@@ -39,7 +39,7 @@ export default function InteriorDesign() {
               {/* Header */}
               <div className="text-center mb-12 animate-fadeInUp">
                 <h1 className="font-playfair font-light text-brown text-3xl md:text-4xl lg:text-5xl tracking-wider mb-4">
-                  Interiördesign/Homestyling
+                  Interiørdesign/Homestyling
                 </h1>
               </div>
 
@@ -47,23 +47,23 @@ export default function InteriorDesign() {
               <div className="animate-fadeInUp" style={{ animationDelay: '0.6s' }}>
                 <div className="prose prose-lg max-w-none">
                   <p className="font-playfair font-light text-brown text-lg md:text-xl leading-relaxed mb-8">
-                    Ett hem är aldrig bara väggar, golv och tak. Det är platsen där livet händer – där vardagen får ta plats och där minnen byggs. Därför är interiördesign för oss mer än att bara välja färger eller möbler. Det handlar om att skapa en känsla. En känsla av harmoni, balans och personlighet.
+                    Et hjem er aldri bare vegger, gulv og tak. Det er stedet hvor livet skjer – hvor hverdagen får ta plass og hvor minner skapes. Derfor er interiørdesign for oss mer enn å bare velge farger eller møbler. Det handler om å skape en følelse. En følelse av harmoni, balanse og personlighet.
                   </p>
 
                   <p className="font-playfair font-light text-brown text-lg md:text-xl leading-relaxed mb-8">
-                    Vi erbjuder helhetslösningar inom interiördesign där vi alltid utgår från dig, dina behov och din livsstil. Tillsammans formar vi miljöer som inte bara är vackra, utan också praktiska och hållbara över tid. Allt från materialval och färgsättning till möblering och detaljer planeras med omsorg – så att ditt hem blir precis så som du vill ha det, både idag och imorgon.
+                    Vi tilbyr helhetlige løsninger innen interiørdesign hvor vi alltid tar utgangspunkt i deg, dine behov og din livsstil. Sammen former vi omgivelser som ikke bare er vakre, men også praktiske og varige over tid. Alt fra materialvalg og fargesetting til møblering og detaljer planlegges med omhu – slik at hjemmet ditt blir akkurat slik du ønsker det, både i dag og i morgen.
                   </p>
 
                   <p className="font-playfair font-light text-brown text-lg md:text-xl leading-relaxed mb-8">
-                    För dig som står inför en bostadsförsäljning har vi även möjlighet att hjälpa till med möblering och homestyling. Vi vet hur avgörande det första intrycket är och hur mycket rätt känsla kan påverka slutpriset. Med noga utvalda möbler, rätt ljus och balanserade färgval kan vi lyfta fram hemmets bästa sidor och skapa en atmosfär som tilltalar spekulanterna – samtidigt som det känns naturligt och inbjudande.
+                    For deg som skal selge bolig har vi også mulighet til å hjelpe med møblering og homestyling. Vi vet hvor avgjørende det første inntrykket er, og hvor mye riktig følelse kan påvirke salgsprisen. Med nøye utvalgte møbler, riktig lys og balanserte fargevalg kan vi fremheve boligens beste sider og skape en atmosfære som appellerer til interessenter – samtidig som det føles naturlig og innbydende.
                   </p>
 
                   <p className="font-playfair font-light text-brown text-lg md:text-xl leading-relaxed mb-8">
-                    Vår filosofi är enkel: varje hem har potential. Vårt uppdrag är att hjälpa dig att frigöra den. Oavsett om du vill skapa ditt drömhem att leva i, eller om du vill maximera värdet vid en försäljning, kan du lita på vår erfarenhet, vårt öga för detaljer och vår förståelse för vad som gör ett hem till något mer än bara en bostad.
+                    Vår filosofi er enkel: hvert hjem har potensial. Vårt oppdrag er å hjelpe deg med å frigjøre det. Enten du ønsker å skape ditt drømmehjem å leve i, eller du vil maksimere verdien ved et salg, kan du stole på vår erfaring, vårt blikk for detaljer og vår forståelse for hva som gjør et hjem til noe mer enn bare en bolig.
                   </p>
 
                   <p className="font-playfair font-light text-brown text-lg md:text-xl leading-relaxed">
-                    Vi finns här för att göra din vision till verklighet – med trygghet, engagemang och en genuin känsla för design.
+                    Vi er her for å gjøre din visjon til virkelighet – med trygghet, engasjement og en genuin sans for design.
                   </p>
                 </div>
               </div>
@@ -74,7 +74,7 @@ export default function InteriorDesign() {
                   href="/"
                   className="inline-block font-playfair font-light text-brown text-lg md:text-xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer border-b border-brown/30 hover:border-brown"
                 >
-                  ← Tillbaka till startsidan
+                  ← Tilbake til startsiden
                 </Link>
               </div>
             </div>
@@ -82,7 +82,7 @@ export default function InteriorDesign() {
         </div>
       </div>
 
-      {/* Swedish Full-Screen Menu Overlay */}
+      {/* Full-Screen Menu Overlay */}
       {isMenuOpen && (
         <div className="fixed inset-4 bg-amber-50 z-50 flex flex-col items-center justify-center animate-slideDown rounded-2xl">
           {/* Logo at the top */}
@@ -105,12 +105,12 @@ export default function InteriorDesign() {
                   }}
                   className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block"
                 >
-                  HEM
+                  HJEM
                 </Link>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.25s' }}>
                 <a href="#" className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block">
-                  Tjänster
+                  Tjenester
                 </a>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.4s' }}>
@@ -118,20 +118,20 @@ export default function InteriorDesign() {
                   Byggservice
                 </a>
               </li>
-                             <li className="animate-fadeInUp" style={{ animationDelay: '1.55s' }}>
-                                 <Link 
+              <li className="animate-fadeInUp" style={{ animationDelay: '1.55s' }}>
+                <Link 
                   href="/interior-design-homestyling"
                   onClick={() => {
                     setTimeout(() => setIsMenuOpen(false), 100)
                   }}
                   className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block"
                 >
-                  Interiördesign/Homestyling
+                  Interiørdesign/Homestyling
                 </Link>
-               </li>
+              </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.7s' }}>
                 <a href="#" className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block">
-                  Referenser
+                  Referanser
                 </a>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.85s' }}>

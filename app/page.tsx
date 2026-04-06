@@ -74,7 +74,7 @@ export default function Home() {
             {/* Subtitle Text */}
             <div className="text-center -mt-2 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
               <h2 className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider">
-                DIN TOTALENTREPRENÖR
+                DIN TOTALENTREPRENØR
               </h2>
             </div>
           </div>
@@ -84,11 +84,11 @@ export default function Home() {
             <nav className="text-center">
                                     <ul className="font-playfair font-light text-brown tracking-wider space-y-2 md:space-y-0 md:space-x-8 md:flex md:items-center md:justify-center text-lg md:text-xl lg:text-2xl">
                         <li className="hover:text-gray-800 transition-colors duration-200 cursor-pointer">
-                          Ditt Nya Hem
+                          Ditt Nye Hjem
                         </li>
                         <li className="hidden md:block text-brown/50">/</li>
                         <li className="hover:text-gray-800 transition-colors duration-200 cursor-pointer">
-                          Renovering & Förändring
+                          Renovering & Forandring
                         </li>
                         <li className="hidden md:block text-brown/50">/</li>
                         <li className="hover:text-gray-800 transition-colors duration-200 cursor-pointer">
@@ -96,7 +96,7 @@ export default function Home() {
                         </li>
                         <li className="hidden md:block text-brown/50">/</li>
                         <li className="hover:text-gray-800 transition-colors duration-200 cursor-pointer">
-                          Inredning & Styling
+                          Interiør & Styling
                         </li>
                       </ul>
             </nav>
@@ -104,7 +104,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Swedish Full-Screen Menu Overlay */}
+      {/* Full-Screen Menu Overlay */}
       {isMenuOpen && (
         <div className="fixed inset-4 bg-amber-50 z-50 flex flex-col items-center justify-center animate-slideDown rounded-2xl">
           {/* Logo at the top */}
@@ -127,12 +127,12 @@ export default function Home() {
                   }}
                   className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block"
                 >
-                  HEM
+                  HJEM
                 </Link>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.25s' }}>
                 <a href="#" className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block">
-                  Tjänster
+                  Tjenester
                 </a>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.4s' }}>
@@ -148,12 +148,12 @@ export default function Home() {
                   }}
                   className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block"
                 >
-                  Interiördesign/Homestyling
+                  Interiørdesign/Homestyling
                 </Link>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.7s' }}>
                 <a href="#" className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block">
-                  Referenser
+                  Referanser
                 </a>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.85s' }}>

@@ -14,7 +14,6 @@ export default function Kontakt() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Here you would typically send the data to your backend
     console.log('Booking submitted:', {
       date: selectedDate,
       time: selectedTime,
@@ -23,7 +22,7 @@ export default function Kontakt() {
       phone: userPhone,
       message: userMessage
     })
-    alert('Tack för din bokning! Vi återkommer snart.')
+    alert('Takk for din bestilling! Vi tar kontakt snart.')
   }
 
   return (
@@ -68,31 +67,40 @@ export default function Kontakt() {
                 {/* Contact Details */}
                 <div className="animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
                   <h2 className="font-playfair font-light text-brown text-2xl md:text-3xl tracking-wider mb-6">
-                    Kontaktinformation
+                    Kontaktinformasjon
                   </h2>
                   <div className="space-y-4">
                     <div>
+                      <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Kontaktperson</h3>
+                      <p className="font-playfair font-light text-brown text-lg">Daniel Christinasson</p>
+                    </div>
+                    <div>
                       <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Telefon</h3>
-                      <p className="font-playfair font-light text-brown text-lg">+46 70 123 45 67</p>
+                      <p className="font-playfair font-light text-brown text-lg">+47 465 83 867</p>
                     </div>
                     <div>
                       <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">E-post</h3>
                       <p className="font-playfair font-light text-brown text-lg">info@finthem.nu</p>
                     </div>
                     <div>
-                      <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Adress</h3>
+                      <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Adresse</h3>
                       <p className="font-playfair font-light text-brown text-lg">
                         Storgatan 123<br />
                         123 45 Stockholm<br />
                         Sverige
                       </p>
+                      <p className="font-playfair font-light text-brown text-lg mt-3">
+                        Prinsensgate 5<br />
+                        0152 Oslo<br />
+                        Norge
+                      </p>
                     </div>
                     <div>
-                      <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Öppettider</h3>
+                      <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Åpningstider</h3>
                       <p className="font-playfair font-light text-brown text-lg">
-                        Måndag - Fredag: 08:00 - 17:00<br />
-                        Lördag: 09:00 - 15:00<br />
-                        Söndag: Stängt
+                        Mandag - Fredag: 08:00 - 17:00<br />
+                        Lørdag: 09:00 - 15:00<br />
+                        Søndag: Stengt
                       </p>
                     </div>
                   </div>
@@ -101,12 +109,12 @@ export default function Kontakt() {
                 {/* Booking Form */}
                 <div className="animate-fadeInUp" style={{ animationDelay: '0.6s' }}>
                   <h2 className="font-playfair font-light text-brown text-2xl md:text-3xl tracking-wider mb-6">
-                    Kostnadsfri besiktning på plats
+                    Gratis befaring på stedet
                   </h2>
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                       <label className="block font-playfair font-light text-brown text-lg mb-2">
-                        Namn *
+                        Navn *
                       </label>
                       <input
                         type="text"
@@ -114,7 +122,7 @@ export default function Kontakt() {
                         value={userName}
                         onChange={(e) => setUserName(e.target.value)}
                         className="w-full px-4 py-3 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown bg-white/80"
-                        placeholder="Ditt namn"
+                        placeholder="Ditt navn"
                       />
                     </div>
                     
@@ -128,7 +136,7 @@ export default function Kontakt() {
                         value={userEmail}
                         onChange={(e) => setUserEmail(e.target.value)}
                         className="w-full px-4 py-3 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown bg-white/80"
-                        placeholder="din.email@example.com"
+                        placeholder="din.epost@example.com"
                       />
                     </div>
                     
@@ -147,7 +155,7 @@ export default function Kontakt() {
                     
                     <div>
                       <label className="block font-playfair font-light text-brown text-lg mb-2">
-                        Önskat datum *
+                        Ønsket dato *
                       </label>
                       <input
                         type="date"
@@ -161,7 +169,7 @@ export default function Kontakt() {
                     
                     <div>
                       <label className="block font-playfair font-light text-brown text-lg mb-2">
-                        Önskad tid *
+                        Ønsket tidspunkt *
                       </label>
                       <input
                         type="text"
@@ -169,13 +177,13 @@ export default function Kontakt() {
                         value={selectedTime}
                         onChange={(e) => setSelectedTime(e.target.value)}
                         className="w-full px-4 py-3 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown bg-white/80"
-                        placeholder="Till exempel: 14:30, efter lunch, förmiddag, etc."
+                        placeholder="For eksempel: 14:30, etter lunsj, formiddag, osv."
                       />
                     </div>
                     
                     <div>
                       <label className="block font-playfair font-light text-brown text-lg mb-2">
-                        Beskriv vad ni behöver hjälp med *
+                        Beskriv hva dere trenger hjelp med *
                       </label>
                       <textarea
                         required
@@ -183,7 +191,7 @@ export default function Kontakt() {
                         onChange={(e) => setUserMessage(e.target.value)}
                         rows={4}
                         className="w-full px-4 py-3 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown bg-white/80 resize-none"
-                        placeholder="Beskriv kortfattat vad ni behöver hjälp med. Till exempel: Renovering av kök, nytt badrum, tillbyggnad, etc."
+                        placeholder="Beskriv kort hva dere trenger hjelp med. For eksempel: Renovering av kjøkken, nytt bad, tilbygg, osv."
                       />
                     </div>
                     
@@ -191,7 +199,7 @@ export default function Kontakt() {
                       type="submit"
                       className="w-full bg-brown text-white font-playfair font-light text-lg py-3 px-6 rounded-lg hover:bg-brown/80 transition-colors duration-300 mt-6"
                     >
-                      Boka kostnadsfri besiktning
+                      Book gratis befaring
                     </button>
                   </form>
                 </div>
@@ -203,7 +211,7 @@ export default function Kontakt() {
                   href="/"
                   className="inline-block font-playfair font-light text-brown text-lg md:text-xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer border-b border-brown/30 hover:border-brown"
                 >
-                  ← Tillbaka till startsidan
+                  ← Tilbake til startsiden
                 </Link>
               </div>
             </div>
@@ -211,7 +219,7 @@ export default function Kontakt() {
         </div>
       </div>
 
-      {/* Swedish Full-Screen Menu Overlay */}
+      {/* Full-Screen Menu Overlay */}
       {isMenuOpen && (
         <div className="fixed inset-4 bg-amber-50 z-50 flex flex-col items-center justify-center animate-slideDown rounded-2xl">
           {/* Logo at the top */}
@@ -234,12 +242,12 @@ export default function Kontakt() {
                   }}
                   className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block"
                 >
-                  HEM
+                  HJEM
                 </Link>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.25s' }}>
                 <a href="#" className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block">
-                  Tjänster
+                  Tjenester
                 </a>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.4s' }}>
@@ -255,12 +263,12 @@ export default function Kontakt() {
                   }}
                   className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block"
                 >
-                  Interiördesign/Homestyling
+                  Interiørdesign/Homestyling
                 </Link>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.7s' }}>
                 <a href="#" className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block">
-                  Referenser
+                  Referanser
                 </a>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '1.85s' }}>
