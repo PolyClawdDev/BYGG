@@ -190,15 +190,15 @@ export default function Home() {
           {/* ── Centre: logo with video playing ONLY behind it ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
 
-            {/* Outer: sets the logo size — 90vw wide, height auto from aspect ratio */}
-            <div className="relative w-[90vw] max-w-7xl animate-fadeInScale" style={{ aspectRatio: '4 / 1' }}>
+            {/* Outer: sets the logo size — huge, video behind */}
+            <div className="relative w-[90vw] max-w-7xl animate-fadeInScale" style={{ height: 'clamp(160px, 26vw, 340px)' }}>
               {/* Video behind logo only */}
               <video
                 className="absolute inset-0 w-full h-full object-cover animate-kenburns"
                 autoPlay muted loop playsInline
               >
-                <source src="/bg.mp4" type="video/mp4" />
-                <source src="/BYGGVIDEO.mp4..mov" type="video/mp4" />
+                <source src="/BYGG.mp4" type="video/mp4" />
+                <source src="/BYGG.mp4" type="video/mp4" />
               </video>
               {/* Logo on top */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
