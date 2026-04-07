@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useVideoMask } from './hooks/useVideoMask'
 import ReviewsCarousel from './components/ReviewsCarousel'
 import SiteFooter from './components/SiteFooter'
 
@@ -78,7 +77,6 @@ export default function Home() {
   const [isShaking, setIsShaking] = useState(false)
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
   const [byggVisible, setByggVisible] = useState(false)
-  const maskStyle = useVideoMask()
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -190,20 +188,13 @@ export default function Home() {
 
           <div className="flex-1 flex flex-col px-4">
             <div className="flex-1 flex flex-col items-center justify-center">
-              <div className="relative w-full max-w-7xl h-48 md:h-64 lg:h-80 px-4 animate-fadeInScale">
-                <div className="relative w-full h-full">
-                  <video
-                    className="w-full h-full object-cover"
-                    autoPlay muted loop playsInline
-                    style={maskStyle}
-                    onLoadedMetadata={(e) => {
-                      e.currentTarget.currentTime = 0.1
-                      e.currentTarget.playbackRate = 0.8
-                    }}
-                  >
-                    <source src="/BYGGVIDEO.mp4..mov" type="video/mp4" />
-                  </video>
-                </div>
+              <div className="relative w-full max-w-7xl h-48 md:h-64 lg:h-80 px-4 animate-fadeInScale flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/LOGOH.png"
+                  alt="Fint Hjem"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="text-center -mt-2 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
                 <h2 className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider">
