@@ -3,6 +3,10 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useVideoMask } from './hooks/useVideoMask'
+import ReviewsCarousel from './components/ReviewsCarousel'
+import SiteFooter from './components/SiteFooter'
+
+/* ─── Data ─── */
 
 interface Section {
   id: string
@@ -12,6 +16,8 @@ interface Section {
   lines: string[]
   body: string
   link: string | null
+  videoSide: 'right' | 'left'
+  videoOverlay: string
 }
 
 const SECTIONS: Section[] = [
@@ -21,8 +27,10 @@ const SECTIONS: Section[] = [
     num: '01',
     tag: 'NY KONSTRUKSJON',
     lines: ['VI BYGGER', 'DRØMMEHJEM'],
-    body: 'Fra tomt til nøkkelferdig bolig. Vi håndterer hvert eneste steg med presisjon og omtanke.',
+    body: 'Fra tomt til nøkkelferdig bolig. Vi håndterer hvert eneste steg med presisjon og omtanke — fra søknad til innflytting.',
     link: null,
+    videoSide: 'right',
+    videoOverlay: 'rgba(90,65,50,0.45)',
   },
   {
     id: 'renovering-forandring',
@@ -30,17 +38,10 @@ const SECTIONS: Section[] = [
     num: '02',
     tag: 'RENOVASJON',
     lines: ['TRANSFORMER', 'DET EKSISTERENDE'],
-    body: 'Gi hjemmet ditt nytt liv. Vi respekterer det eksisterende mens vi skaper noe ekstraordinært.',
+    body: 'Gi hjemmet ditt nytt liv. Vi respekterer det eksisterende mens vi skaper noe ekstraordinært — kjøkken, bad, fasade og alt imellom.',
     link: null,
-  },
-  {
-    id: 'byggservice',
-    label: 'Byggservice',
-    num: '03',
-    tag: 'FAGLIG HÅNDVERK',
-    lines: ['FUNDAMENTET', 'FOR ALT ANNET'],
-    body: 'Alt fra fundament til finish. Profesjonelle løsninger for private og kommersielle prosjekter.',
-    link: null,
+    videoSide: 'left',
+    videoOverlay: 'rgba(50,55,60,0.55)',
   },
   {
     id: 'interior-styling',
@@ -48,17 +49,73 @@ const SECTIONS: Section[] = [
     num: '04',
     tag: 'INTERIØRDESIGN',
     lines: ['ROMMET SOM', 'REFLEKTERER DEG'],
-    body: 'Mer enn estetikk — vi skaper rom som virkelig føles riktige. Fra konsept til ferdig interiør.',
+    body: 'Mer enn estetikk — vi skaper rom som virkelig føles riktige. Fra konsept til ferdig interiør med hvert eneste detalj på plass.',
     link: '/interior-design-homestyling',
+    videoSide: 'right',
+    videoOverlay: 'rgba(80,55,45,0.50)',
   },
 ]
 
-const SECTION_BG = ['#f8f6f2', '#f0ebe5', '#f8f6f2', '#f0ebe5']
+const BYGGSERVICE_ITEMS = [
+  {
+    title: 'Snekkerarbeid',
+    desc: 'Skreddersydde trevare­løsninger, innredning og finish av høyeste håndverkskvalitet.',
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+        d="M4 6h16M4 12h16M4 18h7M15 15l4 4-4 4M19 19h-4" />
+    ),
+  },
+  {
+    title: 'Bad & Flislegging',
+    desc: 'Komplette baderomsrenovasjoner med presist håndverk fra membran til fliser.',
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+    ),
+  },
+  {
+    title: 'Maling & Overflater',
+    desc: 'Profesjonell maling innvendig og utvendig — inkludert tapetsering og sparkling.',
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+    ),
+  },
+  {
+    title: 'VVS / Rørlegger',
+    desc: 'Rørleggerarbeid for bad, kjøkken og tekniske installasjoner. Godkjente fagfolk.',
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    ),
+  },
+  {
+    title: 'Tilbygg & Nybygg',
+    desc: 'Tilbygg, garasjer, anneks og nøkkelferdige boliger. Vi håndterer alt fra søknad til nøkkel.',
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+    ),
+  },
+  {
+    title: 'Vinduer & Dører',
+    desc: 'Montering og utskifting av vinduer og dører for bedre isolasjon, lys og estetikk.',
+    icon: (
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+    ),
+  },
+]
+
+const SECTION_BG = ['#f8f6f2', '#f0ebe5', '#f8f6f2']
+
+/* ─── Page ─── */
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isShaking, setIsShaking] = useState(false)
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
+  const [byggVisible, setByggVisible] = useState(false)
   const maskStyle = useVideoMask()
 
   const scrollToSection = (id: string) => {
@@ -71,19 +128,29 @@ export default function Home() {
       setTimeout(() => setIsShaking(false), 600)
     }, 5000)
 
+    const allIds = [...SECTIONS.map((s) => s.id), 'byggservice']
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setVisibleSections((prev) => { const next = new Set(prev); next.add(entry.target.id); return next })
+            if (entry.target.id === 'byggservice') {
+              setByggVisible(true)
+            } else {
+              setVisibleSections((prev) => {
+                const next = new Set(prev)
+                next.add(entry.target.id)
+                return next
+              })
+            }
           }
         })
       },
-      { threshold: 0.15 }
+      { threshold: 0, rootMargin: '0px 0px 80px 0px' }
     )
 
-    SECTIONS.forEach((s) => {
-      const el = document.getElementById(s.id)
+    allIds.forEach((id) => {
+      const el = document.getElementById(id)
       if (el) observer.observe(el)
     })
 
@@ -93,10 +160,12 @@ export default function Home() {
     }
   }, [])
 
+  const ease = 'cubic-bezier(0.16, 1, 0.3, 1)'
+
   return (
     <main className="bg-white">
 
-      {/* ─────────────────── HERO ─────────────────── */}
+      {/* ═══════════════════ HERO ═══════════════════ */}
       <div className="h-screen p-4 relative">
         <div className="w-full h-full animate-subtle-bg rounded-2xl flex flex-col">
 
@@ -113,24 +182,14 @@ export default function Home() {
             </div>
           </button>
 
-          {/* Contact icon */}
+          {/* Contact */}
           <Link
             href="/kontakt"
             className="fixed top-8 right-8 z-50 p-2 hover:bg-white/10 rounded-lg transition-colors duration-200 animate-fadeIn"
             aria-label="Contact"
           >
-            <svg
-              className={`w-8 h-8 text-gray-800 ${isShaking ? 'animate-shake' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-              />
+            <svg className={`w-8 h-8 text-gray-800 ${isShaking ? 'animate-shake' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </Link>
 
@@ -141,10 +200,7 @@ export default function Home() {
                 <div className="relative w-full h-full">
                   <video
                     className="w-full h-full object-cover"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
+                    autoPlay muted loop playsInline
                     style={maskStyle}
                     onLoadedMetadata={(e) => {
                       e.currentTarget.currentTime = 0.1
@@ -152,7 +208,6 @@ export default function Home() {
                     }}
                   >
                     <source src="/BYGGVIDEO.mp4..mov" type="video/mp4" />
-                    Your browser does not support the video tag.
                   </video>
                 </div>
               </div>
@@ -167,37 +222,35 @@ export default function Home() {
             {/* Bottom nav */}
             <div className="mt-auto mb-6 md:mb-10 animate-fadeInUp" style={{ animationDelay: '1.8s' }}>
               <nav className="text-center">
-                <ul className="font-playfair font-light text-brown tracking-wider space-y-3 md:space-y-0 md:space-x-8 md:flex md:items-center md:justify-center text-lg md:text-xl lg:text-2xl">
-                  {SECTIONS.flatMap((s, i) => {
-                    const items = [
+                <ul className="font-playfair font-light text-brown tracking-wider space-y-3 md:space-y-0 md:space-x-6 md:flex md:items-center md:justify-center text-lg md:text-xl lg:text-2xl">
+                  {[
+                    { label: 'Ditt Nye Hjem', id: 'ditt-nye-hjem' },
+                    { label: 'Renovering & Forandring', id: 'renovering-forandring' },
+                    { label: 'Byggservice', id: 'byggservice' },
+                    { label: 'Interiør & Styling', id: 'interior-styling' },
+                  ].flatMap((item, i, arr) => {
+                    const node = (
                       <li
-                        key={s.id}
-                        className="relative group cursor-pointer hover:text-gray-800 transition-colors duration-300"
-                        onClick={() => scrollToSection(s.id)}
+                        key={item.id}
+                        className="relative cursor-pointer group hover:text-gray-800 transition-colors duration-300"
+                        onClick={() => scrollToSection(item.id)}
                       >
-                        {s.label}
-                        <span
-                          className="absolute -bottom-0.5 left-0 h-px bg-current"
-                          style={{ width: 0, transition: 'width 0.35s ease' }}
-                          onMouseEnter={(e) => { (e.currentTarget as HTMLSpanElement).style.width = '100%' }}
-                        />
-                        <style>{`li:hover span { width: 100% !important; }`}</style>
-                      </li>,
-                    ]
-                    if (i < SECTIONS.length - 1) {
-                      items.push(
-                        <li key={`sep-${i}`} className="hidden md:block text-brown/40 select-none">
-                          /
-                        </li>
-                      )
-                    }
-                    return items
+                        <span className="relative">
+                          {item.label}
+                          <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-current transition-all duration-300 group-hover:w-full block" />
+                        </span>
+                      </li>
+                    )
+                    const sep = i < arr.length - 1
+                      ? <li key={`sep-${i}`} className="hidden md:block text-brown/40 select-none">/</li>
+                      : null
+                    return sep ? [node, sep] : [node]
                   })}
                 </ul>
               </nav>
 
               {/* Scroll indicator */}
-              <div className="flex justify-center mt-6 md:mt-8">
+              <div className="flex justify-center mt-6">
                 <div className="flex flex-col items-center gap-1 animate-scrollPulse opacity-40">
                   <div className="w-px h-8 bg-brown" />
                   <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
@@ -207,46 +260,40 @@ export default function Home() {
               </div>
             </div>
           </div>
+
         </div>
       </div>
 
-      {/* ─────────────────── SECTIONS ─────────────────── */}
+      {/* ═══════════════════ SPLIT SECTIONS (01, 02, 04) ═══════════════════ */}
       {SECTIONS.map((section, idx) => {
         const visible = visibleSections.has(section.id)
-        const ease = 'cubic-bezier(0.16, 1, 0.3, 1)'
+        const bg = SECTION_BG[idx]
+        const videoLeft = section.videoSide === 'left'
 
-        return (
-          <section
-            key={section.id}
-            id={section.id}
-            className="min-h-screen relative overflow-hidden flex items-center"
-            style={{ backgroundColor: SECTION_BG[idx] }}
-          >
-            {/* Giant background number */}
+        const textBlock = (
+          <div className="w-full lg:w-1/2 flex items-center px-8 md:px-16 lg:px-20 py-28 lg:py-0 relative">
+            {/* Ghost number */}
             <span
               className="absolute font-montserrat font-black leading-none select-none pointer-events-none"
               style={{
-                right: '-1rem',
+                right: videoLeft ? 'auto' : '-1rem',
+                left: videoLeft ? '-1rem' : 'auto',
                 top: '50%',
-                fontSize: 'clamp(10rem, 22vw, 28rem)',
+                fontSize: 'clamp(8rem, 18vw, 22rem)',
                 color: '#9c7a6d',
-                opacity: visible ? 0.05 : 0,
-                transform: visible
-                  ? 'translateY(-50%) translateX(0)'
-                  : 'translateY(-50%) translateX(3rem)',
+                opacity: visible ? 0.06 : 0,
+                transform: visible ? 'translateY(-50%)' : 'translateY(-50%) translateX(2rem)',
                 transition: `opacity 1.4s ease, transform 1.4s ${ease}`,
-                transitionDelay: '0s',
               }}
             >
               {section.num}
             </span>
 
-            <div className="max-w-7xl mx-auto w-full px-8 md:px-20 lg:px-32 py-32 relative z-10">
-
+            <div className="max-w-lg relative z-10 w-full">
               {/* Tag */}
               <div className="overflow-hidden mb-8">
                 <div
-                  className="font-montserrat font-bold text-xs tracking-[0.4em] text-brown/50"
+                  className="font-montserrat font-bold text-xs tracking-[0.42em] text-brown/50"
                   style={{
                     transform: visible ? 'translateY(0)' : 'translateY(110%)',
                     opacity: visible ? 1 : 0,
@@ -258,13 +305,13 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Headline lines — each sweeps up from overflow:hidden parent */}
+              {/* Headlines */}
               {section.lines.map((line, li) => (
                 <div key={li} className="overflow-hidden">
                   <h2
                     className="font-montserrat font-black leading-[0.88] tracking-tight text-gray-900"
                     style={{
-                      fontSize: 'clamp(2.8rem, 8.5vw, 9.5rem)',
+                      fontSize: 'clamp(2.6rem, 6.5vw, 8rem)',
                       transform: visible ? 'translateY(0)' : 'translateY(108%)',
                       opacity: visible ? 1 : 0,
                       transition: `transform 1.1s ${ease}, opacity 0.4s ease`,
@@ -279,9 +326,9 @@ export default function Home() {
 
               {/* Divider */}
               <div
-                className="h-px bg-brown/15 mt-12 mb-10 origin-left"
+                className="h-px bg-brown/15 mt-10 mb-9 origin-left"
                 style={{
-                  maxWidth: '520px',
+                  maxWidth: '480px',
                   transform: visible ? 'scaleX(1)' : 'scaleX(0)',
                   transition: `transform 1.3s ${ease}`,
                   transitionDelay: '0.45s',
@@ -290,51 +337,204 @@ export default function Home() {
 
               {/* Body */}
               <p
-                className="font-playfair font-light text-brown/75 text-lg md:text-xl leading-relaxed max-w-md"
+                className="font-playfair font-light text-brown/80 text-lg leading-relaxed max-w-sm"
                 style={{
                   opacity: visible ? 1 : 0,
-                  transform: visible ? 'translateY(0)' : 'translateY(18px)',
+                  transform: visible ? 'translateY(0)' : 'translateY(16px)',
                   filter: visible ? 'blur(0px)' : 'blur(3px)',
                   transition: 'opacity 0.9s ease, transform 0.9s ease, filter 0.9s ease',
-                  transitionDelay: '0.62s',
+                  transitionDelay: '0.6s',
                 }}
               >
                 {section.body}
               </p>
 
-              {/* CTA (section 4 only) */}
+              {/* CTA */}
               {section.link && (
                 <Link
                   href={section.link}
-                  className="inline-flex items-center gap-4 mt-14 group"
+                  className="inline-flex items-center gap-4 mt-12 group"
                   style={{
                     opacity: visible ? 1 : 0,
                     transform: visible ? 'translateY(0)' : 'translateY(10px)',
                     transition: 'opacity 0.8s ease, transform 0.8s ease',
-                    transitionDelay: '0.85s',
+                    transitionDelay: '0.82s',
                   }}
                 >
                   <span className="font-montserrat font-bold text-xs tracking-[0.35em] text-brown group-hover:text-gray-900 transition-colors duration-300">
                     UTFORSK MER
                   </span>
-                  <span
-                    className="h-px bg-brown group-hover:bg-gray-900 transition-all duration-500"
-                    style={{ width: '2.5rem' }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLSpanElement).style.width = '5rem' }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLSpanElement).style.width = '2.5rem' }}
-                  />
+                  <span className="h-px w-10 bg-brown group-hover:w-20 group-hover:bg-gray-900 transition-all duration-500" />
                 </Link>
               )}
             </div>
+          </div>
+        )
+
+        const videoPanel = (
+          <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+            <video
+              className="absolute inset-0 w-full h-full object-cover"
+              autoPlay muted loop playsInline
+            >
+              <source src="/bg.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0" style={{ backgroundColor: section.videoOverlay }} />
+            {/* Section label overlay */}
+            <div className="absolute bottom-10 left-10 right-10">
+              <p className="font-montserrat font-bold text-xs tracking-[0.4em] text-white/50 mb-2">
+                — {section.tag}
+              </p>
+              <div className="h-px bg-white/20" />
+            </div>
+          </div>
+        )
+
+        return (
+          <section
+            key={section.id}
+            id={section.id}
+            className="min-h-screen flex"
+            style={{ backgroundColor: bg }}
+          >
+            {videoLeft ? (
+              <>{videoPanel}{textBlock}</>
+            ) : (
+              <>{textBlock}{videoPanel}</>
+            )}
           </section>
         )
       })}
 
-      {/* ─────────────────── MENU OVERLAY ─────────────────── */}
+      {/* ═══════════════════ BYGGSERVICE ═══════════════════ */}
+      <section
+        id="byggservice"
+        className="min-h-screen py-28 px-8 md:px-16 lg:px-20 relative overflow-hidden"
+        style={{ backgroundColor: '#f0ebe5' }}
+      >
+        {/* Ghost number */}
+        <span
+          className="absolute font-montserrat font-black leading-none select-none pointer-events-none"
+          style={{
+            right: '-1rem',
+            top: '8rem',
+            fontSize: 'clamp(10rem, 20vw, 26rem)',
+            color: '#9c7a6d',
+            opacity: byggVisible ? 0.05 : 0,
+            transform: byggVisible ? 'translateX(0)' : 'translateX(3rem)',
+            transition: `opacity 1.4s ease, transform 1.4s ${ease}`,
+          }}
+        >
+          03
+        </span>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Header */}
+          <div className="mb-20">
+            <div className="overflow-hidden mb-8">
+              <div
+                className="font-montserrat font-bold text-xs tracking-[0.42em] text-brown/50"
+                style={{
+                  transform: byggVisible ? 'translateY(0)' : 'translateY(110%)',
+                  opacity: byggVisible ? 1 : 0,
+                  transition: `transform 0.9s ${ease}, opacity 0.7s ease`,
+                  transitionDelay: '0.05s',
+                }}
+              >
+                — FAGLIG HÅNDVERK
+              </div>
+            </div>
+            {['FUNDAMENTET', 'FOR ALT ANNET'].map((line, li) => (
+              <div key={li} className="overflow-hidden">
+                <h2
+                  className="font-montserrat font-black leading-[0.88] tracking-tight text-gray-900"
+                  style={{
+                    fontSize: 'clamp(2.6rem, 6.5vw, 8rem)',
+                    transform: byggVisible ? 'translateY(0)' : 'translateY(108%)',
+                    opacity: byggVisible ? 1 : 0,
+                    transition: `transform 1.1s ${ease}, opacity 0.4s ease`,
+                    transitionDelay: `${0.18 + li * 0.13}s`,
+                    marginBottom: '0.04em',
+                  }}
+                >
+                  {line}
+                </h2>
+              </div>
+            ))}
+            <div
+              className="h-px bg-brown/15 mt-10 mb-0 origin-left"
+              style={{
+                maxWidth: '480px',
+                transform: byggVisible ? 'scaleX(1)' : 'scaleX(0)',
+                transition: `transform 1.3s ${ease}`,
+                transitionDelay: '0.45s',
+              }}
+            />
+          </div>
+
+          {/* Feature grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+            {BYGGSERVICE_ITEMS.map((item, i) => (
+              <div
+                key={item.title}
+                className="group border border-brown/10 rounded-2xl p-8 hover:border-brown/30 hover:shadow-md transition-all duration-400"
+                style={{
+                  backgroundColor: '#f8f6f2',
+                  opacity: byggVisible ? 1 : 0,
+                  transform: byggVisible ? 'translateY(0)' : 'translateY(30px)',
+                  transition: 'opacity 0.8s ease, transform 0.8s ease, border-color 0.4s, box-shadow 0.4s',
+                  transitionDelay: `${0.55 + i * 0.1}s`,
+                }}
+              >
+                <div className="w-10 h-10 mb-6 text-brown/70 group-hover:text-brown transition-colors duration-300">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full">
+                    {item.icon}
+                  </svg>
+                </div>
+                <h3 className="font-montserrat font-black text-sm tracking-wider text-gray-900 mb-3 uppercase">
+                  {item.title}
+                </h3>
+                <p className="font-playfair font-light text-brown/70 text-base leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div
+            className="mt-16"
+            style={{
+              opacity: byggVisible ? 1 : 0,
+              transform: byggVisible ? 'translateY(0)' : 'translateY(10px)',
+              transition: 'opacity 0.8s ease, transform 0.8s ease',
+              transitionDelay: '1.2s',
+            }}
+          >
+            <Link
+              href="/kontakt"
+              className="inline-flex items-center gap-4 group"
+            >
+              <span className="font-montserrat font-bold text-xs tracking-[0.35em] text-brown group-hover:text-gray-900 transition-colors duration-300">
+                BOOK GRATIS BEFARING
+              </span>
+              <span className="h-px w-10 bg-brown group-hover:w-20 group-hover:bg-gray-900 transition-all duration-500" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ REVIEWS ═══════════════════ */}
+      <ReviewsCarousel />
+
+      {/* ═══════════════════ FOOTER ═══════════════════ */}
+      <SiteFooter />
+
+      {/* ═══════════════════ MENU OVERLAY ═══════════════════ */}
       {isMenuOpen && (
         <div className="fixed inset-4 bg-amber-50 z-50 flex flex-col items-center justify-center animate-slideDown rounded-2xl">
-          <div className="absolute top-8 left-1/2 transform -translate-x-1/2 text-center">
-            <img src="/LOGO2.png" alt="FINTHEM Logo" className="h-4 md:h-6 lg:h-8 object-contain" />
+          <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
+            <img src="/LOGO2.png" alt="Fint Hjem" className="h-4 md:h-6 lg:h-8 object-contain" />
           </div>
 
           <nav className="text-center">
@@ -343,21 +543,23 @@ export default function Home() {
                 <Link
                   href="/"
                   onClick={() => setTimeout(() => setIsMenuOpen(false), 100)}
-                  className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block"
+                  className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 block"
                 >
                   HJEM
                 </Link>
               </li>
-              {SECTIONS.map((s, i) => (
-                <li key={s.id} className="animate-fadeInUp" style={{ animationDelay: `${1.25 + i * 0.15}s` }}>
+              {[
+                { label: 'Ditt Nye Hjem', id: 'ditt-nye-hjem' },
+                { label: 'Renovering & Forandring', id: 'renovering-forandring' },
+                { label: 'Byggservice', id: 'byggservice' },
+                { label: 'Interiør & Styling', id: 'interior-styling' },
+              ].map((item, i) => (
+                <li key={item.id} className="animate-fadeInUp" style={{ animationDelay: `${1.25 + i * 0.15}s` }}>
                   <button
-                    onClick={() => {
-                      setIsMenuOpen(false)
-                      setTimeout(() => scrollToSection(s.id), 400)
-                    }}
-                    className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block bg-transparent border-0 p-0"
+                    onClick={() => { setIsMenuOpen(false); setTimeout(() => scrollToSection(item.id), 400) }}
+                    className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 block bg-transparent border-0 p-0"
                   >
-                    {s.label}
+                    {item.label}
                   </button>
                 </li>
               ))}
@@ -365,7 +567,7 @@ export default function Home() {
                 <Link
                   href="/interior-design-homestyling"
                   onClick={() => setTimeout(() => setIsMenuOpen(false), 100)}
-                  className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block"
+                  className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 block"
                 >
                   Interiørdesign/Homestyling
                 </Link>
@@ -374,7 +576,7 @@ export default function Home() {
                 <Link
                   href="/kontakt"
                   onClick={() => setTimeout(() => setIsMenuOpen(false), 100)}
-                  className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer block"
+                  className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 block"
                 >
                   Kontakt
                 </Link>
@@ -383,26 +585,16 @@ export default function Home() {
           </nav>
 
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-6">
-            <a href="#" className="text-brown hover:text-gray-800 transition-colors duration-200">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-              </svg>
-            </a>
-            <a href="#" className="text-brown hover:text-gray-800 transition-colors duration-200">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
-              </svg>
-            </a>
-            <a href="#" className="text-brown hover:text-gray-800 transition-colors duration-200">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-              </svg>
-            </a>
-            <a href="#" className="text-brown hover:text-gray-800 transition-colors duration-200">
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
-            </a>
+            {[
+              <path key="ig" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />,
+              <path key="tt" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />,
+              <path key="fb" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />,
+              <path key="li" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />,
+            ].map((path, i) => (
+              <a key={i} href="#" className="text-brown hover:text-gray-800 transition-colors duration-200">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">{path}</svg>
+              </a>
+            ))}
           </div>
         </div>
       )}
@@ -419,6 +611,7 @@ export default function Home() {
           </div>
         </button>
       )}
+
     </main>
   )
 }
