@@ -190,27 +190,24 @@ export default function Home() {
           {/* ── Centre: logo with video playing ONLY behind it ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
 
-            {/* Video masked to the LOGOB.png shape — video plays through the logo */}
+            {/* Full video + LOGOB on top with multiply: white/light areas show video, black strokes stay dark.
+                (CSS mask was wrong for hollow logos — mask only showed video on the thin opaque strokes.) */}
             <div
-              className="w-[90vw] max-w-7xl animate-fadeInScale"
-              style={{ height: 'clamp(180px, 28vw, 360px)' }}
+              className="relative isolate w-[90vw] max-w-7xl animate-fadeInScale overflow-hidden rounded-sm"
+              style={{ height: 'clamp(180px, 28vw, 360px)', backgroundColor: '#f8f6f2' }}
             >
               <video
-                className="w-full h-full object-cover animate-kenburns"
+                className="absolute inset-0 h-full w-full object-cover animate-kenburns"
                 autoPlay muted loop playsInline
-                style={{
-                  WebkitMaskImage: 'url("/LOGOB.png")',
-                  maskImage: 'url("/LOGOB.png")',
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskPosition: 'center',
-                }}
               >
                 <source src="/BYGG.mp4" type="video/mp4" />
               </video>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/LOGOB.png"
+                alt="Fint Hjem"
+                className="pointer-events-none absolute inset-0 h-full w-full object-contain mix-blend-multiply"
+              />
             </div>
 
             <div className="text-center mt-6 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
