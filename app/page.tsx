@@ -16,7 +16,9 @@ interface Section {
   lines: string[]
   body: string
   link: string | null
-  videoSide: 'right' | 'left'
+  imageSide: 'right' | 'left'
+  image: string
+  imageAlt: string
 }
 
 const SECTIONS: Section[] = [
@@ -28,7 +30,9 @@ const SECTIONS: Section[] = [
     lines: ['VI BYGGER', 'DRØMMEHJEM'],
     body: 'Fra tomt til nøkkelferdig bolig. Vi håndterer hvert eneste steg med presisjon og omtanke — fra søknad til innflytting.',
     link: null,
-    videoSide: 'right',
+    imageSide: 'right',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85',
+    imageAlt: 'Moderne nybygget bolighus med hvit fasade',
   },
   {
     id: 'renovering-forandring',
@@ -38,7 +42,9 @@ const SECTIONS: Section[] = [
     lines: ['TRANSFORMER', 'DET EKSISTERENDE'],
     body: 'Gi hjemmet ditt nytt liv. Vi respekterer det eksisterende mens vi skaper noe ekstraordinært — kjøkken, bad, fasade og alt imellom.',
     link: null,
-    videoSide: 'left',
+    imageSide: 'left',
+    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1400&q=85',
+    imageAlt: 'Nyrenovert moderne kjøkken',
   },
   {
     id: 'interior-styling',
@@ -48,7 +54,9 @@ const SECTIONS: Section[] = [
     lines: ['ROMMET SOM', 'REFLEKTERER DEG'],
     body: 'Mer enn estetikk — vi skaper rom som virkelig føles riktige. Fra konsept til ferdig interiør med hvert eneste detalj på plass.',
     link: '/interior-design-homestyling',
-    videoSide: 'right',
+    imageSide: 'right',
+    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=85',
+    imageAlt: 'Luksuriøst skandinavisk interiør med minimalistisk design',
   },
 ]
 
@@ -142,10 +150,8 @@ export default function Home() {
     transitionDelay: '0.05s',
   })
 
-  /* Cinematic clip-path wipe for video panels:
-     right-side videos enter from the right,
-     left-side videos enter from the left */
-  const videoPanelClip = (visible: boolean, side: 'right' | 'left'): React.CSSProperties => ({
+  /* Cinematic clip-path wipe: right-side image enters from right, left from left */
+  const imagePanelClip = (visible: boolean, side: 'right' | 'left'): React.CSSProperties => ({
     clipPath: visible
       ? 'inset(0 0 0 0)'
       : side === 'right' ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)',
@@ -253,8 +259,8 @@ export default function Home() {
             <span
               className="absolute font-montserrat font-black leading-none select-none pointer-events-none hidden lg:block"
               style={{
-                right: section.videoSide === 'right' ? '-0.5rem' : 'auto',
-                left: section.videoSide === 'left' ? '-0.5rem' : 'auto',
+                right: section.imageSide === 'right' ? '-0.5rem' : 'auto',
+                left: section.imageSide === 'left' ? '-0.5rem' : 'auto',
                 top: '50%',
                 fontSize: 'clamp(8rem, 14vw, 18rem)',
                 color: '#9c7a6d',
@@ -321,27 +327,28 @@ export default function Home() {
           </div>
         )
 
-        /* Video panel with Ken Burns zoom + cinematic clip-path reveal */
-        const videoSide = (
+        /* Image panel: Ken Burns zoom + cinematic clip-path wipe reveal */
+        const imageSide = (
           <div
-            className="w-full h-[60vw] md:h-[50vw] lg:h-auto lg:w-1/2 flex-shrink-0 relative"
-            style={videoPanelClip(visible, section.videoSide)}
+            className="w-full h-[70vw] md:h-[55vw] lg:h-auto lg:w-1/2 flex-shrink-0 relative"
+            style={imagePanelClip(visible, section.imageSide)}
           >
             <div className="absolute inset-0 overflow-hidden">
-              <video
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={section.image}
+                alt={section.imageAlt}
                 className="absolute inset-0 w-full h-full object-cover animate-kenburns"
-                autoPlay muted loop playsInline
-              >
-                <source src="/bg.mp4" type="video/mp4" />
-              </video>
+                loading="eager"
+              />
 
-              {/* Very light gradient — lets video breathe */}
+              {/* Soft edge blend + bottom vignette */}
               <div
                 className="absolute inset-0"
                 style={{
-                  background: section.videoSide === 'right'
-                    ? 'linear-gradient(to right, rgba(248,246,242,0.2) 0%, transparent 20%), linear-gradient(to top, rgba(10,8,5,0.55) 0%, transparent 45%)'
-                    : 'linear-gradient(to left, rgba(240,235,229,0.2) 0%, transparent 20%), linear-gradient(to top, rgba(10,8,5,0.55) 0%, transparent 45%)',
+                  background: section.imageSide === 'right'
+                    ? 'linear-gradient(to right, rgba(248,246,242,0.25) 0%, transparent 18%), linear-gradient(to top, rgba(10,8,5,0.6) 0%, transparent 42%)'
+                    : 'linear-gradient(to left, rgba(240,235,229,0.25) 0%, transparent 18%), linear-gradient(to top, rgba(10,8,5,0.6) 0%, transparent 42%)',
                 }}
               />
 
@@ -358,11 +365,11 @@ export default function Home() {
           <section
             key={section.id}
             id={section.id}
-            className={`flex flex-col ${section.videoSide === 'left' ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}
+            className={`flex flex-col ${section.imageSide === 'left' ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}
             style={{ backgroundColor: bg }}
           >
             {textSide}
-            {videoSide}
+            {imageSide}
           </section>
         )
       })}
