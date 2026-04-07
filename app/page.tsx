@@ -190,24 +190,27 @@ export default function Home() {
           {/* ── Centre: logo with video playing ONLY behind it ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
 
-            {/* Outer: sets the logo size — huge, video behind */}
-            <div className="relative w-[90vw] max-w-7xl animate-fadeInScale" style={{ height: 'clamp(160px, 26vw, 340px)' }}>
-              {/* Video behind logo only */}
+            {/* Video masked to the LOGOH.png shape — video plays through the logo */}
+            <div
+              className="w-[90vw] max-w-7xl animate-fadeInScale"
+              style={{ height: 'clamp(180px, 28vw, 360px)' }}
+            >
               <video
-                className="absolute inset-0 w-full h-full object-cover animate-kenburns"
+                className="w-full h-full object-cover animate-kenburns"
                 autoPlay muted loop playsInline
+                style={{
+                  WebkitMaskImage: 'url("/LOGOH.png")',
+                  maskImage: 'url("/LOGOH.png")',
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center',
+                }}
               >
                 <source src="/BYGG.mp4" type="video/mp4" />
-                <source src="/BYGG.mp4" type="video/mp4" />
               </video>
-              {/* Logo on top */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/LOGOH.png"
-                alt="Fint Hjem"
-                className="absolute inset-0 w-full h-full object-contain"
-                style={{ zIndex: 1 }}
-              />
             </div>
 
             <div className="text-center mt-6 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
