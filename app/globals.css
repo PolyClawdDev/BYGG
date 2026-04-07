@@ -3,6 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 248, 246, 242;
@@ -219,3 +223,19 @@ video[style*="mask"] {
         .animate-shake {
           animation: shake 0.6s ease-in-out;
         }
+
+/* Scroll indicator pulse */
+@keyframes scrollPulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.55;
+    transform: translateY(5px);
+  }
+}
+
+.animate-scrollPulse {
+  animation: scrollPulse 2.2s ease-in-out infinite;
+}
