@@ -115,20 +115,24 @@ export default function Home() {
 
   const ease = 'cubic-bezier(0.16, 1, 0.3, 1)'
 
-  /* Headline clip-path reveal — no overflow-hidden wrapper needed */
-  const headlineStyle = (visible: boolean, delay: number): React.CSSProperties => ({
-    fontSize: 'clamp(1.5rem, 3.8vw, 4.8rem)',
+  /* Headline font wrapper — no clip-path, no overflow */
+  const headlineWrapStyle: React.CSSProperties = {
+    fontSize: 'clamp(2rem, 3.8vw, 5rem)',
     lineHeight: 0.9,
     letterSpacing: '-0.02em',
-    clipPath: visible
-      ? 'polygon(0% 0%, 100% 0%, 100% 115%, 0% 115%)'
-      : 'polygon(0% 115%, 100% 115%, 100% 115%, 0% 115%)',
-    transform: visible ? 'translateY(0)' : 'translateY(10px)',
-    opacity: visible ? 1 : 0,
-    transition: `clip-path 1.1s ${ease}, transform 1.1s ${ease}, opacity 0.45s ease`,
-    transitionDelay: `${delay}s`,
     marginBottom: '0.06em',
+    overflow: 'hidden',   // clips the inner span vertically only — text never overflows horizontally
     display: 'block',
+  }
+
+  /* Inner span animates up into view */
+  const headlineStyle = (visible: boolean, delay: number): React.CSSProperties => ({
+    display: 'block',
+    paddingBottom: '0.12em', // prevents descender clipping
+    transform: visible ? 'translateY(0)' : 'translateY(108%)',
+    opacity: visible ? 1 : 0,
+    transition: `transform 1.1s ${ease}, opacity 0.5s ease`,
+    transitionDelay: `${delay}s`,
   })
 
   const tagStyle = (visible: boolean): React.CSSProperties => ({
@@ -262,7 +266,7 @@ export default function Home() {
               {section.num}
             </span>
 
-            <div className="max-w-lg relative z-10 w-full">
+            <div className="relative z-10 w-full">
               <div className="overflow-hidden mb-8">
                 <div className="font-montserrat font-bold text-xs tracking-[0.42em] text-brown/50" style={tagStyle(visible)}>
                   — {section.tag}
@@ -270,9 +274,9 @@ export default function Home() {
               </div>
 
               {section.lines.map((line, li) => (
-                <h2 key={li} className="font-montserrat font-black text-gray-900" style={headlineStyle(visible, 0.18 + li * 0.13)}>
-                  {line}
-                </h2>
+                <span key={li} className="font-montserrat font-black text-gray-900 block" style={headlineWrapStyle}>
+                  <span style={headlineStyle(visible, 0.18 + li * 0.13)}>{line}</span>
+                </span>
               ))}
 
               <div
@@ -392,9 +396,9 @@ export default function Home() {
               </div>
             </div>
             {['FUNDAMENTET', 'FOR ALT ANNET'].map((line, li) => (
-              <h2 key={li} className="font-montserrat font-black text-gray-900" style={headlineStyle(byggVisible, 0.18 + li * 0.13)}>
-                {line}
-              </h2>
+              <span key={li} className="font-montserrat font-black text-gray-900 block" style={headlineWrapStyle}>
+                <span style={headlineStyle(byggVisible, 0.18 + li * 0.13)}>{line}</span>
+              </span>
             ))}
             <div
               className="h-px bg-brown/15 mt-10 origin-left"
