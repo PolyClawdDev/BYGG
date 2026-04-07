@@ -190,15 +190,21 @@ export default function Home() {
           {/* ── Centre: logo with video playing ONLY behind it ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
 
-            {/* Full video + LOGOB on top with multiply: white/light areas show video, black strokes stay dark.
-                (CSS mask was wrong for hollow logos — mask only showed video on the thin opaque strokes.) */}
+            {/* Video + LOGOB stacked, same object-contain — no solid “card” behind (that read as a white patch vs silk hero).
+                multiply: white letter fill × video → video inside letters; black strokes stay dark. */}
             <div
-              className="relative isolate w-[90vw] max-w-7xl animate-fadeInScale overflow-hidden rounded-sm"
-              style={{ height: 'clamp(180px, 28vw, 360px)', backgroundColor: '#f8f6f2' }}
+              className="relative w-[min(90vw,80rem)] animate-fadeInScale"
+              style={{
+                aspectRatio: '2.4 / 1',
+                maxHeight: 'min(42vw, 380px)',
+              }}
             >
               <video
-                className="absolute inset-0 h-full w-full object-cover animate-kenburns"
-                autoPlay muted loop playsInline
+                className="absolute inset-0 z-0 h-full w-full object-contain object-center animate-kenburns"
+                autoPlay
+                muted
+                loop
+                playsInline
               >
                 <source src="/BYGG.mp4" type="video/mp4" />
               </video>
@@ -206,7 +212,7 @@ export default function Home() {
               <img
                 src="/LOGOB.png"
                 alt="Fint Hjem"
-                className="pointer-events-none absolute inset-0 h-full w-full object-contain mix-blend-multiply"
+                className="pointer-events-none absolute inset-0 z-10 h-full w-full object-contain object-center mix-blend-multiply"
               />
             </div>
 
