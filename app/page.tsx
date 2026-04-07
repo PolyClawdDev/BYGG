@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useId } from 'react'
 import Link from 'next/link'
 import ReviewsCarousel from './components/ReviewsCarousel'
 import SiteFooter from './components/SiteFooter'
@@ -73,6 +73,10 @@ const BYGGSERVICE_ITEMS = [
 /* ─── Page ─── */
 
 export default function Home() {
+  const videoMaskUid = useId().replace(/:/g, '')
+  const finthemInvertFilterId = `finthem-inv-${videoMaskUid}`
+  const finthemVideoMaskId = `finthem-vidmask-${videoMaskUid}`
+
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isShaking, setIsShaking] = useState(false)
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
@@ -190,8 +194,35 @@ export default function Home() {
           {/* ── Centre: logo with video playing ONLY behind it ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
 
-            {/* Video + LOGOB stacked, same object-contain — no solid “card” behind (that read as a white patch vs silk hero).
-                multiply: white letter fill × video → video inside letters; black strokes stay dark. */}
+            {/* Video clipped to letter shapes: FINTHEM.png is black-on-white; SVG feColorMatrix inverts to white-on-black
+                so the mask shows BYGG.mp4 only inside the solid letter silhouettes. LOGOB is outline-only — it cannot do that. */}
+            <svg width={0} height={0} className="absolute" aria-hidden>
+              <defs>
+                <filter id={finthemInvertFilterId} colorInterpolationFilters="sRGB">
+                  <feColorMatrix
+                    type="matrix"
+                    values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"
+                  />
+                </filter>
+                <mask
+                  id={finthemVideoMaskId}
+                  maskUnits="objectBoundingBox"
+                  maskContentUnits="objectBoundingBox"
+                  x={0}
+                  y={0}
+                  width={1}
+                  height={1}
+                >
+                  <image
+                    href="/FINTHEM.png"
+                    width={1}
+                    height={1}
+                    preserveAspectRatio="xMidYMid meet"
+                    filter={`url(#${finthemInvertFilterId})`}
+                  />
+                </mask>
+              </defs>
+            </svg>
             <div
               className="relative w-[min(90vw,80rem)] animate-fadeInScale"
               style={{
@@ -205,15 +236,19 @@ export default function Home() {
                 muted
                 loop
                 playsInline
+                style={{
+                  WebkitMask: `url(#${finthemVideoMaskId})`,
+                  mask: `url(#${finthemVideoMaskId})`,
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center',
+                }}
               >
                 <source src="/BYGG.mp4" type="video/mp4" />
               </video>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/LOGOB.png"
-                alt="Fint Hjem"
-                className="pointer-events-none absolute inset-0 z-10 h-full w-full object-contain object-center mix-blend-multiply"
-              />
             </div>
 
             <div className="text-center mt-6 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
