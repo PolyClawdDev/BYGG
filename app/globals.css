@@ -224,6 +224,17 @@ video[style*="mask"] {
           animation: shake 0.6s ease-in-out;
         }
 
+/* Ken Burns slow zoom for video panels */
+@keyframes kenBurns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.1); }
+}
+
+.animate-kenburns {
+  animation: kenBurns 16s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
 /* Infinite marquee for reviews carousel */
 @keyframes marquee {
   from { transform: translateX(0); }
