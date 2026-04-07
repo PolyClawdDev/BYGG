@@ -6,7 +6,7 @@ import { useVideoMask } from './hooks/useVideoMask'
 import ReviewsCarousel from './components/ReviewsCarousel'
 import SiteFooter from './components/SiteFooter'
 
-/* ─── Data ─── */
+/* ─── Types ─── */
 
 interface Section {
   id: string
@@ -19,6 +19,8 @@ interface Section {
   videoSide: 'right' | 'left'
   videoOverlay: string
 }
+
+/* ─── Data ─── */
 
 const SECTIONS: Section[] = [
   {
@@ -41,7 +43,7 @@ const SECTIONS: Section[] = [
     body: 'Gi hjemmet ditt nytt liv. Vi respekterer det eksisterende mens vi skaper noe ekstraordinært — kjøkken, bad, fasade og alt imellom.',
     link: null,
     videoSide: 'left',
-    videoOverlay: 'rgba(50,55,60,0.55)',
+    videoOverlay: 'rgba(40,45,50,0.58)',
   },
   {
     id: 'interior-styling',
@@ -56,58 +58,46 @@ const SECTIONS: Section[] = [
   },
 ]
 
+const SECTION_BG = ['#f8f6f2', '#f0ebe5', '#f8f6f2']
+
 const BYGGSERVICE_ITEMS = [
   {
     title: 'Snekkerarbeid',
-    desc: 'Skreddersydde trevare­løsninger, innredning og finish av høyeste håndverkskvalitet.',
-    icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-        d="M4 6h16M4 12h16M4 18h7M15 15l4 4-4 4M19 19h-4" />
-    ),
+    desc: 'Skreddersydde trevareløsninger, innredning og finish av høyeste håndverkskvalitet.',
+    gradient: 'from-amber-100 to-amber-200',
+    icon: 'M4 6h16M4 12h16M4 18h7M15 15l4 4-4 4M19 19h-4',
   },
   {
     title: 'Bad & Flislegging',
     desc: 'Komplette baderomsrenovasjoner med presist håndverk fra membran til fliser.',
-    icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-    ),
+    gradient: 'from-blue-100 to-blue-200',
+    icon: 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01',
   },
   {
     title: 'Maling & Overflater',
     desc: 'Profesjonell maling innvendig og utvendig — inkludert tapetsering og sparkling.',
-    icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-    ),
+    gradient: 'from-rose-100 to-rose-200',
+    icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z',
   },
   {
     title: 'VVS / Rørlegger',
     desc: 'Rørleggerarbeid for bad, kjøkken og tekniske installasjoner. Godkjente fagfolk.',
-    icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    ),
+    gradient: 'from-teal-100 to-teal-200',
+    icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z',
   },
   {
     title: 'Tilbygg & Nybygg',
     desc: 'Tilbygg, garasjer, anneks og nøkkelferdige boliger. Vi håndterer alt fra søknad til nøkkel.',
-    icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-    ),
+    gradient: 'from-stone-200 to-stone-300',
+    icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
   },
   {
     title: 'Vinduer & Dører',
     desc: 'Montering og utskifting av vinduer og dører for bedre isolasjon, lys og estetikk.',
-    icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-    ),
+    gradient: 'from-indigo-100 to-indigo-200',
+    icon: 'M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18',
   },
 ]
-
-const SECTION_BG = ['#f8f6f2', '#f0ebe5', '#f8f6f2']
 
 /* ─── Page ─── */
 
@@ -146,7 +136,7 @@ export default function Home() {
           }
         })
       },
-      { threshold: 0, rootMargin: '0px 0px 80px 0px' }
+      { threshold: 0, rootMargin: '0px 0px 100px 0px' }
     )
 
     allIds.forEach((id) => {
@@ -161,6 +151,30 @@ export default function Home() {
   }, [])
 
   const ease = 'cubic-bezier(0.16, 1, 0.3, 1)'
+
+  /* Headline animation using clip-path — no overflow-hidden needed,
+     so text is never cropped on narrow viewports */
+  const headlineStyle = (visible: boolean, delay: number) => ({
+    fontSize: 'clamp(1.5rem, 8vw, 7rem)' as const,
+    lineHeight: 0.9 as const,
+    letterSpacing: '-0.02em' as const,
+    clipPath: visible
+      ? 'polygon(0% 0%, 100% 0%, 100% 115%, 0% 115%)'
+      : 'polygon(0% 115%, 100% 115%, 100% 115%, 0% 115%)',
+    transform: visible ? 'translateY(0)' : 'translateY(12px)',
+    opacity: visible ? 1 : 0,
+    transition: `clip-path 1.1s ${ease}, transform 1.1s ${ease}, opacity 0.45s ease`,
+    transitionDelay: `${delay}s`,
+    marginBottom: '0.06em',
+    display: 'block' as const,
+  })
+
+  const tagStyle = (visible: boolean) => ({
+    transform: visible ? 'translateY(0)' : 'translateY(110%)',
+    opacity: visible ? 1 : 0,
+    transition: `transform 0.9s ${ease}, opacity 0.7s ease`,
+    transitionDelay: '0.05s',
+  })
 
   return (
     <main className="bg-white">
@@ -182,7 +196,7 @@ export default function Home() {
             </div>
           </button>
 
-          {/* Contact */}
+          {/* Contact icon */}
           <Link
             href="/kontakt"
             className="fixed top-8 right-8 z-50 p-2 hover:bg-white/10 rounded-lg transition-colors duration-200 animate-fadeIn"
@@ -193,7 +207,7 @@ export default function Home() {
             </svg>
           </Link>
 
-          {/* Logo + subtitle */}
+          {/* Logo */}
           <div className="flex-1 flex flex-col px-4">
             <div className="flex-1 flex flex-col items-center justify-center">
               <div className="relative w-full max-w-7xl h-48 md:h-64 lg:h-80 px-4 animate-fadeInScale">
@@ -211,7 +225,6 @@ export default function Home() {
                   </video>
                 </div>
               </div>
-
               <div className="text-center -mt-2 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
                 <h2 className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider">
                   DIN TOTALENTREPRENØR
@@ -248,8 +261,6 @@ export default function Home() {
                   })}
                 </ul>
               </nav>
-
-              {/* Scroll indicator */}
               <div className="flex justify-center mt-6">
                 <div className="flex flex-col items-center gap-1 animate-scrollPulse opacity-40">
                   <div className="w-px h-8 bg-brown" />
@@ -264,144 +275,126 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ═══════════════════ SPLIT SECTIONS (01, 02, 04) ═══════════════════ */}
+      {/* ═══════════════════ SPLIT SECTIONS ═══════════════════ */}
       {SECTIONS.map((section, idx) => {
         const visible = visibleSections.has(section.id)
         const bg = SECTION_BG[idx]
-        const videoLeft = section.videoSide === 'left'
 
-        const textBlock = (
-          <div className="w-full lg:w-1/2 flex items-center px-8 md:px-16 lg:px-20 py-28 lg:py-0 relative">
-            {/* Ghost number */}
-            <span
-              className="absolute font-montserrat font-black leading-none select-none pointer-events-none"
-              style={{
-                right: videoLeft ? 'auto' : '-1rem',
-                left: videoLeft ? '-1rem' : 'auto',
-                top: '50%',
-                fontSize: 'clamp(8rem, 18vw, 22rem)',
-                color: '#9c7a6d',
-                opacity: visible ? 0.06 : 0,
-                transform: visible ? 'translateY(-50%)' : 'translateY(-50%) translateX(2rem)',
-                transition: `opacity 1.4s ease, transform 1.4s ${ease}`,
-              }}
-            >
-              {section.num}
-            </span>
-
-            <div className="max-w-lg relative z-10 w-full">
-              {/* Tag */}
-              <div className="overflow-hidden mb-8">
-                <div
-                  className="font-montserrat font-bold text-xs tracking-[0.42em] text-brown/50"
-                  style={{
-                    transform: visible ? 'translateY(0)' : 'translateY(110%)',
-                    opacity: visible ? 1 : 0,
-                    transition: `transform 0.9s ${ease}, opacity 0.7s ease`,
-                    transitionDelay: '0.05s',
-                  }}
-                >
-                  — {section.tag}
-                </div>
-              </div>
-
-              {/* Headlines */}
-              {section.lines.map((line, li) => (
-                <div key={li} className="overflow-hidden">
-                  <h2
-                    className="font-montserrat font-black leading-[0.88] tracking-tight text-gray-900"
-                    style={{
-                      fontSize: 'clamp(2.6rem, 6.5vw, 8rem)',
-                      transform: visible ? 'translateY(0)' : 'translateY(108%)',
-                      opacity: visible ? 1 : 0,
-                      transition: `transform 1.1s ${ease}, opacity 0.4s ease`,
-                      transitionDelay: `${0.18 + li * 0.13}s`,
-                      marginBottom: '0.04em',
-                    }}
-                  >
-                    {line}
-                  </h2>
-                </div>
-              ))}
-
-              {/* Divider */}
-              <div
-                className="h-px bg-brown/15 mt-10 mb-9 origin-left"
-                style={{
-                  maxWidth: '480px',
-                  transform: visible ? 'scaleX(1)' : 'scaleX(0)',
-                  transition: `transform 1.3s ${ease}`,
-                  transitionDelay: '0.45s',
-                }}
-              />
-
-              {/* Body */}
-              <p
-                className="font-playfair font-light text-brown/80 text-lg leading-relaxed max-w-sm"
-                style={{
-                  opacity: visible ? 1 : 0,
-                  transform: visible ? 'translateY(0)' : 'translateY(16px)',
-                  filter: visible ? 'blur(0px)' : 'blur(3px)',
-                  transition: 'opacity 0.9s ease, transform 0.9s ease, filter 0.9s ease',
-                  transitionDelay: '0.6s',
-                }}
-              >
-                {section.body}
-              </p>
-
-              {/* CTA */}
-              {section.link && (
-                <Link
-                  href={section.link}
-                  className="inline-flex items-center gap-4 mt-12 group"
-                  style={{
-                    opacity: visible ? 1 : 0,
-                    transform: visible ? 'translateY(0)' : 'translateY(10px)',
-                    transition: 'opacity 0.8s ease, transform 0.8s ease',
-                    transitionDelay: '0.82s',
-                  }}
-                >
-                  <span className="font-montserrat font-bold text-xs tracking-[0.35em] text-brown group-hover:text-gray-900 transition-colors duration-300">
-                    UTFORSK MER
-                  </span>
-                  <span className="h-px w-10 bg-brown group-hover:w-20 group-hover:bg-gray-900 transition-all duration-500" />
-                </Link>
-              )}
-            </div>
-          </div>
-        )
-
-        const videoPanel = (
-          <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
-            <video
-              className="absolute inset-0 w-full h-full object-cover"
-              autoPlay muted loop playsInline
-            >
-              <source src="/bg.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0" style={{ backgroundColor: section.videoOverlay }} />
-            {/* Section label overlay */}
-            <div className="absolute bottom-10 left-10 right-10">
-              <p className="font-montserrat font-bold text-xs tracking-[0.4em] text-white/50 mb-2">
-                — {section.tag}
-              </p>
-              <div className="h-px bg-white/20" />
-            </div>
-          </div>
-        )
-
+        /* Text always first in DOM on mobile (flex-col).
+           On desktop, lg:flex-row-reverse flips order for videoSide=left */
         return (
           <section
             key={section.id}
             id={section.id}
-            className="min-h-screen flex"
+            className={`flex flex-col ${section.videoSide === 'left' ? 'lg:flex-row-reverse' : 'lg:flex-row'}`}
             style={{ backgroundColor: bg }}
           >
-            {videoLeft ? (
-              <>{videoPanel}{textBlock}</>
-            ) : (
-              <>{textBlock}{videoPanel}</>
-            )}
+            {/* ── Text side ── */}
+            <div className="w-full lg:w-1/2 flex items-center px-8 md:px-14 lg:px-16 py-20 lg:py-28 relative min-h-[60vw] lg:min-h-screen">
+
+              {/* Ghost section number — hidden on mobile */}
+              <span
+                className="absolute font-montserrat font-black leading-none select-none pointer-events-none hidden lg:block"
+                style={{
+                  right: section.videoSide === 'right' ? '-1rem' : 'auto',
+                  left: section.videoSide === 'left' ? '-1rem' : 'auto',
+                  top: '50%',
+                  fontSize: 'clamp(8rem, 16vw, 20rem)',
+                  color: '#9c7a6d',
+                  opacity: visible ? 0.06 : 0,
+                  transform: visible ? 'translateY(-50%)' : 'translateY(-50%) translateX(2rem)',
+                  transition: `opacity 1.4s ease, transform 1.4s ${ease}`,
+                }}
+              >
+                {section.num}
+              </span>
+
+              <div className="max-w-lg relative z-10 w-full">
+
+                {/* Tag */}
+                <div className="overflow-hidden mb-8">
+                  <div
+                    className="font-montserrat font-bold text-xs tracking-[0.42em] text-brown/50"
+                    style={tagStyle(visible)}
+                  >
+                    — {section.tag}
+                  </div>
+                </div>
+
+                {/* Headlines — clip-path reveal, NO overflow-hidden wrapper */}
+                {section.lines.map((line, li) => (
+                  <h2
+                    key={li}
+                    className="font-montserrat font-black text-gray-900"
+                    style={headlineStyle(visible, 0.18 + li * 0.13)}
+                  >
+                    {line}
+                  </h2>
+                ))}
+
+                {/* Divider */}
+                <div
+                  className="h-px bg-brown/15 mt-10 mb-9 origin-left"
+                  style={{
+                    maxWidth: '440px',
+                    transform: visible ? 'scaleX(1)' : 'scaleX(0)',
+                    transition: `transform 1.3s ${ease}`,
+                    transitionDelay: '0.45s',
+                  }}
+                />
+
+                {/* Body */}
+                <p
+                  className="font-playfair font-light text-brown/80 text-base md:text-lg leading-relaxed max-w-sm"
+                  style={{
+                    opacity: visible ? 1 : 0,
+                    transform: visible ? 'translateY(0)' : 'translateY(14px)',
+                    filter: visible ? 'blur(0px)' : 'blur(3px)',
+                    transition: 'opacity 0.9s ease, transform 0.9s ease, filter 0.9s ease',
+                    transitionDelay: '0.6s',
+                  }}
+                >
+                  {section.body}
+                </p>
+
+                {/* CTA */}
+                {section.link && (
+                  <Link
+                    href={section.link}
+                    className="inline-flex items-center gap-4 mt-12 group"
+                    style={{
+                      opacity: visible ? 1 : 0,
+                      transform: visible ? 'translateY(0)' : 'translateY(10px)',
+                      transition: 'opacity 0.8s ease, transform 0.8s ease',
+                      transitionDelay: '0.82s',
+                    }}
+                  >
+                    <span className="font-montserrat font-bold text-xs tracking-[0.35em] text-brown group-hover:text-gray-900 transition-colors duration-300">
+                      UTFORSK MER
+                    </span>
+                    <span className="h-px w-10 bg-brown group-hover:w-20 group-hover:bg-gray-900 transition-all duration-500" />
+                  </Link>
+                )}
+              </div>
+            </div>
+
+            {/* ── Video side — shown on ALL screen sizes ── */}
+            <div className="w-full h-72 md:h-96 lg:h-auto lg:w-1/2 relative overflow-hidden flex-shrink-0">
+              <video
+                className="absolute inset-0 w-full h-full object-cover"
+                autoPlay muted loop playsInline
+              >
+                <source src="/bg.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0" style={{ backgroundColor: section.videoOverlay }} />
+              <div className="absolute bottom-8 left-8 right-8">
+                <p className="font-montserrat font-bold text-xs tracking-[0.4em] text-white/50 mb-2">
+                  — {section.tag}
+                </p>
+                <div className="h-px bg-white/20" />
+              </div>
+            </div>
+
           </section>
         )
       })}
@@ -409,15 +402,15 @@ export default function Home() {
       {/* ═══════════════════ BYGGSERVICE ═══════════════════ */}
       <section
         id="byggservice"
-        className="min-h-screen py-28 px-8 md:px-16 lg:px-20 relative overflow-hidden"
+        className="py-20 md:py-28 px-8 md:px-14 lg:px-20 relative overflow-hidden"
         style={{ backgroundColor: '#f0ebe5' }}
       >
-        {/* Ghost number */}
+        {/* Ghost number desktop only */}
         <span
-          className="absolute font-montserrat font-black leading-none select-none pointer-events-none"
+          className="absolute font-montserrat font-black leading-none select-none pointer-events-none hidden lg:block"
           style={{
             right: '-1rem',
-            top: '8rem',
+            top: '6rem',
             fontSize: 'clamp(10rem, 20vw, 26rem)',
             color: '#9c7a6d',
             opacity: byggVisible ? 0.05 : 0,
@@ -429,42 +422,30 @@ export default function Home() {
         </span>
 
         <div className="max-w-7xl mx-auto relative z-10">
+
           {/* Header */}
-          <div className="mb-20">
+          <div className="mb-12 md:mb-16">
             <div className="overflow-hidden mb-8">
               <div
                 className="font-montserrat font-bold text-xs tracking-[0.42em] text-brown/50"
-                style={{
-                  transform: byggVisible ? 'translateY(0)' : 'translateY(110%)',
-                  opacity: byggVisible ? 1 : 0,
-                  transition: `transform 0.9s ${ease}, opacity 0.7s ease`,
-                  transitionDelay: '0.05s',
-                }}
+                style={tagStyle(byggVisible)}
               >
                 — FAGLIG HÅNDVERK
               </div>
             </div>
             {['FUNDAMENTET', 'FOR ALT ANNET'].map((line, li) => (
-              <div key={li} className="overflow-hidden">
-                <h2
-                  className="font-montserrat font-black leading-[0.88] tracking-tight text-gray-900"
-                  style={{
-                    fontSize: 'clamp(2.6rem, 6.5vw, 8rem)',
-                    transform: byggVisible ? 'translateY(0)' : 'translateY(108%)',
-                    opacity: byggVisible ? 1 : 0,
-                    transition: `transform 1.1s ${ease}, opacity 0.4s ease`,
-                    transitionDelay: `${0.18 + li * 0.13}s`,
-                    marginBottom: '0.04em',
-                  }}
-                >
-                  {line}
-                </h2>
-              </div>
+              <h2
+                key={li}
+                className="font-montserrat font-black text-gray-900"
+                style={headlineStyle(byggVisible, 0.18 + li * 0.13)}
+              >
+                {line}
+              </h2>
             ))}
             <div
-              className="h-px bg-brown/15 mt-10 mb-0 origin-left"
+              className="h-px bg-brown/15 mt-10 origin-left"
               style={{
-                maxWidth: '480px',
+                maxWidth: '440px',
                 transform: byggVisible ? 'scaleX(1)' : 'scaleX(0)',
                 transition: `transform 1.3s ${ease}`,
                 transitionDelay: '0.45s',
@@ -472,38 +453,71 @@ export default function Home() {
             />
           </div>
 
-          {/* Feature grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+          {/* Video strip — visible on all devices */}
+          <div
+            className="relative w-full h-64 md:h-80 overflow-hidden rounded-2xl mb-16"
+            style={{
+              opacity: byggVisible ? 1 : 0,
+              transform: byggVisible ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'opacity 0.9s ease, transform 0.9s ease',
+              transitionDelay: '0.5s',
+            }}
+          >
+            <video
+              className="absolute inset-0 w-full h-full object-cover"
+              autoPlay muted loop playsInline
+            >
+              <source src="/bg.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0" style={{ backgroundColor: 'rgba(50,40,35,0.45)' }} />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <p className="font-montserrat font-black text-white/80 text-xs tracking-[0.6em] uppercase">
+                Profesjonelt Håndverk Siden 2010
+              </p>
+            </div>
+          </div>
+
+          {/* Service cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {BYGGSERVICE_ITEMS.map((item, i) => (
               <div
                 key={item.title}
-                className="group border border-brown/10 rounded-2xl p-8 hover:border-brown/30 hover:shadow-md transition-all duration-400"
+                className="group rounded-2xl overflow-hidden border border-brown/10 hover:border-brown/25 hover:shadow-lg transition-all duration-500"
                 style={{
                   backgroundColor: '#f8f6f2',
                   opacity: byggVisible ? 1 : 0,
-                  transform: byggVisible ? 'translateY(0)' : 'translateY(30px)',
+                  transform: byggVisible ? 'translateY(0)' : 'translateY(28px)',
                   transition: 'opacity 0.8s ease, transform 0.8s ease, border-color 0.4s, box-shadow 0.4s',
-                  transitionDelay: `${0.55 + i * 0.1}s`,
+                  transitionDelay: `${0.6 + i * 0.08}s`,
                 }}
               >
-                <div className="w-10 h-10 mb-6 text-brown/70 group-hover:text-brown transition-colors duration-300">
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full">
-                    {item.icon}
+                {/* Card image area */}
+                <div className={`w-full h-40 bg-gradient-to-br ${item.gradient} relative flex items-center justify-center`}>
+                  <svg
+                    className="w-16 h-16 text-gray-600/40"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d={item.icon} />
                   </svg>
                 </div>
-                <h3 className="font-montserrat font-black text-sm tracking-wider text-gray-900 mb-3 uppercase">
-                  {item.title}
-                </h3>
-                <p className="font-playfair font-light text-brown/70 text-base leading-relaxed">
-                  {item.desc}
-                </p>
+                {/* Card text */}
+                <div className="p-7">
+                  <h3 className="font-montserrat font-black text-xs tracking-[0.2em] text-gray-900 mb-3 uppercase">
+                    {item.title}
+                  </h3>
+                  <p className="font-playfair font-light text-brown/70 text-base leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
 
           {/* CTA */}
           <div
-            className="mt-16"
+            className="mt-14"
             style={{
               opacity: byggVisible ? 1 : 0,
               transform: byggVisible ? 'translateY(0)' : 'translateY(10px)',
@@ -511,16 +525,14 @@ export default function Home() {
               transitionDelay: '1.2s',
             }}
           >
-            <Link
-              href="/kontakt"
-              className="inline-flex items-center gap-4 group"
-            >
+            <Link href="/kontakt" className="inline-flex items-center gap-4 group">
               <span className="font-montserrat font-bold text-xs tracking-[0.35em] text-brown group-hover:text-gray-900 transition-colors duration-300">
                 BOOK GRATIS BEFARING
               </span>
               <span className="h-px w-10 bg-brown group-hover:w-20 group-hover:bg-gray-900 transition-all duration-500" />
             </Link>
           </div>
+
         </div>
       </section>
 
@@ -536,15 +548,10 @@ export default function Home() {
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
             <img src="/LOGO2.png" alt="Fint Hjem" className="h-4 md:h-6 lg:h-8 object-contain" />
           </div>
-
           <nav className="text-center">
             <ul className="space-y-6">
               <li className="animate-fadeInUp" style={{ animationDelay: '1.1s' }}>
-                <Link
-                  href="/"
-                  onClick={() => setTimeout(() => setIsMenuOpen(false), 100)}
-                  className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 block"
-                >
+                <Link href="/" onClick={() => setTimeout(() => setIsMenuOpen(false), 100)} className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 block">
                   HJEM
                 </Link>
               </li>
@@ -564,35 +571,28 @@ export default function Home() {
                 </li>
               ))}
               <li className="animate-fadeInUp" style={{ animationDelay: '1.85s' }}>
-                <Link
-                  href="/interior-design-homestyling"
-                  onClick={() => setTimeout(() => setIsMenuOpen(false), 100)}
-                  className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 block"
-                >
-                  Interiørdesign/Homestyling
+                <Link href="/interior-design-homestyling" onClick={() => setTimeout(() => setIsMenuOpen(false), 100)} className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 block">
+                  Interiørdesign / Homestyling
                 </Link>
               </li>
               <li className="animate-fadeInUp" style={{ animationDelay: '2.0s' }}>
-                <Link
-                  href="/kontakt"
-                  onClick={() => setTimeout(() => setIsMenuOpen(false), 100)}
-                  className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 block"
-                >
+                <Link href="/kontakt" onClick={() => setTimeout(() => setIsMenuOpen(false), 100)} className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider hover:text-gray-800 transition-all duration-500 block">
                   Kontakt
                 </Link>
               </li>
             </ul>
           </nav>
-
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-6">
             {[
-              <path key="ig" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />,
-              <path key="tt" d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />,
-              <path key="fb" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />,
-              <path key="li" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />,
-            ].map((path, i) => (
+              'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z',
+              'M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z',
+              'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z',
+              'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z',
+            ].map((d, i) => (
               <a key={i} href="#" className="text-brown hover:text-gray-800 transition-colors duration-200">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">{path}</svg>
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d={d} />
+                </svg>
               </a>
             ))}
           </div>
