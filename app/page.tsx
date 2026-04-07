@@ -223,15 +223,10 @@ export default function Home() {
                 </mask>
               </defs>
             </svg>
-            <div
-              className="relative w-[min(90vw,80rem)] animate-fadeInScale"
-              style={{
-                aspectRatio: '2.4 / 1',
-                maxHeight: 'min(42vw, 380px)',
-              }}
-            >
+            {/* FINTHEM.png is 1024×1024 — wide 2.4:1 + max-height made a short strip and clipped the mask vertically */}
+            <div className="relative mx-auto aspect-square w-[min(72vw,400px)] animate-fadeInScale">
               <video
-                className="absolute inset-0 z-0 h-full w-full object-contain object-center animate-kenburns"
+                className="absolute inset-0 z-0 h-full w-full object-cover object-center animate-kenburns"
                 autoPlay
                 muted
                 loop
