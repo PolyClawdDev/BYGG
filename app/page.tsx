@@ -162,23 +162,7 @@ export default function Home() {
 
       {/* ═══════════ HERO ═══════════ */}
       <div className="h-screen p-4 relative">
-        <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden relative">
-
-          {/* Background video — fills the entire hero card */}
-          <video
-            className="absolute inset-0 w-full h-full object-cover animate-kenburns"
-            autoPlay muted loop playsInline
-            style={{ zIndex: 0 }}
-          >
-            <source src="/BYGGVIDEO.mp4..mov" type="video/mp4" />
-            <source src="/bg.mp4" type="video/mp4" />
-          </video>
-
-          {/* Dark overlay so content stays readable */}
-          <div className="absolute inset-0 bg-black/40" style={{ zIndex: 1 }} />
-
-          {/* All content sits above the video */}
-          <div className="relative flex flex-col h-full" style={{ zIndex: 2 }}>
+        <div className="w-full h-full animate-subtle-bg rounded-2xl flex flex-col">
 
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -186,9 +170,9 @@ export default function Home() {
             aria-label="Toggle menu"
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">
-              <span className={`w-full h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`w-full h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
-              <span className={`w-full h-0.5 bg-white transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              <span className={`w-full h-0.5 bg-gray-800 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+              <span className={`w-full h-0.5 bg-gray-800 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
+              <span className={`w-full h-0.5 bg-gray-800 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
             </div>
           </button>
 
@@ -197,24 +181,39 @@ export default function Home() {
             className="fixed top-8 right-8 z-50 p-2 hover:bg-white/10 rounded-lg transition-colors duration-200 animate-fadeIn"
             aria-label="Contact"
           >
-            <svg className={`w-8 h-8 text-white ${isShaking ? 'animate-shake' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className={`w-8 h-8 text-gray-800 ${isShaking ? 'animate-shake' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </Link>
 
           <div className="flex-1 flex flex-col px-4">
             <div className="flex-1 flex flex-col items-center justify-center">
-              {/* Logo — large, same footprint as the old masked text */}
-              <div className="relative w-full max-w-7xl h-48 md:h-64 lg:h-80 px-4 animate-fadeInScale flex items-center justify-center">
+
+              {/* Video plays only behind the logo — cream bg around it stays untouched */}
+              <div
+                className="relative w-[92vw] max-w-6xl animate-fadeInScale overflow-hidden rounded-sm"
+                style={{ height: 'clamp(140px, 28vw, 380px)' }}
+              >
+                {/* Video layer */}
+                <video
+                  className="absolute inset-0 w-full h-full object-cover animate-kenburns"
+                  autoPlay muted loop playsInline
+                >
+                  <source src="/BYGGVIDEO.mp4..mov" type="video/mp4" />
+                  <source src="/bg.mp4" type="video/mp4" />
+                </video>
+
+                {/* Logo on top of video */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/LOGOH.png"
                   alt="Fint Hjem"
-                  className="w-full h-full object-contain drop-shadow-2xl"
+                  className="absolute inset-0 w-full h-full object-contain relative z-10"
                 />
               </div>
-              <div className="text-center -mt-2 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
-                <h2 className="font-playfair font-light text-white/80 text-lg md:text-xl lg:text-2xl tracking-wider">
+
+              <div className="text-center mt-4 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
+                <h2 className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider">
                   DIN TOTALENTREPRENØR
                 </h2>
               </div>
@@ -222,7 +221,7 @@ export default function Home() {
 
             <div className="mt-auto mb-6 md:mb-10 animate-fadeInUp" style={{ animationDelay: '1.8s' }}>
               <nav className="text-center">
-                <ul className="font-playfair font-light text-white/80 tracking-wider space-y-3 md:space-y-0 md:space-x-6 md:flex md:items-center md:justify-center text-lg md:text-xl lg:text-2xl">
+                <ul className="font-playfair font-light text-brown tracking-wider space-y-3 md:space-y-0 md:space-x-6 md:flex md:items-center md:justify-center text-lg md:text-xl lg:text-2xl">
                   {[
                     { label: 'Ditt Nye Hjem', id: 'ditt-nye-hjem' },
                     { label: 'Renovering & Forandring', id: 'renovering-forandring' },
@@ -230,30 +229,29 @@ export default function Home() {
                     { label: 'Interiør & Styling', id: 'interior-styling' },
                   ].flatMap((item, i, arr) => {
                     const node = (
-                      <li key={item.id} className="relative cursor-pointer group hover:text-white transition-colors duration-300" onClick={() => scrollToSection(item.id)}>
+                      <li key={item.id} className="relative cursor-pointer group hover:text-gray-800 transition-colors duration-300" onClick={() => scrollToSection(item.id)}>
                         <span className="relative">
                           {item.label}
                           <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-current transition-all duration-300 group-hover:w-full block" />
                         </span>
                       </li>
                     )
-                    const sep = i < arr.length - 1 ? <li key={`sep-${i}`} className="hidden md:block text-white/30 select-none">/</li> : null
+                    const sep = i < arr.length - 1 ? <li key={`sep-${i}`} className="hidden md:block text-brown/40 select-none">/</li> : null
                     return sep ? [node, sep] : [node]
                   })}
                 </ul>
               </nav>
               <div className="flex justify-center mt-6">
-                <div className="flex flex-col items-center gap-1 animate-scrollPulse opacity-50">
-                  <div className="w-px h-8 bg-white" />
+                <div className="flex flex-col items-center gap-1 animate-scrollPulse opacity-40">
+                  <div className="w-px h-8 bg-brown" />
                   <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
-                    <path d="M1 1l4 4 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M1 1l4 4 4-4" stroke="#9c7a6d" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
               </div>
             </div>
           </div>
 
-          </div>{/* end z-index content wrapper */}
         </div>
       </div>
 
