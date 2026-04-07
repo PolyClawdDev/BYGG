@@ -162,62 +162,62 @@ export default function Home() {
 
       {/* ═══════════ HERO ═══════════ */}
       <div className="h-screen p-4 relative">
-        <div className="w-full h-full animate-subtle-bg rounded-2xl flex flex-col">
+        <div className="w-full h-full rounded-2xl flex flex-col overflow-hidden relative">
 
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="fixed top-8 left-8 z-50 p-2 hover:bg-white/10 rounded-lg transition-colors duration-200 animate-fadeIn"
-            aria-label="Toggle menu"
+          {/* ── Full-hero background video ── */}
+          <video
+            className="absolute inset-0 w-full h-full object-cover animate-kenburns"
+            autoPlay muted loop playsInline
+            style={{ zIndex: 0 }}
           >
-            <div className="w-6 h-5 relative flex flex-col justify-between">
-              <span className={`w-full h-0.5 bg-gray-800 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-              <span className={`w-full h-0.5 bg-gray-800 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
-              <span className={`w-full h-0.5 bg-gray-800 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
-            </div>
-          </button>
+            <source src="/bg.mp4" type="video/mp4" />
+            <source src="/BYGGVIDEO.mp4..mov" type="video/mp4" />
+          </video>
+          {/* Warm cream wash — video shows through but warmth is preserved */}
+          <div className="absolute inset-0" style={{ background: 'rgba(248,246,242,0.55)', zIndex: 1 }} />
 
-          <Link
-            href="/kontakt"
-            className="fixed top-8 right-8 z-50 p-2 hover:bg-white/10 rounded-lg transition-colors duration-200 animate-fadeIn"
-            aria-label="Contact"
-          >
-            <svg className={`w-8 h-8 text-gray-800 ${isShaking ? 'animate-shake' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-          </Link>
+          {/* ── All UI on top ── */}
+          <div className="relative flex flex-col h-full" style={{ zIndex: 2 }}>
 
-          <div className="flex-1 flex flex-col px-4">
-            <div className="flex-1 flex flex-col items-center justify-center">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="fixed top-8 left-8 z-50 p-2 hover:bg-white/10 rounded-lg transition-colors duration-200 animate-fadeIn"
+              aria-label="Toggle menu"
+            >
+              <div className="w-6 h-5 relative flex flex-col justify-between">
+                <span className={`w-full h-0.5 bg-gray-800 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+                <span className={`w-full h-0.5 bg-gray-800 transition-all duration-300 ${isMenuOpen ? 'opacity-0' : ''}`} />
+                <span className={`w-full h-0.5 bg-gray-800 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+              </div>
+            </button>
 
-              {/* Video plays only behind the logo — cream bg around it stays untouched */}
-              <div
-                className="relative w-[92vw] max-w-6xl animate-fadeInScale overflow-hidden rounded-sm"
-                style={{ height: 'clamp(140px, 28vw, 380px)' }}
-              >
-                {/* Video layer */}
-                <video
-                  className="absolute inset-0 w-full h-full object-cover animate-kenburns"
-                  autoPlay muted loop playsInline
-                >
-                  <source src="/BYGGVIDEO.mp4..mov" type="video/mp4" />
-                  <source src="/bg.mp4" type="video/mp4" />
-                </video>
+            <Link
+              href="/kontakt"
+              className="fixed top-8 right-8 z-50 p-2 hover:bg-white/10 rounded-lg transition-colors duration-200 animate-fadeIn"
+              aria-label="Contact"
+            >
+              <svg className={`w-8 h-8 text-gray-800 ${isShaking ? 'animate-shake' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </Link>
 
-                {/* Logo on top of video */}
+            <div className="flex-1 flex flex-col px-4">
+              <div className="flex-1 flex flex-col items-center justify-center">
+
+                {/* LOGOH — fills almost the full hero width */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/LOGOH.png"
                   alt="Fint Hjem"
-                  className="absolute inset-0 w-full h-full object-contain relative z-10"
+                  className="w-[90vw] max-w-7xl object-contain animate-fadeInScale"
                 />
-              </div>
 
-              <div className="text-center mt-4 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
-                <h2 className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider">
-                  DIN TOTALENTREPRENØR
-                </h2>
+                <div className="text-center mt-6 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
+                  <h2 className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider">
+                    DIN TOTALENTREPRENØR
+                  </h2>
+                </div>
               </div>
-            </div>
 
             <div className="mt-auto mb-6 md:mb-10 animate-fadeInUp" style={{ animationDelay: '1.8s' }}>
               <nav className="text-center">
@@ -252,6 +252,7 @@ export default function Home() {
             </div>
           </div>
 
+          </div>{/* end UI layer */}
         </div>
       </div>
 
