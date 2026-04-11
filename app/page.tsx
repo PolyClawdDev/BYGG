@@ -190,10 +190,11 @@ export default function Home() {
           {/* ── Centre: logo with video playing ONLY behind it ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
 
-            {/* LOGOB.png (RGBA outline): video under logo; multiply lets light/white pixels show the video, black strokes stay dark */}
-            <div className="relative mx-auto aspect-square w-[min(72vw,400px)] animate-fadeInScale">
+            {/* LOGOB over video + multiply. Do NOT put opacity/transform animation on this parent — it isolates stacking and
+                mix-blend-multiply then blends against the hero bg instead of the video (looks like empty letters, no motion). */}
+            <div className="relative mx-auto aspect-square w-[min(72vw,400px)]">
               <video
-                className="absolute inset-0 z-0 h-full w-full object-cover object-center animate-kenburns"
+                className="absolute inset-0 z-0 h-full w-full object-cover object-center"
                 autoPlay
                 muted
                 loop
