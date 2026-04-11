@@ -190,15 +190,16 @@ export default function Home() {
           {/* ── Centre: logo with video playing ONLY behind it ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
 
-            {/* LOGOB over video + multiply. Do NOT put opacity/transform animation on this parent — it isolates stacking and
-                mix-blend-multiply then blends against the hero bg instead of the video (looks like empty letters, no motion). */}
-            <div className="relative mx-auto aspect-square w-[min(72vw,400px)]">
+            {/* Only LOGOB.png — no FINTHEM. BYGG.mp4 under logo; multiply: white/light → video, black → stroke.
+                Letter interiors must be transparent (or near-white) in the PNG for motion to read; opaque cream = re-export LOGOB. */}
+            <div className="relative isolate mx-auto aspect-square w-[min(72vw,400px)]">
               <video
                 className="absolute inset-0 z-0 h-full w-full object-cover object-center"
                 autoPlay
                 muted
                 loop
                 playsInline
+                preload="auto"
               >
                 <source src="/BYGG.mp4" type="video/mp4" />
               </video>
