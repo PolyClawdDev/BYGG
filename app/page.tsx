@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useId } from 'react'
 import Link from 'next/link'
 import ReviewsCarousel from './components/ReviewsCarousel'
 import SiteFooter from './components/SiteFooter'
@@ -73,6 +73,10 @@ const BYGGSERVICE_ITEMS = [
 /* ─── Page ─── */
 
 export default function Home() {
+  const logoMaskUid = useId().replace(/:/g, '')
+  const logoFillFilterId = `logob-fill-${logoMaskUid}`
+  const logoVideoMaskId = `logob-vidmask-${logoMaskUid}`
+
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isShaking, setIsShaking] = useState(false)
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
@@ -190,9 +194,51 @@ export default function Home() {
           {/* ── Centre: logo with video playing ONLY behind it ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
 
-            {/* Only LOGOB.png — no FINTHEM. BYGG.mp4 under logo; multiply: white/light → video, black → stroke.
-                Letter interiors must be transparent (or near-white) in the PNG for motion to read; opaque cream = re-export LOGOB. */}
-            <div className="relative isolate mx-auto aspect-square w-[min(72vw,400px)]">
+            {/* LOGOB.png → SVG mask only (no second img): multiply overlay was painting video in the whole white PNG canvas = rectangular box.
+                Invert + light dilate fills each glyph without merging into one slab; video only where mask is white. */}
+            <svg width={0} height={0} className="absolute" aria-hidden>
+              <defs>
+                <filter
+                  id={logoFillFilterId}
+                  colorInterpolationFilters="sRGB"
+                  filterUnits="objectBoundingBox"
+                  primitiveUnits="objectBoundingBox"
+                  x="-0.12"
+                  y="-0.12"
+                  width="1.24"
+                  height="1.24"
+                >
+                  <feColorMatrix
+                    in="SourceGraphic"
+                    type="matrix"
+                    values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"
+                    result="inv"
+                  />
+                  <feMorphology in="inv" operator="dilate" radius="0.004" result="d1" />
+                  <feMorphology in="d1" operator="dilate" radius="0.004" result="d2" />
+                  <feMorphology in="d2" operator="dilate" radius="0.004" result="d3" />
+                  <feMorphology in="d3" operator="dilate" radius="0.004" result="d4" />
+                </filter>
+                <mask
+                  id={logoVideoMaskId}
+                  maskUnits="objectBoundingBox"
+                  maskContentUnits="objectBoundingBox"
+                  x={0}
+                  y={0}
+                  width={1}
+                  height={1}
+                >
+                  <image
+                    href="/LOGOB.png"
+                    width={1}
+                    height={1}
+                    preserveAspectRatio="xMidYMid meet"
+                    filter={`url(#${logoFillFilterId})`}
+                  />
+                </mask>
+              </defs>
+            </svg>
+            <div className="relative isolate mx-auto aspect-square w-[min(72vw,400px)]" aria-label="Fint Hjem">
               <video
                 className="absolute inset-0 z-0 h-full w-full object-cover object-center"
                 autoPlay
@@ -200,15 +246,20 @@ export default function Home() {
                 loop
                 playsInline
                 preload="auto"
+                aria-hidden
+                style={{
+                  WebkitMask: `url(#${logoVideoMaskId})`,
+                  mask: `url(#${logoVideoMaskId})`,
+                  WebkitMaskSize: 'contain',
+                  maskSize: 'contain',
+                  WebkitMaskRepeat: 'no-repeat',
+                  maskRepeat: 'no-repeat',
+                  WebkitMaskPosition: 'center',
+                  maskPosition: 'center',
+                }}
               >
                 <source src="/BYGG.mp4" type="video/mp4" />
               </video>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/LOGOB.png"
-                alt="Fint Hjem"
-                className="pointer-events-none absolute inset-0 z-10 h-full w-full object-contain object-center mix-blend-multiply"
-              />
             </div>
 
             <div className="text-center mt-6 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
