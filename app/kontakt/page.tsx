@@ -41,173 +41,128 @@ export default function Kontakt() {
           </div>
         </button>
 
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col px-4" key="contact-page-v2">
-          {/* Logo at the top */}
-          <div className="absolute top-8 left-1/2 transform -translate-x-1/2 text-center">
-            <img 
-              src="/LOGO2.png" 
-              alt="Fint Hjem logo" 
-              className="h-4 md:h-6 lg:h-8 object-contain"
-            />
-          </div>
-          
-          {/* Content Section - Centered */}
-          <div className="flex-1 flex flex-col items-center justify-center -mt-16 contact-page-header">
-            <div className="w-full max-w-4xl">
-              {/* Header */}
-              <div className="text-center mb-6 animate-fadeInUp">
-                <h1 className="font-playfair font-light text-brown text-3xl md:text-4xl lg:text-5xl tracking-wider mb-4">
-                  Kontakt
-                </h1>
-              </div>
+        {/* Main Content — one-viewport fit, no vertical overflow, no top logo. */}
+        <div className="flex-1 flex flex-col justify-center px-4 md:px-8 py-4 md:py-6" key="contact-page-v3">
+          <div className="w-full max-w-5xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-3 md:mb-4 animate-fadeInUp">
+              <h1 className="font-playfair font-light text-brown text-2xl md:text-3xl lg:text-4xl tracking-wider">
+                Kontakt
+              </h1>
+            </div>
 
-              {/* Contact Information */}
-              <div className="grid md:grid-cols-2 gap-8 mb-12">
-                {/* Contact Details */}
-                <div className="animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
-                  <h2 className="font-playfair font-light text-brown text-2xl md:text-3xl tracking-wider mb-6">
-                    Kontaktinformasjon
-                  </h2>
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Kontaktperson</h3>
-                      <p className="font-playfair font-light text-brown text-lg">Daniel Christinasson</p>
-                    </div>
-                    <div>
-                      <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Telefon</h3>
-                      <p className="font-playfair font-light text-brown text-lg">+47 465 83 867</p>
-                    </div>
-                    <div>
-                      <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">E-post</h3>
-                      <p className="font-playfair font-light text-brown text-lg">info@finthjem.no</p>
-                    </div>
-                    <div>
-                      <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Adresse</h3>
-                      <p className="font-playfair font-light text-brown text-lg">
-                        Prinsensgate 5<br />
-                        0152 Oslo<br />
-                        Norge
-                      </p>
-                    </div>
-                    <div>
-                      <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Åpningstider</h3>
-                      <p className="font-playfair font-light text-brown text-lg">
-                        Mandag - Fredag: 08:00 - 17:00<br />
-                        Lørdag: 09:00 - 15:00<br />
-                        Søndag: Stengt
-                      </p>
-                    </div>
+            {/* Two-column: info + booking form. Aggressive spacing
+                tightening so all content lives inside the fixed
+                h-screen hero card without clipping. */}
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+              {/* Contact Details */}
+              <div className="animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
+                <h2 className="font-playfair font-light text-brown text-xl md:text-2xl tracking-wider mb-3">
+                  Kontaktinformasjon
+                </h2>
+                <div className="space-y-2 text-sm md:text-base">
+                  <div>
+                    <h3 className="font-playfair font-light text-brown font-medium">Kontaktperson</h3>
+                    <p className="font-playfair font-light text-brown">Daniel Christinasson</p>
+                  </div>
+                  <div>
+                    <h3 className="font-playfair font-light text-brown font-medium">Telefon</h3>
+                    <p className="font-playfair font-light text-brown">+47 465 83 867</p>
+                  </div>
+                  <div>
+                    <h3 className="font-playfair font-light text-brown font-medium">E-post</h3>
+                    <p className="font-playfair font-light text-brown">info@finthjem.no</p>
+                  </div>
+                  <div>
+                    <h3 className="font-playfair font-light text-brown font-medium">Adresse</h3>
+                    <p className="font-playfair font-light text-brown">Prinsensgate 5, 0152 Oslo</p>
+                  </div>
+                  <div>
+                    <h3 className="font-playfair font-light text-brown font-medium">Åpningstider</h3>
+                    <p className="font-playfair font-light text-brown">Man–Fre 08–17 · Lør 09–15 · Søn stengt</p>
                   </div>
                 </div>
 
-                {/* Booking Form */}
-                <div className="animate-fadeInUp" style={{ animationDelay: '0.6s' }}>
-                  <h2 className="font-playfair font-light text-brown text-2xl md:text-3xl tracking-wider mb-6">
-                    Gratis befaring på stedet
-                  </h2>
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                      <label className="block font-playfair font-light text-brown text-lg mb-2">
-                        Navn *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={userName}
-                        onChange={(e) => setUserName(e.target.value)}
-                        className="w-full px-4 py-3 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown bg-white/80"
-                        placeholder="Ditt navn"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block font-playfair font-light text-brown text-lg mb-2">
-                        E-post *
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={userEmail}
-                        onChange={(e) => setUserEmail(e.target.value)}
-                        className="w-full px-4 py-3 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown bg-white/80"
-                        placeholder="din.epost@example.com"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block font-playfair font-light text-brown text-lg mb-2">
-                        Telefon
-                      </label>
-                      <input
-                        type="tel"
-                        value={userPhone}
-                        onChange={(e) => setUserPhone(e.target.value)}
-                        className="w-full px-4 py-3 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown bg-white/80"
-                        placeholder="070 123 45 67"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block font-playfair font-light text-brown text-lg mb-2">
-                        Ønsket dato *
-                      </label>
-                      <input
-                        type="date"
-                        required
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        min={new Date().toISOString().split('T')[0]}
-                        className="w-full px-4 py-3 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown bg-white/80"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block font-playfair font-light text-brown text-lg mb-2">
-                        Ønsket tidspunkt *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={selectedTime}
-                        onChange={(e) => setSelectedTime(e.target.value)}
-                        className="w-full px-4 py-3 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown bg-white/80"
-                        placeholder="For eksempel: 14:30, etter lunsj, formiddag, osv."
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block font-playfair font-light text-brown text-lg mb-2">
-                        Beskriv hva dere trenger hjelp med *
-                      </label>
-                      <textarea
-                        required
-                        value={userMessage}
-                        onChange={(e) => setUserMessage(e.target.value)}
-                        rows={4}
-                        className="w-full px-4 py-3 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown bg-white/80 resize-none"
-                        placeholder="Beskriv kort hva dere trenger hjelp med. For eksempel: Renovering av kjøkken, nytt bad, tilbygg, osv."
-                      />
-                    </div>
-                    
-                    <button
-                      type="submit"
-                      className="w-full bg-brown text-white font-playfair font-light text-lg py-3 px-6 rounded-lg hover:bg-brown/80 transition-colors duration-300 mt-6"
-                    >
-                      Book gratis befaring
-                    </button>
-                  </form>
+                <div className="mt-4 md:mt-6 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
+                  <Link
+                    href="/"
+                    className="inline-block font-playfair font-light text-brown text-sm md:text-base tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer border-b border-brown/30 hover:border-brown"
+                  >
+                    ← Tilbake til startsiden
+                  </Link>
                 </div>
               </div>
 
-              {/* Back to Home Button */}
-              <div className="text-center mt-12 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
-                <Link 
-                  href="/"
-                  className="inline-block font-playfair font-light text-brown text-lg md:text-xl tracking-wider hover:text-gray-800 transition-all duration-500 cursor-pointer border-b border-brown/30 hover:border-brown"
-                >
-                  ← Tilbake til startsiden
-                </Link>
+              {/* Booking Form */}
+              <div className="animate-fadeInUp" style={{ animationDelay: '0.6s' }}>
+                <h2 className="font-playfair font-light text-brown text-xl md:text-2xl tracking-wider mb-3">
+                  Gratis befaring på stedet
+                </h2>
+                <form onSubmit={handleSubmit} className="space-y-2.5">
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <input
+                      type="text"
+                      required
+                      aria-label="Navn"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      className="w-full px-3 py-2 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown text-sm md:text-base bg-white/80"
+                      placeholder="Navn *"
+                    />
+                    <input
+                      type="email"
+                      required
+                      aria-label="E-post"
+                      value={userEmail}
+                      onChange={(e) => setUserEmail(e.target.value)}
+                      className="w-full px-3 py-2 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown text-sm md:text-base bg-white/80"
+                      placeholder="E-post *"
+                    />
+                  </div>
+                  <input
+                    type="tel"
+                    aria-label="Telefon"
+                    value={userPhone}
+                    onChange={(e) => setUserPhone(e.target.value)}
+                    className="w-full px-3 py-2 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown text-sm md:text-base bg-white/80"
+                    placeholder="Telefon"
+                  />
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <input
+                      type="date"
+                      required
+                      aria-label="Ønsket dato"
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      min={new Date().toISOString().split('T')[0]}
+                      className="w-full px-3 py-2 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown text-sm md:text-base bg-white/80"
+                    />
+                    <input
+                      type="text"
+                      required
+                      aria-label="Ønsket tidspunkt"
+                      value={selectedTime}
+                      onChange={(e) => setSelectedTime(e.target.value)}
+                      className="w-full px-3 py-2 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown text-sm md:text-base bg-white/80"
+                      placeholder="Tidspunkt *"
+                    />
+                  </div>
+                  <textarea
+                    required
+                    aria-label="Beskrivelse"
+                    value={userMessage}
+                    onChange={(e) => setUserMessage(e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-brown/30 rounded-lg focus:outline-none focus:border-brown font-playfair font-light text-brown text-sm md:text-base bg-white/80 resize-none"
+                    placeholder="Beskriv kort hva dere trenger hjelp med — f.eks. renovering av kjøkken, nytt bad, tilbygg *"
+                  />
+                  <button
+                    type="submit"
+                    className="w-full bg-brown text-white font-playfair font-light text-base py-2.5 px-6 rounded-lg hover:bg-brown/80 transition-colors duration-300"
+                  >
+                    Book gratis befaring
+                  </button>
+                </form>
               </div>
             </div>
           </div>
@@ -217,15 +172,12 @@ export default function Kontakt() {
       {/* Full-Screen Menu Overlay */}
       {isMenuOpen && (
         <div className="fixed inset-4 bg-amber-50 z-50 flex flex-col items-center justify-center animate-slideDown rounded-2xl">
-          {/* Logo at the top */}
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2 text-center">
-            <img 
-              src="/LOGO2.png" 
-              alt="Fint Hjem logo" 
-              className="h-4 md:h-6 lg:h-8 object-contain"
-            />
+            <span className="font-montserrat font-black text-brown text-3xl md:text-5xl lg:text-6xl tracking-tight leading-none">
+              FINT HJEM
+            </span>
           </div>
-          
+
           {/* Menu Items */}
           <nav className="text-center">
             <ul className="space-y-6">
