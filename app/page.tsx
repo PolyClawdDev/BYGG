@@ -416,42 +416,56 @@ export default function Home() {
                     className="relative w-full"
                     style={{
                       aspectRatio: `${W} / ${H}`,
-                      // Hold invisible until Montserrat Black is confirmed loaded
-                      // AND the first video frame is ready, then fade in smoothly.
-                      opacity: heroMaskReady && heroVideoReady ? 1 : 0,
-                      transition: 'opacity 0.5s ease-out',
-                      willChange: 'opacity',
+                      // OUTER CONTAINER IS ALWAYS SOLID BEIGE + overflow:hidden.
+                      // This is the critical "box glitch" killer — even if every layer
+                      // inside fails to paint for a frame, the user sees beige-on-beige
+                      // (identical to the page bg), never a raw video rectangle.
+                      backgroundColor: PLATE,
+                      overflow: 'hidden',
                     }}
                     aria-hidden
                   >
-                    {/* Layer 1 — raw HTML video. No SVG wrappers, no foreignObject.
-                        Sits behind the overlay; only the letter-shaped holes reveal it. */}
+                    {/* Layer 1 — raw HTML video. Opacity-gated individually.
+                        Fades in UNDER the plate. Because the plate (Layer 2) stays at
+                        opacity 1 the whole time the video fades in, there's no moment
+                        where the video rectangle can bleed through at the edges.       */}
                     <video
                       autoPlay
                       muted
                       loop
                       playsInline
-                      preload="auto"
+                      preload="metadata"
                       aria-hidden
                       onLoadedData={() => setHeroVideoReady(true)}
                       onCanPlay={() => setHeroVideoReady(true)}
                       {...({ 'webkit-playsinline': 'true' } as React.HTMLAttributes<HTMLVideoElement>)}
                       className="absolute inset-0 w-full h-full"
-                      style={{ objectFit: 'cover', display: 'block' }}
+                      style={{
+                        objectFit: 'cover',
+                        display: 'block',
+                        opacity: heroMaskReady && heroVideoReady ? 1 : 0,
+                        transition: 'opacity 0.4s ease-out',
+                        willChange: 'opacity',
+                      }}
                     >
                       <source src="/BYGG.mp4" type="video/mp4" />
                     </video>
 
-                    {/* Layer 2 — beige "plate" that covers the entire wordmark box,
-                        with letter-shaped holes punched out via <mask>. In the mask,
-                        white = keep the plate (hide video), black = remove the plate
-                        (show video). So the letters (black in mask) become the only
-                        place where the video shows through.                            */}
+                    {/* Layer 2 — beige plate with letter-shaped holes. Gated ONLY on
+                        fonts being loaded. Snaps to opacity 1 as soon as Montserrat
+                        Black is confirmed loaded and STAYS 100% opaque from then on,
+                        so it always fully covers the video outside the letter shapes.
+                        Before fonts load: opacity 0 — harmless because the outer
+                        container is already beige behind it.                          */}
                     <svg
                       viewBox={`0 0 ${W} ${H}`}
                       preserveAspectRatio="xMidYMid meet"
                       className="absolute inset-0 block w-full h-full"
                       aria-hidden
+                      style={{
+                        opacity: heroMaskReady ? 1 : 0,
+                        transition: 'opacity 0.2s ease-out',
+                      }}
                     >
                       <defs>
                         <mask
