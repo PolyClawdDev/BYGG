@@ -325,7 +325,7 @@ export default function Home() {
             the middle of the viewport — nothing drags to the bottom.
           • Desktop: default flow (logo centered via flex-1, nav at bottom). */}
       <div className="h-[100svh] p-3 md:p-4">
-        <div className="w-full h-full animate-subtle-bg rounded-2xl flex flex-col justify-center md:justify-start">
+        <div className="w-full h-full animate-subtle-bg animate-subtle-color rounded-2xl flex flex-col justify-center md:justify-start">
 
           {/* Top bar buttons */}
           <button
@@ -408,12 +408,21 @@ export default function Home() {
                 const fontFamily = "'Montserrat', 'Arial Black', system-ui, sans-serif"
                 return (
                   <div
-                    // BOTH animation classes — bg + color — cycle through the same
-                    // palette as the page. The container's bg stays identical to the
-                    // page at all times (no more visible rectangle), and `color` is
-                    // used by the SVG plate below via fill="currentColor" so the
-                    // plate also stays in sync.
-                    className="relative w-full animate-subtle-bg animate-subtle-color"
+                    /* IMPORTANT — no animate-subtle-bg / animate-subtle-color
+                       here. Those classes live exclusively on the OUTER hero
+                       panel now. Keeping a duplicate animation on this inner
+                       container would create a SECOND CSS animation timeline
+                       that the GPU compositor (promoted by the parent's
+                       animate-fadeInUp) can sample at a slightly different
+                       moment than the outer panel's animation — causing the
+                       plate color to drift from the page bg and show up as a
+                       faint rectangle edge around FINT HJEM (most visible at
+                       the top edge where letters don't break it up).
+                       By inheriting `color` from the outer panel through the
+                       DOM cascade, the plate's fill="currentColor" is always
+                       the SAME VALUE as the panel's animated background-color,
+                       pixel-for-pixel, frame-for-frame. No drift possible. */
+                    className="relative w-full"
                     style={{
                       aspectRatio: `${W} / ${H}`,
                       overflow: 'hidden',
