@@ -153,7 +153,70 @@ export default function Home() {
   const [isShaking, setIsShaking] = useState(false)
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
   const [byggVisible, setByggVisible] = useState(false)
+  const [heroMaskReady, setHeroMaskReady] = useState(false)
+  const [heroVideoReady, setHeroVideoReady] = useState(false)
+  const [isMobileHero, setIsMobileHero] = useState(false)
   const sectionImageRefs = useRef<Array<HTMLDivElement | null>>([])
+
+  /* ── Mobile-vs-desktop hero wordmark layout ─────────────────────────────
+     On phones the 4.17:1 single-line SVG collapses to ~90px tall which
+     looks terrible. Swap to a 2-line stacked layout (FINT / HJEM) that
+     fills the hero properly on narrow screens. Uses matchMedia so the
+     switch is instant on orientation change. The SVG stays opacity:0 until
+     fonts+video are ready, so the initial layout decision never flashes. */
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const mq = window.matchMedia('(max-width: 767px)')
+    const update = () => setIsMobileHero(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
+  /* ── Fonts + SVG-mask readiness ──────────────────────────────────────────
+     Causes of the "glitching video box on hard refresh":
+       1. Google Font not loaded yet → <text> inside the <mask> renders with a
+          fallback (Arial Black / system-ui). Glyph outlines differ, so the
+          mask shape is wrong for a frame and the video rectangle leaks.
+       2. Some browsers paint <foreignObject> video BEFORE the mask="..."
+          reference resolves on first paint → full video box flashes once.
+     Fix: hold the whole hero SVG at opacity:0 until the Montserrat Black
+     font is confirmed loaded, then fade in. */
+  useEffect(() => {
+    let cancelled = false
+    const fontsApi = typeof document !== 'undefined' ? (document as Document & { fonts?: FontFaceSet }).fonts : undefined
+
+    const markReady = () => {
+      if (cancelled) return
+      // One extra frame so the browser has committed the mask layout.
+      requestAnimationFrame(() => {
+        if (!cancelled) setHeroMaskReady(true)
+      })
+    }
+
+    if (fontsApi && typeof fontsApi.load === 'function') {
+      // Load at the actual mask size (200px, weight 900) — subsetting picks
+      // the specific glyphs we need (FINT HJEM) in one shot.
+      fontsApi
+        .load('900 200px Montserrat', 'FINT HJEM')
+        .then(markReady)
+        .catch(markReady)
+    } else {
+      // Old browser fallback — just show after a tick.
+      setTimeout(markReady, 300)
+    }
+
+    // Hard safety net: if nothing fired after 1.5s, reveal anyway so the hero
+    // is never permanently hidden (slow networks / cached video / mobile Safari).
+    const videoSafety = window.setTimeout(() => {
+      if (!cancelled) setHeroVideoReady(true)
+    }, 1500)
+
+    return () => {
+      cancelled = true
+      window.clearTimeout(videoSafety)
+    }
+  }, [])
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -230,7 +293,7 @@ export default function Home() {
 
   /* Headline font wrapper — no clip-path, no overflow */
   const headlineWrapStyle: React.CSSProperties = {
-    fontSize: 'clamp(2rem, 3.8vw, 5rem)',
+    fontSize: 'clamp(2.4rem, 7.5vw, 5rem)',
     lineHeight: 0.9,
     letterSpacing: '-0.02em',
     marginBottom: '0.06em',
@@ -297,7 +360,7 @@ export default function Home() {
           {/* ── FINT HJEM: video is clipped to the shape of LOGOB.png letters (no box) ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <div
-              className="relative mx-auto w-full max-w-[1100px] animate-fadeInUp"
+              className="relative mx-auto w-full max-w-[360px] md:max-w-[1100px] animate-fadeInUp"
               aria-label="Fint Hjem"
             >
               {/* Visuelt skjult H1 – synlig for Google, skjermlesere og Lighthouse SEO.
@@ -322,68 +385,121 @@ export default function Home() {
                 Result: video only paints inside the solid letter shapes; everything outside
                 is transparent (page bg shows through). No rectangular box. No outlines.
               */}
-              <svg
-                viewBox="0 0 1000 240"
-                preserveAspectRatio="xMidYMid meet"
-                className="block w-full h-auto"
-                aria-hidden
-              >
-                <defs>
-                  <mask
-                    id="finthjem-logo-mask"
-                    maskUnits="userSpaceOnUse"
-                    x="0"
-                    y="0"
-                    width="1000"
-                    height="240"
-                  >
-                    <rect x="0" y="0" width="1000" height="240" fill="black" />
-                    {/*
-                      textLength + lengthAdjust forces "FINT HJEM" to fit exactly inside the
-                      viewBox width with a small margin, no matter how the browser metrics
-                      the Montserrat Black glyphs — so letters are never cut off on the sides.
-                    */}
-                    <text
-                      x="500"
-                      y="192"
-                      textAnchor="middle"
-                      textLength="940"
-                      lengthAdjust="spacingAndGlyphs"
-                      fill="white"
-                      fontFamily="'Montserrat', 'Arial Black', system-ui, sans-serif"
-                      fontWeight={900}
-                      fontSize={200}
-                    >
-                      FINT HJEM
-                    </text>
-                  </mask>
-                </defs>
-                <foreignObject
-                  x="0"
-                  y="0"
-                  width="1000"
-                  height="240"
-                  mask="url(#finthjem-logo-mask)"
-                >
-                  <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="auto"
+              {/* ── Responsive wordmark ───────────────────────────────────
+                  Mobile (<768px):  viewBox 500×480, two stacked lines
+                                    FINT / HJEM  (big, punchy presence)
+                  Desktop (≥768px): viewBox 1000×240, one line FINT HJEM
+                  Both share ONE <video> inside ONE <foreignObject>. */}
+              {(() => {
+                const W = isMobileHero ? 500 : 1000
+                const H = isMobileHero ? 480 : 240
+                const MASK_ID = 'finthjem-logo-mask'
+                const fontFamily = "'Montserrat', 'Arial Black', system-ui, sans-serif"
+                return (
+                  <svg
+                    viewBox={`0 0 ${W} ${H}`}
+                    preserveAspectRatio="xMidYMid meet"
+                    className="block w-full h-auto"
                     aria-hidden
-                    {...({ xmlns: 'http://www.w3.org/1999/xhtml' } as React.HTMLAttributes<HTMLVideoElement>)}
                     style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
+                      // Hold invisible until Montserrat Black is confirmed loaded
+                      // AND the first video frame is ready, then fade in smoothly.
+                      // This is what kills the "flashing video box" on hard refresh.
+                      opacity: heroMaskReady && heroVideoReady ? 1 : 0,
+                      transition: 'opacity 0.5s ease-out',
+                      willChange: 'opacity',
                     }}
                   >
-                    <source src="/BYGG.mp4" type="video/mp4" />
-                  </video>
-                </foreignObject>
-              </svg>
+                    <defs>
+                      <mask
+                        id={MASK_ID}
+                        maskUnits="userSpaceOnUse"
+                        x="0"
+                        y="0"
+                        width={W}
+                        height={H}
+                      >
+                        <rect x="0" y="0" width={W} height={H} fill="black" />
+                        {isMobileHero ? (
+                          <>
+                            {/* Two stacked lines for phones — much larger letters. */}
+                            <text
+                              x="250"
+                              y="210"
+                              textAnchor="middle"
+                              textLength="440"
+                              lengthAdjust="spacingAndGlyphs"
+                              fill="white"
+                              fontFamily={fontFamily}
+                              fontWeight={900}
+                              fontSize={190}
+                            >
+                              FINT
+                            </text>
+                            <text
+                              x="250"
+                              y="430"
+                              textAnchor="middle"
+                              textLength="440"
+                              lengthAdjust="spacingAndGlyphs"
+                              fill="white"
+                              fontFamily={fontFamily}
+                              fontWeight={900}
+                              fontSize={190}
+                            >
+                              HJEM
+                            </text>
+                          </>
+                        ) : (
+                          /* Single line for tablet/desktop. textLength forces the
+                             wordmark to fit inside the viewBox regardless of how
+                             the browser metrics Montserrat Black glyphs. */
+                          <text
+                            x="500"
+                            y="192"
+                            textAnchor="middle"
+                            textLength="940"
+                            lengthAdjust="spacingAndGlyphs"
+                            fill="white"
+                            fontFamily={fontFamily}
+                            fontWeight={900}
+                            fontSize={200}
+                          >
+                            FINT HJEM
+                          </text>
+                        )}
+                      </mask>
+                    </defs>
+                    <foreignObject
+                      x="0"
+                      y="0"
+                      width={W}
+                      height={H}
+                      mask={`url(#${MASK_ID})`}
+                    >
+                      <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
+                        aria-hidden
+                        onLoadedData={() => setHeroVideoReady(true)}
+                        onCanPlay={() => setHeroVideoReady(true)}
+                        {...({ xmlns: 'http://www.w3.org/1999/xhtml' } as React.HTMLAttributes<HTMLVideoElement>)}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block',
+                        }}
+                      >
+                        <source src="/BYGG.mp4" type="video/mp4" />
+                      </video>
+                    </foreignObject>
+                  </svg>
+                )
+              })()}
             </div>
 
             <div className="text-center mt-8 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
@@ -435,7 +551,7 @@ export default function Home() {
         const bg = SECTION_BG[idx]
 
         const textSide = (
-          <div className="w-full lg:w-1/2 flex items-center px-8 md:px-14 lg:px-20 py-24 lg:py-0 relative min-h-[75vw] lg:min-h-screen">
+          <div className="w-full lg:w-1/2 flex items-center px-6 sm:px-8 md:px-14 lg:px-20 py-20 sm:py-24 lg:py-0 relative min-h-[60vw] lg:min-h-screen">
             {/* Ghost number — desktop only */}
             <span
               className="absolute font-montserrat font-black leading-none select-none pointer-events-none hidden lg:block"
@@ -474,7 +590,7 @@ export default function Home() {
               <h2
                 className="font-montserrat font-black text-gray-900 tracking-tight mb-10"
                 style={{
-                  fontSize: 'clamp(2.1rem, 4.2vw, 5.1rem)',
+                  fontSize: 'clamp(2.5rem, 8vw, 5.1rem)',
                   lineHeight: 0.95,
                   letterSpacing: '-0.02em',
                 }}
@@ -607,7 +723,7 @@ export default function Home() {
         /* Image panel: cinematic clip-path wipe + scroll parallax + glass badge + corner brackets */
         const imageSide = (
           <div
-            className="w-full h-[75vw] md:h-[58vw] lg:h-auto lg:w-1/2 flex-shrink-0 relative"
+            className="w-full h-[95vw] sm:h-[85vw] md:h-[58vw] lg:h-auto lg:w-1/2 flex-shrink-0 relative"
             style={imagePanelClip(visible, section.imageSide)}
           >
             <div className="absolute inset-0 overflow-hidden">
@@ -728,7 +844,7 @@ export default function Home() {
       {/* ═══════════ BYGGSERVICE ═══════════ */}
       <section
         id="byggservice"
-        className="py-24 md:py-32 px-8 md:px-14 lg:px-20 relative overflow-hidden"
+        className="py-20 sm:py-24 md:py-32 px-6 sm:px-8 md:px-14 lg:px-20 relative overflow-hidden"
         style={{ backgroundColor: '#f0ebe5' }}
       >
         <span

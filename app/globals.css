@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Playfair+Display:wght@300;400&display=swap');
+/* display=block for Montserrat so the hero mask never paints with a fallback
+   font (which would change the letter widths and leak a video rectangle for
+   one frame on hard refresh). Playfair can keep swap — it's body copy only. */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=block');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -64,7 +64,7 @@ function StarIcon() {
 
 function ReviewCard({ name, location, text }: Review) {
   return (
-    <div className="flex-shrink-0 w-80 bg-white rounded-2xl p-8 mx-3 shadow-sm border border-stone-100 flex flex-col">
+    <div className="flex-shrink-0 w-[280px] sm:w-80 bg-white rounded-2xl p-6 sm:p-8 mx-2 sm:mx-3 shadow-sm border border-stone-100 flex flex-col">
       <div className="flex gap-1 mb-5">
         {[0,1,2,3,4].map((i) => <StarIcon key={i} />)}
       </div>
@@ -83,9 +83,9 @@ export default function ReviewsCarousel() {
   const doubled = [...REVIEWS, ...REVIEWS]
 
   return (
-    <section className="py-28 overflow-hidden" style={{ backgroundColor: '#f8f6f2' }}>
+    <section className="py-20 sm:py-24 md:py-28 overflow-hidden" style={{ backgroundColor: '#f8f6f2' }}>
       {/* Header */}
-      <div className="text-center mb-20 px-8">
+      <div className="text-center mb-14 sm:mb-20 px-6 sm:px-8">
         <p className="font-montserrat font-bold text-xs tracking-[0.4em] text-brown/50 mb-5">
           — KUNDEANMELDELSER
         </p>
