@@ -406,21 +406,17 @@ export default function Home() {
                 const W = isMobileHero ? 500 : 1000
                 const H = isMobileHero ? 480 : 240
                 const MASK_ID = 'finthjem-cutout-mask'
-                // The page bg is animate-subtle-bg which oscillates between
-                // #f8f6f2 and ~#f4eee8 over 60s. #f8f6f2 is the dominant shade
-                // and the delta is ~2% — imperceptible under letter edges.
-                const PLATE = '#f8f6f2'
                 const fontFamily = "'Montserrat', 'Arial Black', system-ui, sans-serif"
                 return (
                   <div
-                    className="relative w-full"
+                    // BOTH animation classes — bg + color — cycle through the same
+                    // palette as the page. The container's bg stays identical to the
+                    // page at all times (no more visible rectangle), and `color` is
+                    // used by the SVG plate below via fill="currentColor" so the
+                    // plate also stays in sync.
+                    className="relative w-full animate-subtle-bg animate-subtle-color"
                     style={{
                       aspectRatio: `${W} / ${H}`,
-                      // OUTER CONTAINER IS ALWAYS SOLID BEIGE + overflow:hidden.
-                      // This is the critical "box glitch" killer — even if every layer
-                      // inside fails to paint for a frame, the user sees beige-on-beige
-                      // (identical to the page bg), never a raw video rectangle.
-                      backgroundColor: PLATE,
                       overflow: 'hidden',
                     }}
                     aria-hidden
@@ -526,13 +522,14 @@ export default function Home() {
                           )}
                         </mask>
                       </defs>
-                      {/* The plate itself — page bg color, masked so letters are cut out. */}
+                      {/* Plate fill uses currentColor so it tracks the container's
+                          animate-subtle-color class exactly, matching the page bg. */}
                       <rect
                         x="0"
                         y="0"
                         width={W}
                         height={H}
-                        fill={PLATE}
+                        fill="currentColor"
                         mask={`url(#${MASK_ID})`}
                       />
                     </svg>

@@ -156,6 +156,46 @@ body {
   background-color: #f8f6f2; /* Prevent white flash on load */
 }
 
+/* Same palette as silkSmoothColorShift but animates `color` instead of
+   `background-color`. Used by the hero wordmark container so its background
+   AND its SVG <rect fill="currentColor"> plate both cycle in exact lockstep
+   with the surrounding page bg — eliminating the "faint white rectangle"
+   that appeared when the page bg drifted to #e9d8d2 but the container was
+   stuck on #f8f6f2. */
+@keyframes silkSmoothColorShiftInk {
+  0%   { color: #f8f6f2; }
+  4%   { color: #f7f4f0; }
+  8%   { color: #f6f2ee; }
+  12%  { color: #f5f0ec; }
+  16%  { color: #f4eee8; }
+  20%  { color: #f3ece6; }
+  24%  { color: #f2eae4; }
+  28%  { color: #f1e8e2; }
+  32%  { color: #f0e6e0; }
+  36%  { color: #efe4de; }
+  40%  { color: #eee2dc; }
+  44%  { color: #ede0da; }
+  48%  { color: #ecded8; }
+  52%  { color: #ebdcd6; }
+  56%  { color: #eadad4; }
+  60%  { color: #e9d8d2; }
+  64%  { color: #eadad4; }
+  68%  { color: #ebdcd6; }
+  72%  { color: #ecded8; }
+  76%  { color: #ede0da; }
+  80%  { color: #eee2dc; }
+  84%  { color: #efe4de; }
+  88%  { color: #f0e6e0; }
+  92%  { color: #f1e8e2; }
+  96%  { color: #f2eae4; }
+  100% { color: #f8f6f2; }
+}
+
+.animate-subtle-color {
+  animation: silkSmoothColorShiftInk 60s ease-in-out infinite;
+  color: #f8f6f2;
+}
+
 /* Dramatic fade in animations for page load */
 @keyframes fadeInUp {
   from {
