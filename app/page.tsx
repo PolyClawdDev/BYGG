@@ -1126,7 +1126,9 @@ export default function Home() {
       {isMenuOpen && (
         <div className="fixed inset-4 bg-amber-50 z-50 flex flex-col items-center justify-center animate-slideDown rounded-2xl">
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-            <img src="/LOGOB.png" alt="Fint Hjem" className="h-4 md:h-6 lg:h-8 object-contain" />
+            <span className="font-montserrat font-black text-brown text-3xl md:text-5xl lg:text-6xl tracking-tight leading-none">
+              FINT HJEM
+            </span>
           </div>
           <nav className="text-center">
             <ul className="space-y-6">
