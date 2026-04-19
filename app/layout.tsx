@@ -9,7 +9,7 @@ import FloatingCallCta from './components/FloatingCallCta'
    Merke:     Fint Hjem  (ALDRI "Fint Hem")
    Domene:    https://finthjem.no
    Mål:       Toppresultat på Google for totalentreprenør, nybygg, renovering,
-              byggservice og interiørdesign i Oslo / Norge og Sverige.
+              byggservice og interiørdesign i Oslo og Norge.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const SITE_URL = 'https://finthjem.no'
@@ -17,7 +17,7 @@ const SITE_NAME = 'Fint Hjem'
 const DEFAULT_TITLE =
   'Fint Hjem – Totalentreprenør i Oslo | Nybygg, Renovering & Interiør'
 const DEFAULT_DESCRIPTION =
-  'Fint Hjem er din totalentreprenør i Oslo og Stockholm med over 20 års erfaring. Vi leverer nøkkelferdige nybygg, renovering, byggservice og interiørdesign – fra søknad til innflytting. Book gratis befaring i dag.'
+  'Fint Hjem er din totalentreprenør i Oslo med over 20 års erfaring. Vi leverer nøkkelferdige nybygg, renovering, byggservice og interiørdesign – fra søknad til innflytting. Book gratis befaring i dag.'
 const OG_IMAGE = `${SITE_URL}/LOGO.png`
 
 const KEYWORDS: string[] = [
@@ -55,8 +55,6 @@ const KEYWORDS: string[] = [
   'interiørarkitekt Oslo',
   'homestyling Oslo',
   'boligstyling Oslo',
-  'byggefirma Stockholm',
-  'renovering Stockholm',
 ]
 
 /* ── Root metadata — kilden til alt Google ser ───────────────────────────── */
@@ -81,7 +79,6 @@ export const metadata: Metadata = {
     canonical: SITE_URL,
     languages: {
       'nb-NO': SITE_URL,
-      'sv-SE': SITE_URL,
       'x-default': SITE_URL,
     },
   },
@@ -90,7 +87,7 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: SITE_NAME,
     locale: 'nb_NO',
-    alternateLocale: ['sv_SE', 'en_US'],
+    alternateLocale: ['en_US'],
     url: SITE_URL,
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
@@ -168,7 +165,7 @@ export const viewport: Viewport = {
   maximumScale: 5,
 }
 
-/* ── JSON-LD: Organization, LocalBusiness (Oslo + Stockholm), WebSite ────── */
+/* ── JSON-LD: Organization, LocalBusiness (Oslo), WebSite ─────────────────── */
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -191,7 +188,6 @@ const jsonLd = {
       telephone: '+4746583867',
       areaServed: [
         { '@type': 'Country', name: 'Norge' },
-        { '@type': 'Country', name: 'Sverige' },
       ],
       knowsAbout: [
         'Nybygg',
@@ -217,8 +213,8 @@ const jsonLd = {
           contactType: 'customer service',
           telephone: '+4746583867',
           email: 'info@finthjem.no',
-          availableLanguage: ['Norwegian', 'Swedish', 'English'],
-          areaServed: ['NO', 'SE'],
+          availableLanguage: ['Norwegian', 'English'],
+          areaServed: ['NO'],
         },
       ],
     },
@@ -314,41 +310,6 @@ const jsonLd = {
           },
         ],
       },
-    },
-
-    /* Lokalavdeling — Stockholm */
-    {
-      '@type': 'LocalBusiness',
-      '@id': `${SITE_URL}/#stockholm`,
-      name: 'Fint Hjem – Stockholm',
-      parentOrganization: { '@id': `${SITE_URL}/#organization` },
-      url: SITE_URL,
-      image: `${SITE_URL}/LOGO.png`,
-      telephone: '+4746583867',
-      email: 'info@finthjem.no',
-      priceRange: '$$$',
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: 'Storgatan 123',
-        addressLocality: 'Stockholm',
-        postalCode: '12345',
-        addressCountry: 'SE',
-      },
-      areaServed: [{ '@type': 'AdministrativeArea', name: 'Stockholm' }],
-      openingHoursSpecification: [
-        {
-          '@type': 'OpeningHoursSpecification',
-          dayOfWeek: [
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-          ],
-          opens: '08:00',
-          closes: '17:00',
-        },
-      ],
     },
 
     /* Nettside — gjør det klart at finthjem.no er sideenheten */

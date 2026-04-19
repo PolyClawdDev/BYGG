@@ -39,7 +39,7 @@ export default function SiteFooter() {
               className="h-5 md:h-6 object-contain mb-6 brightness-0 invert opacity-80"
             />
             <p className="font-playfair font-light text-white/50 text-sm leading-relaxed mb-8">
-              Din totalentreprenør for nybygg, renovering, byggservice og interiørdesign. Vi bygger drømmehjem med presisjon og omtanke — i Norge og Sverige.
+              Din totalentreprenør for nybygg, renovering, byggservice og interiørdesign. Vi bygger drømmehjem med presisjon og omtanke — i Oslo og resten av Norge.
             </p>
             <div className="flex gap-4">
               {SOCIAL.map((s) => {
@@ -130,15 +130,9 @@ export default function SiteFooter() {
                 </a>
               </li>
               <li>
-                <p className="font-montserrat font-bold text-xs tracking-wider text-white/30 uppercase mb-1">Oslo</p>
+                <p className="font-montserrat font-bold text-xs tracking-wider text-white/30 uppercase mb-1">Adresse</p>
                 <p className="font-playfair font-light text-white/60 text-sm leading-relaxed">
                   Prinsensgate 5<br />0152 Oslo, Norge
-                </p>
-              </li>
-              <li>
-                <p className="font-montserrat font-bold text-xs tracking-wider text-white/30 uppercase mb-1">Stockholm</p>
-                <p className="font-playfair font-light text-white/60 text-sm leading-relaxed">
-                  Storgatan 123<br />123 45 Stockholm, Sverige
                 </p>
               </li>
               <li>

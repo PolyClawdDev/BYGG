@@ -85,11 +85,6 @@ export default function Kontakt() {
                     <div>
                       <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Adresse</h3>
                       <p className="font-playfair font-light text-brown text-lg">
-                        Storgatan 123<br />
-                        123 45 Stockholm<br />
-                        Sverige
-                      </p>
-                      <p className="font-playfair font-light text-brown text-lg mt-3">
                         Prinsensgate 5<br />
                         0152 Oslo<br />
                         Norge

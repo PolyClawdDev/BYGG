@@ -314,9 +314,18 @@ export default function Home() {
   return (
     <main className="bg-white">
 
-      {/* ═══════════ HERO ═══════════ */}
-      <div className="h-screen p-4">
-        <div className="w-full h-full animate-subtle-bg rounded-2xl flex flex-col">
+      {/* ═══════════ HERO ═══════════
+          h-[100svh] uses the "small viewport height" — it resolves to the
+          visible area WITHOUT Safari's dynamic toolbar, so nothing gets
+          clipped or pushed below the fold on iOS. Desktop browsers treat
+          100svh as equivalent to 100vh. Padding is tighter on phones.
+
+          Layout behavior:
+          • Mobile: justify-center packs logo + subtitle + nav tightly in
+            the middle of the viewport — nothing drags to the bottom.
+          • Desktop: default flow (logo centered via flex-1, nav at bottom). */}
+      <div className="h-[100svh] p-3 md:p-4">
+        <div className="w-full h-full animate-subtle-bg rounded-2xl flex flex-col justify-center md:justify-start">
 
           {/* Top bar buttons */}
           <button
@@ -341,8 +350,10 @@ export default function Home() {
             </svg>
           </Link>
 
-          {/* ── FINT HJEM: video is clipped to the shape of LOGOB.png letters (no box) ── */}
-          <div className="flex-1 flex flex-col items-center justify-center px-4">
+          {/* ── FINT HJEM: video is clipped to the shape of LOGOB.png letters (no box) ──
+              flex-1 only kicks in on md+ so the logo centers in remaining space.
+              On mobile the parent's justify-center already centers everything. */}
+          <div className="md:flex-1 flex flex-col items-center justify-center px-4">
             <div
               className="relative mx-auto w-full max-w-[1100px] animate-fadeInUp"
               aria-label="Fint Hjem"
@@ -434,7 +445,14 @@ export default function Home() {
                         container is already beige behind it.                          */}
                     <svg
                       viewBox={`0 0 ${W} ${H}`}
-                      preserveAspectRatio="xMidYMid meet"
+                      /* none = stretch SVG content to fill the container exactly.
+                         The outer <div> already locks the aspect ratio to 1000:240
+                         via CSS, so there's no real distortion — but this kills
+                         the sub-pixel letterbox gap that "meet" produces when the
+                         container's computed height lands on a fractional pixel.
+                         That gap was letting the video underneath leak as a thin
+                         horizontal seam right under the FINT HJEM letters. */
+                      preserveAspectRatio="none"
                       className="absolute inset-0 block w-full h-full"
                       aria-hidden
                       style={{
@@ -486,17 +504,20 @@ export default function Home() {
               })()}
             </div>
 
-            <div className="text-center mt-8 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
-              <h2 className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider">
+            <div className="text-center mt-3 md:mt-8 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
+              <h2 className="font-playfair font-light text-brown text-sm md:text-xl lg:text-2xl tracking-[0.2em] md:tracking-wider">
                 DIN TOTALENTREPRENØR
               </h2>
             </div>
           </div>
 
-          {/* ── Bottom: nav + scroll arrow ── */}
-          <div className="pb-6 md:pb-10 animate-fadeInUp" style={{ animationDelay: '1.8s' }}>
+          {/* ── Bottom: nav + scroll arrow ──
+              Mobile: compact vertical stack (space-y-1) with smaller text so
+              all 4 section links fit within the hero viewport together with
+              the wordmark and subtitle — no scrolling required to see them. */}
+          <div className="pb-3 md:pb-10 animate-fadeInUp" style={{ animationDelay: '1.8s' }}>
             <nav className="text-center">
-              <ul className="font-playfair font-light text-brown tracking-wider space-y-3 md:space-y-0 md:space-x-6 md:flex md:items-center md:justify-center text-lg md:text-xl lg:text-2xl">
+              <ul className="font-playfair font-light text-brown tracking-wider space-y-1 md:space-y-0 md:space-x-6 md:flex md:items-center md:justify-center text-sm md:text-xl lg:text-2xl">
                 {[
                   { label: 'Ditt Nye Hjem', id: 'ditt-nye-hjem' },
                   { label: 'Renovering & Forandring', id: 'renovering-forandring' },
@@ -516,9 +537,9 @@ export default function Home() {
                 })}
               </ul>
             </nav>
-            <div className="flex justify-center mt-6">
+            <div className="flex justify-center mt-2 md:mt-6">
               <div className="flex flex-col items-center gap-1 animate-scrollPulse opacity-40">
-                <div className="w-px h-8 bg-brown" />
+                <div className="w-px h-4 md:h-8 bg-brown" />
                 <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
                   <path d="M1 1l4 4 4-4" stroke="#9c7a6d" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>

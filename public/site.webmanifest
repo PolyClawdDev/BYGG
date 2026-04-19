@@ -1,7 +1,7 @@
 {
   "name": "Fint Hjem – Totalentreprenør i Oslo",
   "short_name": "Fint Hjem",
-  "description": "Fint Hjem er din totalentreprenør i Oslo og Stockholm. Nybygg, renovering, byggservice og interiørdesign.",
+  "description": "Fint Hjem er din totalentreprenør i Oslo. Nybygg, renovering, byggservice og interiørdesign.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
