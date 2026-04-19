@@ -155,23 +155,7 @@ export default function Home() {
   const [byggVisible, setByggVisible] = useState(false)
   const [heroMaskReady, setHeroMaskReady] = useState(false)
   const [heroVideoReady, setHeroVideoReady] = useState(false)
-  const [isMobileHero, setIsMobileHero] = useState(false)
   const sectionImageRefs = useRef<Array<HTMLDivElement | null>>([])
-
-  /* ── Mobile-vs-desktop hero wordmark layout ─────────────────────────────
-     On phones the 4.17:1 single-line SVG collapses to ~90px tall which
-     looks terrible. Swap to a 2-line stacked layout (FINT / HJEM) that
-     fills the hero properly on narrow screens. Uses matchMedia so the
-     switch is instant on orientation change. The SVG stays opacity:0 until
-     fonts+video are ready, so the initial layout decision never flashes. */
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const mq = window.matchMedia('(max-width: 767px)')
-    const update = () => setIsMobileHero(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
 
   /* ── Fonts + SVG-mask readiness ──────────────────────────────────────────
      Causes of the "glitching video box on hard refresh":
@@ -360,7 +344,7 @@ export default function Home() {
           {/* ── FINT HJEM: video is clipped to the shape of LOGOB.png letters (no box) ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <div
-              className="relative mx-auto w-full max-w-[360px] md:max-w-[1100px] animate-fadeInUp"
+              className="relative mx-auto w-full max-w-[1100px] animate-fadeInUp"
               aria-label="Fint Hjem"
             >
               {/* Visuelt skjult H1 – synlig for Google, skjermlesere og Lighthouse SEO.
@@ -387,24 +371,19 @@ export default function Home() {
               */}
               {/* ── Cutout-overlay wordmark ────────────────────────────────
                   iOS Safari has a long-standing bug with SVG <foreignObject>
-                  containing a <video> + <mask> — the video either doesn't
-                  render or escapes the mask as a rectangle. (That's the
-                  "random interior photo in the hero" we saw on the phone.)
-
-                  This implementation uses ONLY plain HTML + plain SVG <mask>
-                  applied to a <rect>, which works on every browser back to
-                  iOS 12 / Safari 11:
+                  containing a <video> + <mask>. This implementation uses ONLY
+                  plain HTML + plain SVG <mask> applied to a <rect>, which
+                  works on every browser back to iOS 12 / Safari 11:
 
                     Layer 1: <video> — ordinary HTML element, full bleed
                     Layer 2: <svg>   — beige plate with letter-shaped holes
                                        punched out by a mask. Letters are the
                                        ONLY places where the video shows.
 
-                  Mobile (<768px):  viewBox 500×480, two stacked lines (FINT / HJEM)
-                  Desktop (≥768px): viewBox 1000×240, one line (FINT HJEM)        */}
+                  Single-line FINT HJEM at every breakpoint — same as desktop. */}
               {(() => {
-                const W = isMobileHero ? 500 : 1000
-                const H = isMobileHero ? 480 : 240
+                const W = 1000
+                const H = 240
                 const MASK_ID = 'finthjem-cutout-mask'
                 const fontFamily = "'Montserrat', 'Arial Black', system-ui, sans-serif"
                 return (
@@ -476,50 +455,19 @@ export default function Home() {
                           <rect x="0" y="0" width={W} height={H} fill="white" />
                           {/* Letters in BLACK → those areas of the plate are
                               removed → video underneath shows through.          */}
-                          {isMobileHero ? (
-                            <>
-                              <text
-                                x="250"
-                                y="210"
-                                textAnchor="middle"
-                                textLength="440"
-                                lengthAdjust="spacingAndGlyphs"
-                                fill="black"
-                                fontFamily={fontFamily}
-                                fontWeight={900}
-                                fontSize={190}
-                              >
-                                FINT
-                              </text>
-                              <text
-                                x="250"
-                                y="430"
-                                textAnchor="middle"
-                                textLength="440"
-                                lengthAdjust="spacingAndGlyphs"
-                                fill="black"
-                                fontFamily={fontFamily}
-                                fontWeight={900}
-                                fontSize={190}
-                              >
-                                HJEM
-                              </text>
-                            </>
-                          ) : (
-                            <text
-                              x="500"
-                              y="192"
-                              textAnchor="middle"
-                              textLength="940"
-                              lengthAdjust="spacingAndGlyphs"
-                              fill="black"
-                              fontFamily={fontFamily}
-                              fontWeight={900}
-                              fontSize={200}
-                            >
-                              FINT HJEM
-                            </text>
-                          )}
+                          <text
+                            x="500"
+                            y="192"
+                            textAnchor="middle"
+                            textLength="940"
+                            lengthAdjust="spacingAndGlyphs"
+                            fill="black"
+                            fontFamily={fontFamily}
+                            fontWeight={900}
+                            fontSize={200}
+                          >
+                            FINT HJEM
+                          </text>
                         </mask>
                       </defs>
                       {/* Plate fill uses currentColor so it tracks the container's

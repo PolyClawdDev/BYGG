@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import FloatingCallCta from './components/FloatingCallCta'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SEO — Fint Hjem
@@ -389,7 +390,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        {/* Persistent mobile call-to-action — always one tap away while scrolling. */}
+        <FloatingCallCta />
+      </body>
     </html>
   )
 }
