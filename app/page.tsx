@@ -325,7 +325,24 @@ export default function Home() {
             the middle of the viewport — nothing drags to the bottom.
           • Desktop: default flow (logo centered via flex-1, nav at bottom). */}
       <div className="h-[100svh] p-3 md:p-4">
-        <div className="w-full h-full animate-subtle-bg animate-subtle-color rounded-2xl flex flex-col justify-center md:justify-start">
+        <div
+          /* Inline backgroundColor + color are bulletproof fallbacks that
+             apply from the very first paint, BEFORE the globals.css bundle
+             (which defines .animate-subtle-bg / .animate-subtle-color) is
+             fully parsed. Without this fallback, on a cold hard refresh
+             there is a narrow window where the class-based color rules
+             haven't taken effect yet, `color` inherits default black, the
+             plate rect's `fill="currentColor"` resolves to black, and the
+             user briefly sees a black rectangle with FINT HJEM cut out
+             before the real styles kick in. Pinning both colors inline
+             (identical values, same #f8f6f2 as the animation's 0%/100%
+             keyframes) guarantees the plate is chromatically invisible
+             against the panel from the very first frame. Once the CSS
+             animations take over they paint the exact same starting
+             values and then drift in perfect sync. */
+          style={{ backgroundColor: '#f8f6f2', color: '#f8f6f2' }}
+          className="w-full h-full animate-subtle-bg animate-subtle-color rounded-2xl flex flex-col justify-center md:justify-start"
+        >
 
           {/* Top bar buttons */}
           <button
@@ -357,20 +374,19 @@ export default function Home() {
               subtitle with a big empty area beneath. */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <div
-              /* No animate-fadeInUp here on purpose.
-                 That class animates opacity 0 → 1 on the wrapper, which forces
-                 the browser to promote this subtree to a GPU compositor layer
-                 for the duration of the animation. Inside that layer, the
-                 video + SVG plate + mask get rasterized into a single texture
-                 whose sub-pixel edges don't perfectly match direct rendering,
-                 producing a faint ~1 px seam that was only visible WHILE the
-                 animation was running. The plate and the video already have
-                 their own opacity gates (heroMaskReady / heroVideoReady) that
-                 reveal each layer independently once fonts/video are ready —
-                 so this wrapper doesn't need any opacity animation of its
-                 own, and without one there's no compositor layer, no
-                 rasterized texture, no seam. */
-              className="relative mx-auto w-full max-w-[1100px]"
+              /* animate-heroSlideUp = transform-only slide-up (no opacity).
+                 Why not animate-fadeInUp: fadeInUp animates opacity 0→1 on
+                 this wrapper, which puts the whole subtree in a GPU
+                 compositor layer at < 1 alpha. Any partially-transparent
+                 layer exposes its rectangular bounds while composited onto
+                 the page, showing up as a faint rectangle around FINT HJEM.
+                 A pure transform animation promotes to a compositor layer
+                 too, but the layer stays fully opaque → when composited,
+                 the layer's edge pixels blend with the page bg at full
+                 alpha; since the plate color already matches the page bg
+                 exactly (via currentColor inheriting animate-subtle-color),
+                 there's no visible edge at all. */
+              className="relative mx-auto w-full max-w-[1100px] animate-heroSlideUp"
               aria-label="Fint Hjem"
             >
               {/* Visuelt skjult H1 – synlig for Google, skjermlesere og Lighthouse SEO.
@@ -442,10 +458,19 @@ export default function Home() {
                     }}
                     aria-hidden
                   >
-                    {/* Layer 1 — raw HTML video. Opacity-gated individually.
-                        Fades in UNDER the plate. Because the plate (Layer 2) stays at
-                        opacity 1 the whole time the video fades in, there's no moment
-                        where the video rectangle can bleed through at the edges.       */}
+                    {/* Layer 1 — raw HTML video. Binary visibility gate, no
+                        opacity transition. Why: any opacity 0 → 1 transition
+                        on this full-bleed rectangle renders the whole video
+                        rectangle at < 1 alpha for the duration of the
+                        transition, which briefly exposes the video as a
+                        faded rectangle under/around the letters — a visible
+                        "box fading in." Using `visibility` instead flips it
+                        from invisible (not rendered at all) to visible (fully
+                        rendered) in a single frame, at the exact moment the
+                        mask cutouts are also ready. Because the opaque plate
+                        above already has the correct letter cutouts by then,
+                        the viewer only ever sees the letters — never the
+                        surrounding video rectangle. */}
                     <video
                       autoPlay
                       muted
@@ -460,20 +485,27 @@ export default function Home() {
                       style={{
                         objectFit: 'cover',
                         display: 'block',
-                        opacity: heroMaskReady && heroVideoReady ? 1 : 0,
-                        transition: 'opacity 0.4s ease-out',
-                        willChange: 'opacity',
+                        visibility: heroMaskReady && heroVideoReady ? 'visible' : 'hidden',
                       }}
                     >
                       <source src="/BYGG.mp4" type="video/mp4" />
                     </video>
 
-                    {/* Layer 2 — beige plate with letter-shaped holes. Gated ONLY on
-                        fonts being loaded. Snaps to opacity 1 as soon as Montserrat
-                        Black is confirmed loaded and STAYS 100% opaque from then on,
-                        so it always fully covers the video outside the letter shapes.
-                        Before fonts load: opacity 0 — harmless because the outer
-                        container is already beige behind it.                          */}
+                    {/* Layer 2 — beige plate with letter-shaped holes. Always at
+                        opacity 1 — no fade-in, no transition. Its fill is
+                        currentColor, which inherits from the outer hero panel's
+                        animate-subtle-color and therefore matches the panel's
+                        animated background-color pixel-for-pixel at every frame.
+                        So even though the plate is always rendered, it is always
+                        visually indistinguishable from the surrounding panel.
+                        The "reveal" of the letters happens via the video below
+                        fading in THROUGH the letter cutouts — not by fading the
+                        plate itself. This is what kills the faint rectangle that
+                        used to appear during the plate's fade-in window.
+                        Relies on Montserrat's `font-display: block` (globals.css)
+                        which keeps the mask text invisible — and therefore the
+                        cutouts non-existent — until the real font has loaded, so
+                        no fallback-font letter shapes ever leak video through. */}
                     <svg
                       viewBox={`0 0 ${W} ${H}`}
                       /* Bulletproof iOS Safari seam fix:
@@ -494,8 +526,6 @@ export default function Home() {
                       aria-hidden
                       style={{
                         overflow: 'visible',
-                        opacity: heroMaskReady ? 1 : 0,
-                        transition: 'opacity 0.2s ease-out',
                       }}
                     >
                       <defs>

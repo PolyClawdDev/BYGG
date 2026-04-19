@@ -243,6 +243,29 @@ body {
   opacity: 0;
 }
 
+/* Slide-up animation for the hero wordmark wrapper.
+   CRITICAL: uses `top` (a paint-time property on a position:relative
+   element) instead of `transform`. Any CSS `transform` or `opacity`
+   animation promotes the animated element to a GPU compositor layer,
+   and the rasterized layer's rectangular edges become visible against
+   the page bg while the animation is running — showing up as a faint
+   "box around the letters" for the 2-second duration of the reveal.
+   Animating `top` runs on the paint thread, does NOT create a
+   compositor layer, does NOT rasterize the subtree to a texture, so
+   there is NO layer-edge seam. Slightly less buttery-smooth than a
+   GPU transform animation, but on a 2s ease-out slide over 80 px
+   it's visually indistinguishable. */
+@keyframes heroSlideUp {
+  from { top: 80px; }
+  to   { top: 0; }
+}
+
+.animate-heroSlideUp {
+  position: relative;
+  top: 0;
+  animation: heroSlideUp 2s ease-out forwards;
+}
+
 .animate-fadeIn {
   animation: fadeIn 1.8s ease-out forwards;
   opacity: 0;
