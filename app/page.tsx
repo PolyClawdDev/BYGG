@@ -351,9 +351,11 @@ export default function Home() {
           </Link>
 
           {/* ── FINT HJEM: video is clipped to the shape of LOGOB.png letters (no box) ──
-              flex-1 only kicks in on md+ so the logo centers in remaining space.
-              On mobile the parent's justify-center already centers everything. */}
-          <div className="md:flex-1 flex flex-col items-center justify-center px-4">
+              flex-1 on every breakpoint so the wordmark takes the remaining height of
+              the hero panel — this pushes the bottom nav (Ditt Nye Hjem …) down to the
+              actual bottom of the viewport instead of stacking right under the
+              subtitle with a big empty area beneath. */}
+          <div className="flex-1 flex flex-col items-center justify-center px-4">
             <div
               className="relative mx-auto w-full max-w-[1100px] animate-fadeInUp"
               aria-label="Fint Hjem"
@@ -395,6 +397,13 @@ export default function Home() {
               {(() => {
                 const W = 1000
                 const H = 240
+                /* Plate/mask overdraw — in SVG user-space units. With a 1000×240
+                   viewBox, 20 units ≈ 2 % of the container on each side, which
+                   translates to ~2 screen px on mobile and ~20 px on 1100 px
+                   desktop. Comfortably beyond any browser's sub-pixel rounding
+                   error but still fully clipped by the parent <div>'s
+                   overflow:hidden, so never visible. */
+                const OVERDRAW = 20
                 const MASK_ID = 'finthjem-cutout-mask'
                 const fontFamily = "'Montserrat', 'Arial Black', system-ui, sans-serif"
                 return (
@@ -445,17 +454,24 @@ export default function Home() {
                         container is already beige behind it.                          */}
                     <svg
                       viewBox={`0 0 ${W} ${H}`}
-                      /* none = stretch SVG content to fill the container exactly.
-                         The outer <div> already locks the aspect ratio to 1000:240
-                         via CSS, so there's no real distortion — but this kills
-                         the sub-pixel letterbox gap that "meet" produces when the
-                         container's computed height lands on a fractional pixel.
-                         That gap was letting the video underneath leak as a thin
-                         horizontal seam right under the FINT HJEM letters. */
+                      /* Bulletproof iOS Safari seam fix:
+                         1. preserveAspectRatio="none" — stretches content to fill
+                            the container exactly (container already locks aspect
+                            ratio 1000:240 via CSS, so no visible distortion).
+                         2. overflow: visible — lets the plate rect render past the
+                            SVG viewport into the parent div.
+                         3. Plate rect AND mask are expanded by OVERDRAW user-space
+                            units beyond the viewBox on every side. The parent
+                            <div style={{overflow:'hidden'}}> clips the overdraw
+                            cleanly at the container edge. This guarantees that
+                            even if iOS Safari rounds the SVG bounds to a
+                            fractional pixel, there is always plate coverage over
+                            the video at the edges — no seam possible. */
                       preserveAspectRatio="none"
                       className="absolute inset-0 block w-full h-full"
                       aria-hidden
                       style={{
+                        overflow: 'visible',
                         opacity: heroMaskReady ? 1 : 0,
                         transition: 'opacity 0.2s ease-out',
                       }}
@@ -464,15 +480,24 @@ export default function Home() {
                         <mask
                           id={MASK_ID}
                           maskUnits="userSpaceOnUse"
-                          x="0"
-                          y="0"
-                          width={W}
-                          height={H}
+                          x={-OVERDRAW}
+                          y={-OVERDRAW}
+                          width={W + OVERDRAW * 2}
+                          height={H + OVERDRAW * 2}
                         >
-                          {/* Start fully white → plate is visible everywhere. */}
-                          <rect x="0" y="0" width={W} height={H} fill="white" />
+                          {/* Fully white over the entire overdrawn region →
+                              plate is visible everywhere outside letters. */}
+                          <rect
+                            x={-OVERDRAW}
+                            y={-OVERDRAW}
+                            width={W + OVERDRAW * 2}
+                            height={H + OVERDRAW * 2}
+                            fill="white"
+                          />
                           {/* Letters in BLACK → those areas of the plate are
-                              removed → video underneath shows through.          */}
+                              removed → video underneath shows through. Letter
+                              coordinates stay in original viewBox space so
+                              centering is unchanged. */}
                           <text
                             x="500"
                             y="192"
@@ -489,12 +514,13 @@ export default function Home() {
                         </mask>
                       </defs>
                       {/* Plate fill uses currentColor so it tracks the container's
-                          animate-subtle-color class exactly, matching the page bg. */}
+                          animate-subtle-color class exactly, matching the page bg.
+                          Overdrawn by OVERDRAW on every side — parent div clips. */}
                       <rect
-                        x="0"
-                        y="0"
-                        width={W}
-                        height={H}
+                        x={-OVERDRAW}
+                        y={-OVERDRAW}
+                        width={W + OVERDRAW * 2}
+                        height={H + OVERDRAW * 2}
                         fill="currentColor"
                         mask={`url(#${MASK_ID})`}
                       />
