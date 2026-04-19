@@ -326,22 +326,21 @@ export default function Home() {
           • Desktop: default flow (logo centered via flex-1, nav at bottom). */}
       <div className="h-[100svh] p-3 md:p-4">
         <div
-          /* Inline backgroundColor + color are bulletproof fallbacks that
-             apply from the very first paint, BEFORE the globals.css bundle
-             (which defines .animate-subtle-bg / .animate-subtle-color) is
-             fully parsed. Without this fallback, on a cold hard refresh
-             there is a narrow window where the class-based color rules
-             haven't taken effect yet, `color` inherits default black, the
-             plate rect's `fill="currentColor"` resolves to black, and the
-             user briefly sees a black rectangle with FINT HJEM cut out
-             before the real styles kick in. Pinning both colors inline
-             (identical values, same #f8f6f2 as the animation's 0%/100%
-             keyframes) guarantees the plate is chromatically invisible
-             against the panel from the very first frame. Once the CSS
-             animations take over they paint the exact same starting
-             values and then drift in perfect sync. */
+          /* SINGLE STATIC COLOR — no animation whatsoever.
+             The subtle-color-shift animations (animate-subtle-bg +
+             animate-subtle-color) were causing a visible rectangle
+             around FINT HJEM because in practice the two animations —
+             one on `background-color`, one on `color` — don't stay
+             in perfect pixel-level sync across all browsers/GPUs.
+             Even a 1-bit-off difference between the plate fill and
+             the panel bg exposes the plate as a beige rectangle
+             against a slightly-different beige. Solution: pin BOTH
+             backgroundColor and color to the same literal #f8f6f2,
+             static forever. Plate fill (also #f8f6f2, hardcoded
+             inline on the rect) is guaranteed identical to the
+             panel bg at every single frame. No drift possible. */
           style={{ backgroundColor: '#f8f6f2', color: '#f8f6f2' }}
-          className="w-full h-full animate-subtle-bg animate-subtle-color rounded-2xl flex flex-col justify-center md:justify-start"
+          className="w-full h-full rounded-2xl flex flex-col justify-center md:justify-start"
         >
 
           {/* Top bar buttons */}
@@ -565,15 +564,20 @@ export default function Home() {
                           </text>
                         </mask>
                       </defs>
-                      {/* Plate fill uses currentColor so it tracks the container's
-                          animate-subtle-color class exactly, matching the page bg.
+                      {/* Plate fill is HARDCODED to the exact same literal
+                          #f8f6f2 that the outer panel uses for its inline
+                          backgroundColor. No currentColor indirection, no CSS
+                          inheritance chain, no animation timing to worry
+                          about — the plate color and the panel bg are
+                          guaranteed identical at every frame. That's what
+                          kills the "box around the letters" for good.
                           Overdrawn by OVERDRAW on every side — parent div clips. */}
                       <rect
                         x={-OVERDRAW}
                         y={-OVERDRAW}
                         width={W + OVERDRAW * 2}
                         height={H + OVERDRAW * 2}
-                        fill="currentColor"
+                        fill="#f8f6f2"
                         mask={`url(#${MASK_ID})`}
                       />
                     </svg>
