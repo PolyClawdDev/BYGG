@@ -385,119 +385,144 @@ export default function Home() {
                 Result: video only paints inside the solid letter shapes; everything outside
                 is transparent (page bg shows through). No rectangular box. No outlines.
               */}
-              {/* ── Responsive wordmark ───────────────────────────────────
-                  Mobile (<768px):  viewBox 500×480, two stacked lines
-                                    FINT / HJEM  (big, punchy presence)
-                  Desktop (≥768px): viewBox 1000×240, one line FINT HJEM
-                  Both share ONE <video> inside ONE <foreignObject>. */}
+              {/* ── Cutout-overlay wordmark ────────────────────────────────
+                  iOS Safari has a long-standing bug with SVG <foreignObject>
+                  containing a <video> + <mask> — the video either doesn't
+                  render or escapes the mask as a rectangle. (That's the
+                  "random interior photo in the hero" we saw on the phone.)
+
+                  This implementation uses ONLY plain HTML + plain SVG <mask>
+                  applied to a <rect>, which works on every browser back to
+                  iOS 12 / Safari 11:
+
+                    Layer 1: <video> — ordinary HTML element, full bleed
+                    Layer 2: <svg>   — beige plate with letter-shaped holes
+                                       punched out by a mask. Letters are the
+                                       ONLY places where the video shows.
+
+                  Mobile (<768px):  viewBox 500×480, two stacked lines (FINT / HJEM)
+                  Desktop (≥768px): viewBox 1000×240, one line (FINT HJEM)        */}
               {(() => {
                 const W = isMobileHero ? 500 : 1000
                 const H = isMobileHero ? 480 : 240
-                const MASK_ID = 'finthjem-logo-mask'
+                const MASK_ID = 'finthjem-cutout-mask'
+                // The page bg is animate-subtle-bg which oscillates between
+                // #f8f6f2 and ~#f4eee8 over 60s. #f8f6f2 is the dominant shade
+                // and the delta is ~2% — imperceptible under letter edges.
+                const PLATE = '#f8f6f2'
                 const fontFamily = "'Montserrat', 'Arial Black', system-ui, sans-serif"
                 return (
-                  <svg
-                    viewBox={`0 0 ${W} ${H}`}
-                    preserveAspectRatio="xMidYMid meet"
-                    className="block w-full h-auto"
-                    aria-hidden
+                  <div
+                    className="relative w-full"
                     style={{
+                      aspectRatio: `${W} / ${H}`,
                       // Hold invisible until Montserrat Black is confirmed loaded
                       // AND the first video frame is ready, then fade in smoothly.
-                      // This is what kills the "flashing video box" on hard refresh.
                       opacity: heroMaskReady && heroVideoReady ? 1 : 0,
                       transition: 'opacity 0.5s ease-out',
                       willChange: 'opacity',
                     }}
+                    aria-hidden
                   >
-                    <defs>
-                      <mask
-                        id={MASK_ID}
-                        maskUnits="userSpaceOnUse"
+                    {/* Layer 1 — raw HTML video. No SVG wrappers, no foreignObject.
+                        Sits behind the overlay; only the letter-shaped holes reveal it. */}
+                    <video
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                      aria-hidden
+                      onLoadedData={() => setHeroVideoReady(true)}
+                      onCanPlay={() => setHeroVideoReady(true)}
+                      {...({ 'webkit-playsinline': 'true' } as React.HTMLAttributes<HTMLVideoElement>)}
+                      className="absolute inset-0 w-full h-full"
+                      style={{ objectFit: 'cover', display: 'block' }}
+                    >
+                      <source src="/BYGG.mp4" type="video/mp4" />
+                    </video>
+
+                    {/* Layer 2 — beige "plate" that covers the entire wordmark box,
+                        with letter-shaped holes punched out via <mask>. In the mask,
+                        white = keep the plate (hide video), black = remove the plate
+                        (show video). So the letters (black in mask) become the only
+                        place where the video shows through.                            */}
+                    <svg
+                      viewBox={`0 0 ${W} ${H}`}
+                      preserveAspectRatio="xMidYMid meet"
+                      className="absolute inset-0 block w-full h-full"
+                      aria-hidden
+                    >
+                      <defs>
+                        <mask
+                          id={MASK_ID}
+                          maskUnits="userSpaceOnUse"
+                          x="0"
+                          y="0"
+                          width={W}
+                          height={H}
+                        >
+                          {/* Start fully white → plate is visible everywhere. */}
+                          <rect x="0" y="0" width={W} height={H} fill="white" />
+                          {/* Letters in BLACK → those areas of the plate are
+                              removed → video underneath shows through.          */}
+                          {isMobileHero ? (
+                            <>
+                              <text
+                                x="250"
+                                y="210"
+                                textAnchor="middle"
+                                textLength="440"
+                                lengthAdjust="spacingAndGlyphs"
+                                fill="black"
+                                fontFamily={fontFamily}
+                                fontWeight={900}
+                                fontSize={190}
+                              >
+                                FINT
+                              </text>
+                              <text
+                                x="250"
+                                y="430"
+                                textAnchor="middle"
+                                textLength="440"
+                                lengthAdjust="spacingAndGlyphs"
+                                fill="black"
+                                fontFamily={fontFamily}
+                                fontWeight={900}
+                                fontSize={190}
+                              >
+                                HJEM
+                              </text>
+                            </>
+                          ) : (
+                            <text
+                              x="500"
+                              y="192"
+                              textAnchor="middle"
+                              textLength="940"
+                              lengthAdjust="spacingAndGlyphs"
+                              fill="black"
+                              fontFamily={fontFamily}
+                              fontWeight={900}
+                              fontSize={200}
+                            >
+                              FINT HJEM
+                            </text>
+                          )}
+                        </mask>
+                      </defs>
+                      {/* The plate itself — page bg color, masked so letters are cut out. */}
+                      <rect
                         x="0"
                         y="0"
                         width={W}
                         height={H}
-                      >
-                        <rect x="0" y="0" width={W} height={H} fill="black" />
-                        {isMobileHero ? (
-                          <>
-                            {/* Two stacked lines for phones — much larger letters. */}
-                            <text
-                              x="250"
-                              y="210"
-                              textAnchor="middle"
-                              textLength="440"
-                              lengthAdjust="spacingAndGlyphs"
-                              fill="white"
-                              fontFamily={fontFamily}
-                              fontWeight={900}
-                              fontSize={190}
-                            >
-                              FINT
-                            </text>
-                            <text
-                              x="250"
-                              y="430"
-                              textAnchor="middle"
-                              textLength="440"
-                              lengthAdjust="spacingAndGlyphs"
-                              fill="white"
-                              fontFamily={fontFamily}
-                              fontWeight={900}
-                              fontSize={190}
-                            >
-                              HJEM
-                            </text>
-                          </>
-                        ) : (
-                          /* Single line for tablet/desktop. textLength forces the
-                             wordmark to fit inside the viewBox regardless of how
-                             the browser metrics Montserrat Black glyphs. */
-                          <text
-                            x="500"
-                            y="192"
-                            textAnchor="middle"
-                            textLength="940"
-                            lengthAdjust="spacingAndGlyphs"
-                            fill="white"
-                            fontFamily={fontFamily}
-                            fontWeight={900}
-                            fontSize={200}
-                          >
-                            FINT HJEM
-                          </text>
-                        )}
-                      </mask>
-                    </defs>
-                    <foreignObject
-                      x="0"
-                      y="0"
-                      width={W}
-                      height={H}
-                      mask={`url(#${MASK_ID})`}
-                    >
-                      <video
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        preload="auto"
-                        aria-hidden
-                        onLoadedData={() => setHeroVideoReady(true)}
-                        onCanPlay={() => setHeroVideoReady(true)}
-                        {...({ xmlns: 'http://www.w3.org/1999/xhtml' } as React.HTMLAttributes<HTMLVideoElement>)}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          display: 'block',
-                        }}
-                      >
-                        <source src="/BYGG.mp4" type="video/mp4" />
-                      </video>
-                    </foreignObject>
-                  </svg>
+                        fill={PLATE}
+                        mask={`url(#${MASK_ID})`}
+                      />
+                    </svg>
+                  </div>
                 )
               })()}
             </div>
