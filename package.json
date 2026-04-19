@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "rm -rf .next",
-    "dev": "WATCHPACK_POLLING=true next dev",
-    "dev:fresh": "rm -rf .next && WATCHPACK_POLLING=true next dev",
+    "clean": "rm -rf .next",
+    "kill:dev-ports": "sh -c 'for p in 3000 3001 3002 3003 3004 3005; do lsof -ti tcp:$p -sTCP:LISTEN 2>/dev/null | xargs kill -9 2>/dev/null; done; pkill -9 -f \"next dev\" 2>/dev/null; pkill -9 -f \"next-server\" 2>/dev/null; exit 0'",
+    "dev": "sh -c 'ulimit -n 65536; next dev -p 3000'",
+    "dev:turbo": "sh -c 'ulimit -n 65536; next dev --turbo -p 3000'",
+    "dev:fresh": "npm run kill:dev-ports && npm run clean && npm run dev",
+    "prebuild": "rm -rf .next",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3000",
     "lint": "next lint"
   },
   "dependencies": {

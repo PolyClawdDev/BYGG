@@ -40,13 +40,12 @@ body {
   opacity: 0;
 }
 
-/* Prevent video flash on load */
-video {
+/* Smooth video fade-in on load (opt-in via .video-fade-in — default is visible) */
+.video-fade-in {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
-
-video[style*="mask"] {
+.video-fade-in.loaded {
   opacity: 1;
 }
 
@@ -233,6 +232,44 @@ video[style*="mask"] {
 .animate-kenburns {
   animation: kenBurns 16s ease-in-out infinite alternate;
   will-change: transform;
+}
+
+/* Gentle float for floating badge cards */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: floatY 5.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Shimmer sweep for premium accents (reserved for future use) */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.animate-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%);
+  animation: shimmer 2.6s ease-in-out infinite;
+}
+
+/* Respect reduced motion — disable decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-kenburns,
+  .animate-shimmer::after {
+    animation: none !important;
+  }
 }
 
 /* Infinite marquee for reviews carousel */

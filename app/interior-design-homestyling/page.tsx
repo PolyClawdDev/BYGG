@@ -28,7 +28,7 @@ export default function InteriorDesign() {
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2 text-center">
             <img 
               src="/LOGO2.png" 
-              alt="FINTHEM Logo" 
+              alt="Fint Hjem logo" 
               className="h-4 md:h-6 lg:h-8 object-contain"
             />
           </div>
@@ -89,7 +89,7 @@ export default function InteriorDesign() {
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2 text-center">
             <img 
               src="/LOGO2.png" 
-              alt="FINTHEM Logo" 
+              alt="Fint Hjem logo" 
               className="h-4 md:h-6 lg:h-8 object-contain"
             />
           </div>

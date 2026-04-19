@@ -47,7 +47,7 @@ export default function Kontakt() {
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2 text-center">
             <img 
               src="/LOGO2.png" 
-              alt="FINTHEM Logo" 
+              alt="Fint Hjem logo" 
               className="h-4 md:h-6 lg:h-8 object-contain"
             />
           </div>
@@ -80,7 +80,7 @@ export default function Kontakt() {
                     </div>
                     <div>
                       <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">E-post</h3>
-                      <p className="font-playfair font-light text-brown text-lg">info@finthem.nu</p>
+                      <p className="font-playfair font-light text-brown text-lg">info@finthjem.no</p>
                     </div>
                     <div>
                       <h3 className="font-playfair font-light text-brown text-lg font-medium mb-2">Adresse</h3>
@@ -226,7 +226,7 @@ export default function Kontakt() {
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2 text-center">
             <img 
               src="/LOGO2.png" 
-              alt="FINTHEM Logo" 
+              alt="Fint Hjem logo" 
               className="h-4 md:h-6 lg:h-8 object-contain"
             />
           </div>

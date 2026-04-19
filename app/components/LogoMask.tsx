@@ -28,7 +28,7 @@ export default function LogoMask({ className = '' }: LogoMaskProps) {
         textAnchor="middle"
         fill="white"
       >
-        FINTHEM
+        FINT HJEM
       </text>
     </svg>
   )

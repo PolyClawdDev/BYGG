@@ -1,11 +1,16 @@
 'use client'
 
-import React, { useState, useEffect, useId } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import ReviewsCarousel from './components/ReviewsCarousel'
 import SiteFooter from './components/SiteFooter'
 
 /* ─── Data ─── */
+
+interface SectionBadge {
+  value: string
+  label: string
+}
 
 interface Section {
   id: string
@@ -15,9 +20,12 @@ interface Section {
   lines: string[]
   body: string
   link: string | null
+  ctaLabel: string
   imageSide: 'right' | 'left'
   image: string
   imageAlt: string
+  features: string[]
+  badge: SectionBadge
 }
 
 const SECTIONS: Section[] = [
@@ -28,10 +36,18 @@ const SECTIONS: Section[] = [
     tag: 'NY KONSTRUKSJON',
     lines: ['VI BYGGER', 'DRØMMEHJEM'],
     body: 'Fra tomt til nøkkelferdig bolig. Vi håndterer hvert eneste steg med presisjon og omtanke — fra søknad til innflytting.',
-    link: null,
+    link: '/kontakt',
+    ctaLabel: 'START DITT PROSJEKT',
     imageSide: 'right',
-    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=90',
     imageAlt: 'Moderne nybygget bolighus med hvit fasade',
+    features: [
+      'Totalentreprenør fra A til Å',
+      'Søknadsbehandling og tegninger inkludert',
+      'Egen arkitekt og prosjektleder',
+      'Nøkkelferdig overlevering',
+    ],
+    badge: { value: '150+', label: 'HJEM BYGGET' },
   },
   {
     id: 'renovering-forandring',
@@ -40,10 +56,18 @@ const SECTIONS: Section[] = [
     tag: 'RENOVASJON',
     lines: ['TRANSFORMER', 'DET EKSISTERENDE'],
     body: 'Gi hjemmet ditt nytt liv. Vi respekterer det eksisterende mens vi skaper noe ekstraordinært — kjøkken, bad, fasade og alt imellom.',
-    link: null,
+    link: '/kontakt',
+    ctaLabel: 'BOOK BEFARING',
     imageSide: 'left',
-    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1400&q=85',
+    image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1800&q=90',
     imageAlt: 'Nyrenovert moderne kjøkken',
+    features: [
+      'Totalrenovering av bolig',
+      'Kjøkken, bad og våtrom',
+      'Fasade, tak og energioppgradering',
+      'Detaljert tidsplan og budsjett',
+    ],
+    badge: { value: '20+', label: 'ÅRS ERFARING' },
   },
   {
     id: 'interior-styling',
@@ -53,34 +77,83 @@ const SECTIONS: Section[] = [
     lines: ['ROMMET SOM', 'REFLEKTERER DEG'],
     body: 'Mer enn estetikk — vi skaper rom som virkelig føles riktige. Fra konsept til ferdig interiør med hvert eneste detalj på plass.',
     link: '/interior-design-homestyling',
+    ctaLabel: 'UTFORSK MER',
     imageSide: 'right',
-    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=85',
+    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1800&q=90',
     imageAlt: 'Luksuriøst skandinavisk interiør med minimalistisk design',
+    features: [
+      'Konseptutvikling og moodboard',
+      '3D-visualisering av rommene',
+      'Fargepalett, tekstiler og materialer',
+      'Styling, møblering og dekor',
+    ],
+    badge: { value: '500+', label: 'ROM DESIGNET' },
   },
 ]
 
 const SECTION_BG = ['#f8f6f2', '#f0ebe5', '#f8f6f2']
 
-const BYGGSERVICE_ITEMS = [
-  { title: 'Snekkerarbeid', desc: 'Skreddersydde trevareløsninger, innredning og finish av høyeste håndverkskvalitet.', icon: 'M4 6h16M4 12h16M4 18h7M15 15l4 4-4 4M19 19h-4' },
-  { title: 'Bad & Flislegging', desc: 'Komplette baderomsrenovasjoner med presist håndverk fra membran til ferdig flate.', icon: 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01' },
-  { title: 'Maling & Overflater', desc: 'Profesjonell maling innvendig og utvendig — inkludert tapetsering og sparkling.', icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z' },
-  { title: 'VVS / Rørlegger', desc: 'Rørleggerarbeid for bad, kjøkken og tekniske installasjoner. Godkjente fagfolk.', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z' },
-  { title: 'Tilbygg & Nybygg', desc: 'Tilbygg, garasjer, anneks og nøkkelferdige boliger. Vi håndterer alt fra søknad til nøkkel.', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
-  { title: 'Vinduer & Dører', desc: 'Montering og utskifting av vinduer og dører for bedre isolasjon, lys og estetikk.', icon: 'M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18' },
+interface ByggServiceItem {
+  num: string
+  title: string
+  desc: string
+  image: string
+  icon: string
+}
+
+const BYGGSERVICE_ITEMS: ByggServiceItem[] = [
+  {
+    num: '01',
+    title: 'Snekkerarbeid',
+    desc: 'Skreddersydde trevareløsninger, innredning og finish av høyeste håndverkskvalitet.',
+    image: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=1400&q=85',
+    icon: 'M4 6h16M4 12h16M4 18h7M15 15l4 4-4 4M19 19h-4',
+  },
+  {
+    num: '02',
+    title: 'Bad & Flislegging',
+    desc: 'Komplette baderomsrenovasjoner med presist håndverk fra membran til ferdig flate.',
+    image: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1400&q=85',
+    icon: 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01',
+  },
+  {
+    num: '03',
+    title: 'Maling & Overflater',
+    desc: 'Profesjonell maling innvendig og utvendig — inkludert tapetsering og sparkling.',
+    image: 'https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?auto=format&fit=crop&w=1400&q=85',
+    icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z',
+  },
+  {
+    num: '04',
+    title: 'VVS / Rørlegger',
+    desc: 'Rørleggerarbeid for bad, kjøkken og tekniske installasjoner. Godkjente fagfolk.',
+    image: 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=1400&q=85',
+    icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z',
+  },
+  {
+    num: '05',
+    title: 'Tilbygg & Nybygg',
+    desc: 'Tilbygg, garasjer, anneks og nøkkelferdige boliger. Vi håndterer alt fra søknad til nøkkel.',
+    image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=85',
+    icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+  },
+  {
+    num: '06',
+    title: 'Vinduer & Dører',
+    desc: 'Montering og utskifting av vinduer og dører for bedre isolasjon, lys og estetikk.',
+    image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85',
+    icon: 'M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18',
+  },
 ]
 
 /* ─── Page ─── */
 
 export default function Home() {
-  const logoMaskUid = useId().replace(/:/g, '')
-  const logoFillFilterId = `logob-fill-${logoMaskUid}`
-  const logoVideoMaskId = `logob-vidmask-${logoMaskUid}`
-
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isShaking, setIsShaking] = useState(false)
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set())
   const [byggVisible, setByggVisible] = useState(false)
+  const sectionImageRefs = useRef<Array<HTMLDivElement | null>>([])
 
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -120,6 +193,36 @@ export default function Home() {
     return () => {
       clearInterval(shakeInterval)
       observer.disconnect()
+    }
+  }, [])
+
+  /* ── Subtle scroll parallax on section images (y-axis only, throttled via rAF) ── */
+  useEffect(() => {
+    let raf: number | null = null
+    const update = () => {
+      const vh = window.innerHeight
+      sectionImageRefs.current.forEach((el) => {
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        const center = rect.top + rect.height / 2
+        // Progress is -1 (section below viewport) to +1 (section above)
+        const progress = Math.max(-1, Math.min(1, (vh / 2 - center) / (vh / 2 + rect.height / 2)))
+        const translateY = progress * 55
+        el.style.setProperty('--parallax-y', `${translateY}px`)
+      })
+      raf = null
+    }
+    const onScroll = () => {
+      if (raf != null) return
+      raf = requestAnimationFrame(update)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    update()
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf != null) cancelAnimationFrame(raf)
     }
   }, [])
 
@@ -191,78 +294,99 @@ export default function Home() {
             </svg>
           </Link>
 
-          {/* ── Centre: logo with video playing ONLY behind it ── */}
+          {/* ── FINT HJEM: video is clipped to the shape of LOGOB.png letters (no box) ── */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
-
-            {/* LOGOB.png → SVG mask only (no second img): multiply overlay was painting video in the whole white PNG canvas = rectangular box.
-                Invert + light dilate fills each glyph without merging into one slab; video only where mask is white. */}
-            <svg width={0} height={0} className="absolute" aria-hidden>
-              <defs>
-                <filter
-                  id={logoFillFilterId}
-                  colorInterpolationFilters="sRGB"
-                  filterUnits="objectBoundingBox"
-                  primitiveUnits="objectBoundingBox"
-                  x="-0.12"
-                  y="-0.12"
-                  width="1.24"
-                  height="1.24"
-                >
-                  <feColorMatrix
-                    in="SourceGraphic"
-                    type="matrix"
-                    values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0"
-                    result="inv"
-                  />
-                  <feMorphology in="inv" operator="dilate" radius="0.004" result="d1" />
-                  <feMorphology in="d1" operator="dilate" radius="0.004" result="d2" />
-                  <feMorphology in="d2" operator="dilate" radius="0.004" result="d3" />
-                  <feMorphology in="d3" operator="dilate" radius="0.004" result="d4" />
-                </filter>
-                <mask
-                  id={logoVideoMaskId}
-                  maskUnits="objectBoundingBox"
-                  maskContentUnits="objectBoundingBox"
-                  x={0}
-                  y={0}
-                  width={1}
-                  height={1}
-                >
-                  <image
-                    href="/LOGOB.png"
-                    width={1}
-                    height={1}
-                    preserveAspectRatio="xMidYMid meet"
-                    filter={`url(#${logoFillFilterId})`}
-                  />
-                </mask>
-              </defs>
-            </svg>
-            <div className="relative isolate mx-auto aspect-square w-[min(72vw,400px)]" aria-label="Fint Hjem">
-              <video
-                className="absolute inset-0 z-0 h-full w-full object-cover object-center"
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
+            <div
+              className="relative mx-auto w-full max-w-[1100px] animate-fadeInUp"
+              aria-label="Fint Hjem"
+            >
+              {/* Visuelt skjult H1 – synlig for Google, skjermlesere og Lighthouse SEO.
+                  Wordmark'en over er et SVG (aria-hidden) så vi trenger dette for at
+                  siden skal ha en semantisk h1 med riktig merke + keywords. */}
+              <h1 className="sr-only">
+                Fint Hjem – Totalentreprenør i Oslo: nybygg, renovering, byggservice og interiørdesign
+              </h1>
+              {/*
+                The SVG below owns the hero wordmark. Inside it:
+                  • <mask> holds the inverted LOGOB.png — feColorMatrix flips colors so the black
+                    letter strokes become WHITE (visible in the mask) and the white background
+                    becomes BLACK (hidden).
+                  • <foreignObject> wraps the HTML <video> and has mask="url(#...)" applied, so the
+                    video is painted only where the letter strokes are.
+                Nothing renders outside the letters → no rectangular box, page background stays clean.
+              */}
+              {/*
+                Clean filled-text mask:
+                  • <mask> paints the FINT HJEM wordmark in white (visible) on a black (hidden) bg
+                  • <foreignObject> wraps the HTML <video> and has the mask applied to it
+                Result: video only paints inside the solid letter shapes; everything outside
+                is transparent (page bg shows through). No rectangular box. No outlines.
+              */}
+              <svg
+                viewBox="0 0 1000 240"
+                preserveAspectRatio="xMidYMid meet"
+                className="block w-full h-auto"
                 aria-hidden
-                style={{
-                  WebkitMask: `url(#${logoVideoMaskId})`,
-                  mask: `url(#${logoVideoMaskId})`,
-                  WebkitMaskSize: 'contain',
-                  maskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  maskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskPosition: 'center',
-                }}
               >
-                <source src="/BYGG.mp4" type="video/mp4" />
-              </video>
+                <defs>
+                  <mask
+                    id="finthjem-logo-mask"
+                    maskUnits="userSpaceOnUse"
+                    x="0"
+                    y="0"
+                    width="1000"
+                    height="240"
+                  >
+                    <rect x="0" y="0" width="1000" height="240" fill="black" />
+                    {/*
+                      textLength + lengthAdjust forces "FINT HJEM" to fit exactly inside the
+                      viewBox width with a small margin, no matter how the browser metrics
+                      the Montserrat Black glyphs — so letters are never cut off on the sides.
+                    */}
+                    <text
+                      x="500"
+                      y="192"
+                      textAnchor="middle"
+                      textLength="940"
+                      lengthAdjust="spacingAndGlyphs"
+                      fill="white"
+                      fontFamily="'Montserrat', 'Arial Black', system-ui, sans-serif"
+                      fontWeight={900}
+                      fontSize={200}
+                    >
+                      FINT HJEM
+                    </text>
+                  </mask>
+                </defs>
+                <foreignObject
+                  x="0"
+                  y="0"
+                  width="1000"
+                  height="240"
+                  mask="url(#finthjem-logo-mask)"
+                >
+                  <video
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    aria-hidden
+                    {...({ xmlns: 'http://www.w3.org/1999/xhtml' } as React.HTMLAttributes<HTMLVideoElement>)}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block',
+                    }}
+                  >
+                    <source src="/BYGG.mp4" type="video/mp4" />
+                  </video>
+                </foreignObject>
+              </svg>
             </div>
 
-            <div className="text-center mt-6 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
+            <div className="text-center mt-8 animate-fadeInUp" style={{ animationDelay: '1.2s' }}>
               <h2 className="font-playfair font-light text-brown text-lg md:text-xl lg:text-2xl tracking-wider">
                 DIN TOTALENTREPRENØR
               </h2>
@@ -311,7 +435,7 @@ export default function Home() {
         const bg = SECTION_BG[idx]
 
         const textSide = (
-          <div className="w-full lg:w-1/2 flex items-center px-8 md:px-14 lg:px-16 py-20 lg:py-0 relative min-h-[70vw] lg:min-h-screen">
+          <div className="w-full lg:w-1/2 flex items-center px-8 md:px-14 lg:px-20 py-24 lg:py-0 relative min-h-[75vw] lg:min-h-screen">
             {/* Ghost number — desktop only */}
             <span
               className="absolute font-montserrat font-black leading-none select-none pointer-events-none hidden lg:block"
@@ -329,90 +453,260 @@ export default function Home() {
               {section.num}
             </span>
 
-            <div className="relative z-10 w-full">
-              <div className="overflow-hidden mb-8">
-                <div className="font-montserrat font-bold text-xs tracking-[0.42em] text-brown/50" style={tagStyle(visible)}>
-                  — {section.tag}
+            <div className="relative z-10 w-full max-w-xl">
+              {/* Eyebrow tag with rule */}
+              <div className="overflow-hidden mb-10">
+                <div
+                  className="flex items-center gap-4"
+                  style={tagStyle(visible)}
+                >
+                  <span className="h-px w-10 bg-brown/50 block" />
+                  <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown/60">
+                    {section.tag}
+                  </span>
+                  <span className="font-montserrat font-bold text-[11px] tracking-[0.3em] text-brown/30 ml-auto hidden md:inline">
+                    / {section.num}
+                  </span>
                 </div>
               </div>
 
-              {section.lines.map((line, li) => (
-                <span key={li} className="font-montserrat font-black text-gray-900 block" style={headlineWrapStyle}>
-                  <span style={headlineStyle(visible, 0.18 + li * 0.13)}>{line}</span>
-                </span>
-              ))}
+              {/* Headline — word-by-word reveal */}
+              <h2
+                className="font-montserrat font-black text-gray-900 tracking-tight mb-10"
+                style={{
+                  fontSize: 'clamp(2.1rem, 4.2vw, 5.1rem)',
+                  lineHeight: 0.95,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {section.lines.map((line, li) => {
+                  const words = line.split(' ')
+                  return (
+                    <span key={li} className="block">
+                      {words.map((word, wi) => {
+                        // Cumulative index across all words of the headline
+                        const cumulativeIndex =
+                          section.lines.slice(0, li).reduce((n, l) => n + l.split(' ').length, 0) + wi
+                        return (
+                          <span
+                            key={wi}
+                            className="inline-block overflow-hidden align-baseline"
+                            style={{ marginRight: wi < words.length - 1 ? '0.28em' : 0, paddingBottom: '0.09em' }}
+                          >
+                            <span
+                              className="inline-block"
+                              style={{
+                                transform: visible ? 'translateY(0)' : 'translateY(110%)',
+                                opacity: visible ? 1 : 0,
+                                transition: `transform 1.1s ${ease}, opacity 0.6s ease`,
+                                transitionDelay: `${0.15 + cumulativeIndex * 0.1}s`,
+                              }}
+                            >
+                              {word}
+                            </span>
+                          </span>
+                        )
+                      })}
+                    </span>
+                  )
+                })}
+              </h2>
 
               <div
-                className="h-px bg-brown/15 mt-10 mb-9 origin-left"
+                className="h-px bg-brown/20 origin-left mb-8"
                 style={{
-                  maxWidth: '440px',
+                  maxWidth: '320px',
                   transform: visible ? 'scaleX(1)' : 'scaleX(0)',
                   transition: `transform 1.3s ${ease}`,
-                  transitionDelay: '0.45s',
+                  transitionDelay: '0.65s',
                 }}
               />
 
               <p
-                className="font-playfair font-light text-brown/80 text-base md:text-lg leading-relaxed max-w-sm"
+                className="font-playfair font-light text-brown/80 text-base md:text-lg leading-relaxed max-w-md mb-10"
                 style={{
                   opacity: visible ? 1 : 0,
                   transform: visible ? 'translateY(0)' : 'translateY(14px)',
                   filter: visible ? 'blur(0px)' : 'blur(3px)',
                   transition: 'opacity 0.9s ease, transform 0.9s ease, filter 0.9s ease',
-                  transitionDelay: '0.6s',
+                  transitionDelay: '0.78s',
                 }}
               >
                 {section.body}
               </p>
 
-              {section.link && (
-                <Link
-                  href={section.link}
-                  className="inline-flex items-center gap-4 mt-12 group"
-                  style={{
-                    opacity: visible ? 1 : 0,
-                    transform: visible ? 'translateY(0)' : 'translateY(10px)',
-                    transition: 'opacity 0.8s ease, transform 0.8s ease',
-                    transitionDelay: '0.82s',
-                  }}
-                >
-                  <span className="font-montserrat font-bold text-xs tracking-[0.35em] text-brown group-hover:text-gray-900 transition-colors duration-300">UTFORSK MER</span>
-                  <span className="h-px w-10 bg-brown group-hover:w-20 group-hover:bg-gray-900 transition-all duration-500" />
-                </Link>
-              )}
+              {/* Feature checklist */}
+              <ul className="space-y-3 mb-12">
+                {section.features.map((feat, fi) => (
+                  <li
+                    key={fi}
+                    className="flex items-start gap-3 font-playfair font-light text-brown/85 text-[15px] md:text-base"
+                    style={{
+                      opacity: visible ? 1 : 0,
+                      transform: visible ? 'translateX(0)' : 'translateX(-14px)',
+                      transition: `opacity 0.7s ease, transform 0.7s ${ease}`,
+                      transitionDelay: `${0.95 + fi * 0.08}s`,
+                    }}
+                  >
+                    <svg
+                      className="w-4 h-4 mt-1 text-brown flex-shrink-0"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <path
+                        d="M2 8.4l3.5 3.6L14 3"
+                        stroke="currentColor"
+                        strokeWidth="1.4"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span>{feat}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTA — animated arrow */}
+              <Link
+                href={section.link || '/kontakt'}
+                className="group relative inline-flex items-center gap-5 pb-3 border-b border-brown/25 hover:border-gray-900 transition-colors duration-500"
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'translateY(0)' : 'translateY(10px)',
+                  transition: 'opacity 0.8s ease, transform 0.8s ease',
+                  transitionDelay: `${1.2 + section.features.length * 0.08}s`,
+                }}
+              >
+                <span className="font-montserrat font-bold text-[11px] tracking-[0.35em] text-gray-900">
+                  {section.ctaLabel}
+                </span>
+                <span className="relative flex items-center w-12 h-[1px] bg-brown/50 group-hover:bg-gray-900 group-hover:w-20 transition-all duration-500">
+                  <svg
+                    width="12"
+                    height="10"
+                    viewBox="0 0 12 10"
+                    className="absolute right-0 -translate-x-2 group-hover:translate-x-0 transition-transform duration-500 text-gray-900"
+                    aria-hidden
+                  >
+                    <path
+                      d="M1 5h10M7 1l4 4-4 4"
+                      stroke="currentColor"
+                      strokeWidth="1.25"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              </Link>
             </div>
           </div>
         )
 
-        /* Image panel: Ken Burns zoom + cinematic clip-path wipe reveal */
+        /* Image panel: cinematic clip-path wipe + scroll parallax + glass badge + corner brackets */
         const imageSide = (
           <div
-            className="w-full h-[70vw] md:h-[55vw] lg:h-auto lg:w-1/2 flex-shrink-0 relative"
+            className="w-full h-[75vw] md:h-[58vw] lg:h-auto lg:w-1/2 flex-shrink-0 relative"
             style={imagePanelClip(visible, section.imageSide)}
           >
             <div className="absolute inset-0 overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={section.image}
-                alt={section.imageAlt}
-                className="absolute inset-0 w-full h-full object-cover animate-kenburns"
-                loading="eager"
-              />
+              {/* Parallax wrapper — translates on scroll via CSS var set by rAF handler */}
+              <div
+                ref={(el) => {
+                  sectionImageRefs.current[idx] = el
+                }}
+                className="absolute"
+                style={{
+                  // Extend the image vertically so parallax translation never reveals blank edges
+                  top: '-8%',
+                  left: 0,
+                  right: 0,
+                  bottom: '-8%',
+                  transform: 'translate3d(0, var(--parallax-y, 0), 0)',
+                  willChange: 'transform',
+                }}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={section.image}
+                  alt={section.imageAlt}
+                  className="absolute inset-0 w-full h-full object-cover animate-kenburns"
+                  loading="eager"
+                />
+              </div>
 
               {/* Soft edge blend + bottom vignette */}
               <div
-                className="absolute inset-0"
+                className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: section.imageSide === 'right'
-                    ? 'linear-gradient(to right, rgba(248,246,242,0.25) 0%, transparent 18%), linear-gradient(to top, rgba(10,8,5,0.6) 0%, transparent 42%)'
-                    : 'linear-gradient(to left, rgba(240,235,229,0.25) 0%, transparent 18%), linear-gradient(to top, rgba(10,8,5,0.6) 0%, transparent 42%)',
+                  background:
+                    section.imageSide === 'right'
+                      ? 'linear-gradient(to right, rgba(248,246,242,0.25) 0%, transparent 18%), linear-gradient(to top, rgba(10,8,5,0.62) 0%, transparent 48%)'
+                      : 'linear-gradient(to left, rgba(240,235,229,0.25) 0%, transparent 18%), linear-gradient(to top, rgba(10,8,5,0.62) 0%, transparent 48%)',
                 }}
               />
 
-              {/* Bottom tag label */}
-              <div className="absolute bottom-8 left-8 right-8 z-10">
-                <p className="font-montserrat font-bold text-xs tracking-[0.4em] text-white/60 mb-2">— {section.tag}</p>
-                <div className="h-px bg-white/20" />
+              {/* Corner brackets — minimalist editorial frames */}
+              <div
+                className="absolute top-6 left-6 w-10 h-10 pointer-events-none"
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'scale(1)' : 'scale(0.5)',
+                  transition: `opacity 0.8s ease, transform 0.8s ${ease}`,
+                  transitionDelay: '1s',
+                }}
+              >
+                <span className="absolute top-0 left-0 w-full h-px bg-white/70" />
+                <span className="absolute top-0 left-0 w-px h-full bg-white/70" />
+              </div>
+              <div
+                className="absolute bottom-6 right-6 w-10 h-10 pointer-events-none"
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'scale(1)' : 'scale(0.5)',
+                  transition: `opacity 0.8s ease, transform 0.8s ${ease}`,
+                  transitionDelay: '1.1s',
+                }}
+              >
+                <span className="absolute bottom-0 right-0 w-full h-px bg-white/70" />
+                <span className="absolute bottom-0 right-0 w-px h-full bg-white/70" />
+              </div>
+
+              {/* Glass-morphism feature badge */}
+              <div
+                className="absolute bottom-8 left-8 md:bottom-10 md:left-10 animate-float"
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.9)',
+                  transition: `opacity 1s ease, transform 1s ${ease}`,
+                  transitionDelay: '1.25s',
+                }}
+              >
+                <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-lg px-5 py-4 md:px-6 md:py-5 shadow-xl">
+                  <div className="font-montserrat font-black text-white text-3xl md:text-4xl leading-none tracking-tight">
+                    {section.badge.value}
+                  </div>
+                  <div className="font-montserrat font-bold text-white/70 text-[10px] tracking-[0.3em] mt-2">
+                    {section.badge.label}
+                  </div>
+                </div>
+              </div>
+
+              {/* Top-right rotating tag label */}
+              <div
+                className="absolute top-8 right-8 z-10 hidden md:flex items-center gap-3 pointer-events-none"
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? 'translateX(0)' : 'translateX(16px)',
+                  transition: `opacity 0.9s ease, transform 0.9s ${ease}`,
+                  transitionDelay: '1s',
+                }}
+              >
+                <span className="h-px w-10 bg-white/50" />
+                <p className="font-montserrat font-bold text-[10px] tracking-[0.4em] text-white/80">
+                  {section.tag}
+                </p>
               </div>
             </div>
           </div>
@@ -475,49 +769,145 @@ export default function Home() {
             />
           </div>
 
-          {/* Clean service cards — no image areas */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {/* Premium image-reveal service cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 lg:gap-6">
             {BYGGSERVICE_ITEMS.map((item, i) => (
-              <div
+              <Link
                 key={item.title}
-                className="group p-8 rounded-2xl border border-brown/10 hover:border-brown/30 hover:shadow-lg transition-all duration-500"
+                href="/kontakt"
+                className="group relative overflow-hidden rounded-2xl border border-brown/10 hover:border-brown/40 transition-all duration-700 aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] block"
                 style={{
-                  backgroundColor: '#f8f6f2',
                   opacity: byggVisible ? 1 : 0,
-                  transform: byggVisible ? 'translateY(0)' : 'translateY(28px)',
-                  transition: 'opacity 0.8s ease, transform 0.8s ease, border-color 0.4s, box-shadow 0.4s',
-                  transitionDelay: `${0.55 + i * 0.1}s`,
+                  transform: byggVisible ? 'translateY(0)' : 'translateY(32px)',
+                  transitionProperty: 'opacity, transform, border-color, box-shadow',
+                  transitionDuration: '0.9s',
+                  transitionTimingFunction: ease,
+                  transitionDelay: `${0.55 + i * 0.09}s`,
+                  backgroundColor: '#f8f6f2',
                 }}
               >
-                <div className="w-10 h-10 mb-6 text-brown/60 group-hover:text-brown transition-colors duration-300">
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
-                  </svg>
+                {/* Base beige (always visible) */}
+                <div className="absolute inset-0 bg-[#f8f6f2]" />
+
+                {/* Background image — zooms + fades in on hover */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={item.image}
+                  alt=""
+                  aria-hidden
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-cover opacity-0 scale-110 group-hover:opacity-100 group-hover:scale-100 transition-[opacity,transform] duration-[1100ms]"
+                  style={{ transitionTimingFunction: ease }}
+                />
+
+                {/* Dark vignette over image (only when hovered) */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                  style={{
+                    background:
+                      'linear-gradient(to top, rgba(10,8,5,0.85) 0%, rgba(10,8,5,0.35) 55%, rgba(10,8,5,0.12) 100%)',
+                  }}
+                />
+
+                {/* Ghost number — top-right watermark */}
+                <span
+                  className="absolute top-4 right-6 font-montserrat font-black leading-none pointer-events-none select-none text-brown/10 group-hover:text-white/15 transition-colors duration-700"
+                  style={{ fontSize: 'clamp(4rem, 7vw, 6rem)' }}
+                >
+                  {item.num}
+                </span>
+
+                {/* Thin top line that expands on hover */}
+                <span className="absolute top-0 left-0 h-[2px] w-0 bg-brown/80 group-hover:w-full transition-[width] duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)]" />
+
+                {/* Card content */}
+                <div className="relative z-10 h-full flex flex-col p-7 md:p-8 lg:p-9">
+                  <div className="w-11 h-11 text-brown/70 group-hover:text-white transition-colors duration-500">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" className="w-full h-full">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.4}
+                        d={item.icon}
+                      />
+                    </svg>
+                  </div>
+
+                  <div className="mt-auto">
+                    <h3 className="font-montserrat font-black text-[13px] tracking-[0.22em] uppercase text-gray-900 group-hover:text-white transition-colors duration-500 mb-3">
+                      {item.title}
+                    </h3>
+                    <p className="font-playfair font-light text-brown/75 group-hover:text-white/85 text-[15px] md:text-base leading-relaxed transition-colors duration-500">
+                      {item.desc}
+                    </p>
+
+                    <div className="mt-7 flex items-center gap-3 text-brown/65 group-hover:text-white transition-colors duration-500">
+                      <span className="font-montserrat font-bold text-[10px] tracking-[0.35em]">
+                        LES MER
+                      </span>
+                      <span className="relative block h-px w-8 bg-current group-hover:w-14 transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                        <svg
+                          width="10"
+                          height="10"
+                          viewBox="0 0 10 10"
+                          className="absolute right-0 -top-[4px] -translate-x-2 group-hover:translate-x-0 transition-transform duration-500"
+                          aria-hidden
+                        >
+                          <path
+                            d="M1 5h8M5 1l4 4-4 4"
+                            stroke="currentColor"
+                            strokeWidth="1.3"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="font-montserrat font-black text-xs tracking-[0.2em] text-gray-900 mb-3 uppercase">
-                  {item.title}
-                </h3>
-                <p className="font-playfair font-light text-brown/70 text-base leading-relaxed">
-                  {item.desc}
-                </p>
-              </div>
+              </Link>
             ))}
           </div>
 
+          {/* Bottom CTA row */}
           <div
-            className="mt-14"
+            className="mt-16 flex flex-col md:flex-row md:items-end md:justify-between gap-8"
             style={{
               opacity: byggVisible ? 1 : 0,
               transform: byggVisible ? 'translateY(0)' : 'translateY(10px)',
               transition: 'opacity 0.8s ease, transform 0.8s ease',
-              transitionDelay: '1.2s',
+              transitionDelay: '1.3s',
             }}
           >
-            <Link href="/kontakt" className="inline-flex items-center gap-4 group">
-              <span className="font-montserrat font-bold text-xs tracking-[0.35em] text-brown group-hover:text-gray-900 transition-colors duration-300">
+            <p className="font-playfair font-light text-brown/75 text-base md:text-lg max-w-md leading-relaxed">
+              Usikker på hvor du skal begynne? Vi kommer gjerne på befaring uten forpliktelser og gir deg en ærlig vurdering.
+            </p>
+            <Link
+              href="/kontakt"
+              className="group inline-flex items-center gap-5 pb-3 border-b border-brown/30 hover:border-gray-900 transition-colors duration-500 self-start md:self-end"
+            >
+              <span className="font-montserrat font-bold text-[11px] tracking-[0.35em] text-gray-900">
                 BOOK GRATIS BEFARING
               </span>
-              <span className="h-px w-10 bg-brown group-hover:w-20 group-hover:bg-gray-900 transition-all duration-500" />
+              <span className="relative flex items-center w-12 h-[1px] bg-brown/50 group-hover:bg-gray-900 group-hover:w-20 transition-all duration-500">
+                <svg
+                  width="12"
+                  height="10"
+                  viewBox="0 0 12 10"
+                  className="absolute right-0 -translate-x-2 group-hover:translate-x-0 transition-transform duration-500 text-gray-900"
+                  aria-hidden
+                >
+                  <path
+                    d="M1 5h10M7 1l4 4-4 4"
+                    stroke="currentColor"
+                    strokeWidth="1.25"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
             </Link>
           </div>
         </div>
