@@ -33,11 +33,9 @@ export default function SiteFooter() {
 
           {/* Brand */}
           <div className="lg:col-span-1">
-            <img
-              src="/LOGO2.png"
-              alt="Fint Hjem"
-              className="h-5 md:h-6 object-contain mb-6 brightness-0 invert opacity-80"
-            />
+            <span className="block font-montserrat font-black text-white text-2xl md:text-3xl lg:text-4xl tracking-tight leading-none mb-6">
+              FINT HJEM
+            </span>
             <p className="font-playfair font-light text-white/50 text-sm leading-relaxed mb-8">
               Din totalentreprenør for nybygg, renovering, byggservice og interiørdesign. Vi bygger drømmehjem med presisjon og omtanke — i Oslo og resten av Norge.
             </p>
