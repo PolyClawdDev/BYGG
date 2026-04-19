@@ -357,7 +357,20 @@ export default function Home() {
               subtitle with a big empty area beneath. */}
           <div className="flex-1 flex flex-col items-center justify-center px-4">
             <div
-              className="relative mx-auto w-full max-w-[1100px] animate-fadeInUp"
+              /* No animate-fadeInUp here on purpose.
+                 That class animates opacity 0 → 1 on the wrapper, which forces
+                 the browser to promote this subtree to a GPU compositor layer
+                 for the duration of the animation. Inside that layer, the
+                 video + SVG plate + mask get rasterized into a single texture
+                 whose sub-pixel edges don't perfectly match direct rendering,
+                 producing a faint ~1 px seam that was only visible WHILE the
+                 animation was running. The plate and the video already have
+                 their own opacity gates (heroMaskReady / heroVideoReady) that
+                 reveal each layer independently once fonts/video are ready —
+                 so this wrapper doesn't need any opacity animation of its
+                 own, and without one there's no compositor layer, no
+                 rasterized texture, no seam. */
+              className="relative mx-auto w-full max-w-[1100px]"
               aria-label="Fint Hjem"
             >
               {/* Visuelt skjult H1 – synlig for Google, skjermlesere og Lighthouse SEO.
