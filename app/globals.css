@@ -375,6 +375,17 @@ body {
   will-change: transform, opacity;
 }
 
+/* Hero "Få estimat" button — a single diagonal warm-gold highlight that
+   sweeps across the dark pill every ~4.8s, with a long pause at the
+   end of the cycle so it reads as a premium accent rather than a
+   constant animation. The span is absolutely positioned inside the
+   button with a gradient background; we just translate it left→right. */
+@keyframes heroBtnShimmer {
+  0%   { transform: translateX(-120%); }
+  55%  { transform: translateX(120%); }
+  100% { transform: translateX(120%); }
+}
+
 /* Scroll indicator pulse */
 @keyframes scrollPulse {
   0%, 100% {

@@ -30,6 +30,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.9,
     },
+    {
+      url: `${SITE_URL}/estimat`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
 
     /* ── Anker-URL'er for seksjonene på forsiden ─ Gjør at Google kan
        vise "Gå til seksjon"-resultater i søk (Sitelinks / Jump-to). ── */
