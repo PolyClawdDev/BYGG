@@ -18,7 +18,7 @@ const DEFAULT_TITLE =
   'Fint Hjem – Totalentreprenør i Oslo | Nybygg, Renovering & Interiør'
 const DEFAULT_DESCRIPTION =
   'Fint Hjem er din totalentreprenør i Oslo med over 20 års erfaring. Vi leverer nøkkelferdige nybygg, renovering, byggservice og interiørdesign – fra søknad til innflytting. Book gratis befaring i dag.'
-const OG_IMAGE = `${SITE_URL}/LOGO.png`
+const OG_IMAGE = `${SITE_URL}/FAVICON.png`
 
 const KEYWORDS: string[] = [
   'Fint Hjem',
@@ -94,15 +94,15 @@ export const metadata: Metadata = {
     images: [
       {
         url: OG_IMAGE,
-        width: 1200,
-        height: 630,
+        width: 512,
+        height: 512,
         alt: 'Fint Hjem – Totalentreprenør i Oslo',
       },
     ],
   },
 
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
     images: [OG_IMAGE],

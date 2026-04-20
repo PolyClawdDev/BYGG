@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 const SITE_URL = 'https://finthjem.no'
 const PAGE_URL = `${SITE_URL}/kontakt`
-const OG_IMAGE = `${SITE_URL}/LOGO.png`
+const OG_IMAGE = `${SITE_URL}/FAVICON.png`
 
 const TITLE = 'Kontakt Fint Hjem – Book gratis befaring i Oslo'
 const DESCRIPTION =
@@ -33,14 +33,14 @@ export const metadata: Metadata = {
     images: [
       {
         url: OG_IMAGE,
-        width: 1200,
-        height: 630,
+        width: 512,
+        height: 512,
         alt: 'Kontakt Fint Hjem – Book gratis befaring',
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
     title: TITLE,
     description: DESCRIPTION,
     images: [OG_IMAGE],
