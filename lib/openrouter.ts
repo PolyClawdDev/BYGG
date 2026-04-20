@@ -1,36 +1,28 @@
 /**
  * Tiny, dependency-free OpenRouter client.
  *
- * We deliberately don't pull in an SDK — the OpenAI-compatible HTTP
- * surface that OpenRouter exposes is trivial to call with native fetch,
- * and this keeps the bundle lean. All configuration lives in environment
- * variables so swapping models or keys is a one-line deploy change.
+ * Deliberately provider-agnostic — all model selection lives in
+ * `lib/model-config.ts`, and the caller must pass `model` explicitly
+ * on every request. This file knows nothing about which models we use;
+ * its only job is to speak HTTP to OpenRouter correctly.
  *
  * Required env:
  *   OPENROUTER_API_KEY      — account key from https://openrouter.ai/keys
  *
  * Optional env (sensible defaults in parentheses):
- *   OPENROUTER_MODEL        — the model slug to use
- *                             (anthropic/claude-3.5-sonnet)
- *   OPENROUTER_SITE_URL     — forwarded as HTTP-Referer (identifies the
- *                             calling app to OpenRouter's rankings)
+ *   OPENROUTER_SITE_URL     — forwarded as HTTP-Referer so we show up
+ *                             on OpenRouter's rankings dashboard
  *                             (https://finthjem.no)
- *   OPENROUTER_APP_NAME     — forwarded as X-Title  (Fint Hjem Estimator)
+ *   OPENROUTER_APP_NAME     — forwarded as X-Title (Fint Hjem Estimator)
  */
 
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions'
 
-// Multi-modal-capable, strong reasoning, good Norwegian. Easy to swap
-// from `.env.local` without touching code. If you later turn on vision
-// analysis, make sure the chosen model supports `input_image`.
-const DEFAULT_MODEL = 'anthropic/claude-3.5-sonnet'
-
 // ─── Message shapes ──────────────────────────────────────────────────────
 //
-// We support both plain text messages and the OpenAI-compatible
-// multimodal format where `content` is an array of parts. Structuring
-// it this way means we can light up image input as soon as Fint Hjem
-// wants to enable a vision-capable model — no UI changes required.
+// OpenAI-compatible multimodal content: either a plain string (simple
+// text turn) or an array of typed parts (text + image blocks). This
+// lines up with what OpenRouter accepts across every provider we use.
 export type OpenRouterContentPart =
   | { type: 'text'; text: string }
   | { type: 'image_url'; image_url: { url: string } }
@@ -41,7 +33,11 @@ export interface OpenRouterMessage {
 }
 
 export interface OpenRouterRequest {
-  model?: string
+  /**
+   * Required. The caller must decide which model to use — see
+   * `lib/model-config.ts` for the routing helper.
+   */
+  model: string
   messages: OpenRouterMessage[]
   temperature?: number
   max_tokens?: number
@@ -63,10 +59,9 @@ interface OpenRouterResponse {
 
 export function getOpenRouterConfig() {
   const apiKey = process.env.OPENROUTER_API_KEY
-  const model = process.env.OPENROUTER_MODEL || DEFAULT_MODEL
   const siteUrl = process.env.OPENROUTER_SITE_URL || 'https://finthjem.no'
   const appName = process.env.OPENROUTER_APP_NAME || 'Fint Hjem Estimator'
-  return { apiKey, model, siteUrl, appName }
+  return { apiKey, siteUrl, appName }
 }
 
 export class OpenRouterError extends Error {
@@ -81,14 +76,17 @@ export class OpenRouterError extends Error {
 /**
  * Single-shot (non-streaming) chat completion.
  *
- * Returns the raw assistant `content` string. The caller is responsible
- * for parsing any structured output (e.g. the <<<ESTIMATE_JSON>>> block).
+ * Returns the raw assistant `content` string. The caller parses any
+ * structured output (e.g. the <<<ESTIMATE_JSON>>> block).
+ *
+ * No fallback logic here — if the request fails, it throws. That's
+ * intentional: product does not want silent model swapping.
  */
 export async function chatCompletion(
   req: OpenRouterRequest,
   { signal }: { signal?: AbortSignal } = {}
 ): Promise<{ content: string; model: string }> {
-  const { apiKey, model, siteUrl, appName } = getOpenRouterConfig()
+  const { apiKey, siteUrl, appName } = getOpenRouterConfig()
 
   if (!apiKey) {
     throw new OpenRouterError(
@@ -97,13 +95,20 @@ export async function chatCompletion(
     )
   }
 
+  if (!req.model) {
+    // Defensive — should never happen since the route helper always
+    // picks a model, but it's cheaper to check here than to debug a
+    // 400 from OpenRouter later.
+    throw new OpenRouterError('Internt: chatCompletion kalt uten modell.', 500)
+  }
+
   const body: OpenRouterRequest = {
-    model: req.model || model,
+    model: req.model,
     messages: req.messages,
     temperature: req.temperature ?? 0.4,
-    // Keep replies compact — this is an estimator, not a chatbot for
-    // open-ended conversation. 700 tokens ≈ ~2 short paragraphs + the
-    // structured JSON block.
+    // Replies are intentionally compact — this is an estimator, not a
+    // chatbot. 700 tokens ≈ ~2 short paragraphs + the structured JSON
+    // block the UI depends on.
     max_tokens: req.max_tokens ?? 700,
   }
 
@@ -140,7 +145,7 @@ export async function chatCompletion(
     throw new OpenRouterError('OpenRouter returnerte et tomt svar.', 502)
   }
 
-  return { content, model: body.model || DEFAULT_MODEL }
+  return { content, model: body.model }
 }
 
 // ─── ESTIMATE JSON parsing ───────────────────────────────────────────────
@@ -171,9 +176,9 @@ export function parseAssistantReply(raw: string): ParsedAssistantReply {
 
   try {
     const parsed = JSON.parse(jsonSlice) as EstimateResult
-    // Extremely defensive: only keep fields we explicitly know about —
-    // the AI is instructed not to add extras, but we don't trust it
-    // blindly when parsing potentially-malformed output.
+    // Defensive: only keep fields we know about. The AI is instructed
+    // not to add extras, but we don't trust it blindly when parsing
+    // potentially-malformed output.
     const safe: EstimateResult = {
       priceMin: Number(parsed.priceMin) || 0,
       priceMax: Number(parsed.priceMax) || 0,
