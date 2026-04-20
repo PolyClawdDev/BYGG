@@ -1,13 +1,17 @@
 'use client'
 
 /**
- * ProjectIntakeForm — structured inputs that sit next to the chat.
+ * ProjectIntakeForm — structured inputs for the planner sidebar.
  *
- * The chat by itself is flexible but slow; the intake form lets the
- * user tighten up the estimate in seconds by selecting service,
- * job type, size, property type and standard level. Every field is
- * optional — the AI will either use the value if present or ask
- * naturally for it in the next turn.
+ * Packs the six most useful prompts (service, job, size, property
+ * type, standard, location) into a single dense 1-column stack that
+ * fits inside a 340 px sidebar without scrolling. Phone/email are
+ * intentionally NOT here — they belong to the "Be om befaring" lead
+ * form on the right rail so the customer only types them once, at
+ * the point they're actually committing to be contacted.
+ *
+ * Every field is optional. The AI uses whatever's filled out to
+ * tighten the estimate, and asks naturally for anything missing.
  */
 
 import React from 'react'
@@ -24,19 +28,18 @@ interface Props {
   onChange: (intake: ProjectIntake) => void
 }
 
-/* Shared styles — a thin, editorial input/select that matches the hero
-   CTA language (brown borders, playfair text, no rounded-pill UI). */
+/* Dense input styles — thinner padding than the booking forms on
+   /kontakt so six fields stack comfortably in 340 px without the
+   sidebar turning into a scroll area. */
 const field =
   'w-full bg-transparent border-b border-brown/25 focus:border-gray-900 outline-none ' +
-  'font-playfair font-light text-brown text-[15px] pb-2 pt-1 transition-colors duration-300 ' +
+  'font-playfair font-light text-brown text-[14px] pb-1.5 pt-0.5 transition-colors duration-300 ' +
   'placeholder:text-brown/40'
 
 const label =
-  'block font-montserrat font-bold text-[10px] tracking-[0.32em] text-brown/70 mb-2 uppercase'
+  'block font-montserrat font-bold text-[9.5px] tracking-[0.3em] text-brown/70 mb-1.5 uppercase'
 
 export default function ProjectIntakeForm({ intake, onChange }: Props) {
-  // Filter job types by category so the second dropdown only shows
-  // relevant options — keeps the UI minimal.
   const jobOptions = intake.category
     ? JOB_TYPES.filter((j) => j.category === intake.category)
     : JOB_TYPES
@@ -45,45 +48,47 @@ export default function ProjectIntakeForm({ intake, onChange }: Props) {
     onChange({ ...intake, [key]: value })
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-        <div>
-          <label className={label}>Tjeneste</label>
-          <select
-            className={field}
-            value={intake.category || ''}
-            onChange={(e) => {
-              const val = (e.target.value || undefined) as ProjectIntake['category']
-              // Reset job type when category changes so we don't leave
-              // an incompatible selection hanging around.
-              onChange({ ...intake, category: val, jobType: undefined })
-            }}
-          >
-            <option value="">Velg kategori…</option>
-            {SERVICE_CATEGORIES.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-        </div>
+    <div className="space-y-3.5">
+      <div>
+        <label className={label}>Tjeneste</label>
+        <select
+          className={field}
+          value={intake.category || ''}
+          onChange={(e) => {
+            const val = (e.target.value || undefined) as ProjectIntake['category']
+            // Reset job type when category changes so we don't leave an
+            // incompatible selection hanging around.
+            onChange({ ...intake, category: val, jobType: undefined })
+          }}
+        >
+          <option value="">Velg kategori…</option>
+          {SERVICE_CATEGORIES.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.label}
+            </option>
+          ))}
+        </select>
+      </div>
 
-        <div>
-          <label className={label}>Type jobb</label>
-          <select
-            className={field}
-            value={intake.jobType || ''}
-            onChange={(e) => set('jobType', (e.target.value || undefined) as ProjectIntake['jobType'])}
-          >
-            <option value="">Velg jobbtype…</option>
-            {jobOptions.map((j) => (
-              <option key={j.id} value={j.id}>
-                {j.label}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div>
+        <label className={label}>Type jobb</label>
+        <select
+          className={field}
+          value={intake.jobType || ''}
+          onChange={(e) => set('jobType', (e.target.value || undefined) as ProjectIntake['jobType'])}
+        >
+          <option value="">Velg jobbtype…</option>
+          {jobOptions.map((j) => (
+            <option key={j.id} value={j.id}>
+              {j.label}
+            </option>
+          ))}
+        </select>
+      </div>
 
+      {/* Størrelse + boligtype share a row — both are short values so a
+          two-column split keeps the sidebar dense without cramping. */}
+      <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={label}>Størrelse (m²)</label>
           <input
@@ -110,7 +115,7 @@ export default function ProjectIntakeForm({ intake, onChange }: Props) {
               set('propertyType', (e.target.value || undefined) as ProjectIntake['propertyType'])
             }
           >
-            <option value="">Velg boligtype…</option>
+            <option value="">Velg…</option>
             {PROPERTY_TYPES.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.label}
@@ -118,56 +123,33 @@ export default function ProjectIntakeForm({ intake, onChange }: Props) {
             ))}
           </select>
         </div>
-
-        <div>
-          <label className={label}>Ønsket standard</label>
-          <select
-            className={field}
-            value={intake.standard || ''}
-            onChange={(e) => set('standard', (e.target.value || undefined) as ProjectIntake['standard'])}
-          >
-            <option value="">Velg standard…</option>
-            {STANDARD_LEVELS.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className={label}>Sted / område</label>
-          <input
-            className={field}
-            type="text"
-            placeholder="f.eks. Frogner, Oslo"
-            value={intake.location || ''}
-            onChange={(e) => set('location', e.target.value || undefined)}
-          />
-        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
-        <div>
-          <label className={label}>Telefon (valgfritt)</label>
-          <input
-            className={field}
-            type="tel"
-            placeholder="+47…"
-            value={intake.phone || ''}
-            onChange={(e) => set('phone', e.target.value || undefined)}
-          />
-        </div>
-        <div>
-          <label className={label}>E-post (valgfritt)</label>
-          <input
-            className={field}
-            type="email"
-            placeholder="navn@eksempel.no"
-            value={intake.email || ''}
-            onChange={(e) => set('email', e.target.value || undefined)}
-          />
-        </div>
+      <div>
+        <label className={label}>Ønsket standard</label>
+        <select
+          className={field}
+          value={intake.standard || ''}
+          onChange={(e) => set('standard', (e.target.value || undefined) as ProjectIntake['standard'])}
+        >
+          <option value="">Velg standard…</option>
+          {STANDARD_LEVELS.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label className={label}>Sted / område</label>
+        <input
+          className={field}
+          type="text"
+          placeholder="f.eks. Frogner, Oslo"
+          value={intake.location || ''}
+          onChange={(e) => set('location', e.target.value || undefined)}
+        />
       </div>
     </div>
   )

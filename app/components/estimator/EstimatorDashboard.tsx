@@ -39,7 +39,7 @@ import ProjectIntakeForm from './ProjectIntakeForm'
 import UploadDropzone from './UploadDropzone'
 import EstimateSummaryCard from './EstimateSummaryCard'
 import LeadForm from './LeadForm'
-import { JOB_TYPES, PROPERTY_TYPES, SERVICE_CATEGORIES, STANDARD_LEVELS } from '@/lib/pricing'
+import { JOB_TYPES } from '@/lib/pricing'
 
 type MobileTab = 'planner' | 'chat' | 'estimate'
 
@@ -62,33 +62,6 @@ export default function EstimatorDashboard() {
     return null
   }, [messages])
 
-  // Human-readable project summary so the planner sidebar shows a
-  // living snapshot of what the customer is describing, not just form
-  // values.
-  const planSummary = useMemo(() => {
-    const rows: Array<{ label: string; value: string }> = []
-    if (intake.category) {
-      const lbl = SERVICE_CATEGORIES.find((c) => c.id === intake.category)?.label
-      if (lbl) rows.push({ label: 'Tjeneste', value: lbl })
-    }
-    if (intake.jobType) {
-      const lbl = JOB_TYPES.find((j) => j.id === intake.jobType)?.label
-      if (lbl) rows.push({ label: 'Type jobb', value: lbl })
-    }
-    if (intake.sizeSqm) rows.push({ label: 'Størrelse', value: `${intake.sizeSqm} m²` })
-    if (intake.propertyType) {
-      const lbl = PROPERTY_TYPES.find((p) => p.id === intake.propertyType)?.label
-      if (lbl) rows.push({ label: 'Boligtype', value: lbl })
-    }
-    if (intake.standard) {
-      const lbl = STANDARD_LEVELS.find((s) => s.id === intake.standard)?.label
-      if (lbl) rows.push({ label: 'Standard', value: lbl })
-    }
-    if (intake.location) rows.push({ label: 'Sted', value: intake.location })
-    if (images.length > 0) rows.push({ label: 'Bilder', value: `${images.length}` })
-    return rows
-  }, [intake, images.length])
-
   const defaultLeadSummary = useMemo(() => {
     const parts: string[] = []
     if (intake.jobType) {
@@ -108,54 +81,34 @@ export default function EstimatorDashboard() {
   }
 
   // ─── Sidebar left ──────────────────────────────────────────────────
+  // Everything fits without scrolling at 1024px+ viewport height. The
+  // duplicate live snapshot was removed — the form IS the snapshot.
+  // Phone/email moved to the LeadForm on the right rail. Upload zone
+  // is a compact single-line treatment. Overflow is 'auto' only as a
+  // safety net for very short laptop screens (< 720 px content height).
   const leftPanel = (
-    <div className="h-full flex flex-col">
-      <div className="px-6 md:px-7 pt-7 pb-4 border-b border-brown/10">
-        <p className="font-montserrat font-bold text-[10px] tracking-[0.42em] text-brown/60 uppercase mb-2">
+    <div className="h-full flex flex-col min-h-0">
+      <div className="px-5 md:px-6 pt-5 pb-3 border-b border-brown/10 flex-shrink-0">
+        <p className="font-montserrat font-bold text-[10px] tracking-[0.42em] text-brown/60 uppercase mb-1.5">
           Din planner
         </p>
-        <p className="font-playfair font-light text-gray-900 text-lg leading-snug">
-          {planSummary.length > 0
-            ? 'Prosjektet ditt tar form.'
-            : 'Start planleggingen — hvert detalj gjør estimatet mer presist.'}
+        <p className="font-playfair font-light text-gray-900 text-base leading-snug">
+          Detaljene dine gjør estimatet mer presist.
         </p>
       </div>
 
-      {/* Live project snapshot — only renders once there's something worth showing. */}
-      {planSummary.length > 0 && (
-        <div className="px-6 md:px-7 py-5 border-b border-brown/10 bg-[#f4f0e9]">
-          <p className="font-montserrat font-bold text-[10px] tracking-[0.35em] text-brown/60 uppercase mb-3">
-            Du planlegger
-          </p>
-          <dl className="space-y-2">
-            {planSummary.map((row) => (
-              <div key={row.label} className="flex items-start justify-between gap-4">
-                <dt className="font-playfair font-light text-brown/65 text-[13px]">{row.label}</dt>
-                <dd className="font-playfair text-gray-900 text-[13px] text-right">{row.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      )}
-
-      {/* Scrollable form area */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-6 md:px-7 py-6">
-        <p className="font-montserrat font-bold text-[10px] tracking-[0.35em] text-brown/70 uppercase mb-5">
+      <div className="flex-1 min-h-0 overflow-y-auto px-5 md:px-6 py-4">
+        <p className="font-montserrat font-bold text-[10px] tracking-[0.3em] text-brown/70 uppercase mb-3">
           Prosjektdetaljer
         </p>
         <ProjectIntakeForm intake={intake} onChange={setIntake} />
 
-        <div className="mt-8">
-          <p className="font-montserrat font-bold text-[10px] tracking-[0.35em] text-brown/70 uppercase mb-3">
+        <div className="mt-5">
+          <p className="font-montserrat font-bold text-[10px] tracking-[0.3em] text-brown/70 uppercase mb-2">
             Bilder
           </p>
           <UploadDropzone images={images} onChange={setImages} />
         </div>
-
-        <p className="font-playfair font-light italic text-brown/60 text-[12.5px] mt-8 leading-relaxed">
-          Alt du legger inn her bruker AI-assistenten til å lage et mer presist estimat.
-          Endelig pris fastsettes alltid etter befaring.
-        </p>
       </div>
     </div>
   )

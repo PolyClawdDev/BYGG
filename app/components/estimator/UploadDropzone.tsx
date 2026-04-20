@@ -159,8 +159,8 @@ export default function UploadDropzone({ images, onChange, maxImages = 6 }: Prop
           if (e.dataTransfer.files?.length) void addFiles(e.dataTransfer.files)
         }}
         className={[
-          'group relative block w-full cursor-pointer rounded-xl border transition-colors duration-500',
-          'px-6 py-6 md:py-7 text-center select-none',
+          'group relative block w-full cursor-pointer rounded-lg border transition-colors duration-500',
+          'px-4 py-3.5 select-none',
           isDragging
             ? 'border-brown/70 bg-brown/[0.04]'
             : 'border-brown/20 hover:border-brown/40 bg-transparent',
@@ -177,22 +177,27 @@ export default function UploadDropzone({ images, onChange, maxImages = 6 }: Prop
             e.target.value = ''
           }}
         />
-        <div className="flex flex-col items-center gap-3">
-          <svg className="w-6 h-6 text-brown/70 group-hover:text-brown transition-colors duration-500" viewBox="0 0 24 24" fill="none" aria-hidden>
+        <div className="flex items-center gap-3">
+          <svg
+            className="w-4 h-4 flex-shrink-0 text-brown/70 group-hover:text-brown transition-colors duration-500"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
             <path
               d="M12 15V5m0 0l-4 4m4-4l4 4M5 19h14"
               stroke="currentColor"
-              strokeWidth="1.2"
+              strokeWidth="1.3"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
           </svg>
-          <div>
-            <p className="font-montserrat font-bold text-[11px] tracking-[0.3em] text-gray-900">
+          <div className="min-w-0 flex-1">
+            <p className="font-montserrat font-bold text-[10px] tracking-[0.28em] text-gray-900 leading-tight">
               {isProcessing ? 'BEHANDLER…' : 'LAST OPP BILDER'}
             </p>
-            <p className="font-playfair font-light text-brown/70 text-sm mt-2">
-              Dra inn bilder eller klikk for å velge — JPG eller PNG, opptil {maxImages} stk.
+            <p className="font-playfair font-light text-brown/60 text-[11.5px] leading-snug mt-0.5">
+              JPG/PNG · opptil {maxImages} stk
             </p>
           </div>
         </div>
@@ -205,7 +210,7 @@ export default function UploadDropzone({ images, onChange, maxImages = 6 }: Prop
       )}
 
       {images.length > 0 && (
-        <div className="mt-5 grid grid-cols-3 md:grid-cols-4 gap-3">
+        <div className="mt-3 grid grid-cols-4 gap-2">
           {images.map((img) => (
             <div key={img.id} className="relative group rounded-lg overflow-hidden border border-brown/15 aspect-square bg-[#f0ebe5]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
