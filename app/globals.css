@@ -363,6 +363,18 @@ body {
   animation-play-state: paused;
 }
 
+/* Estimator chat — gentle typing-indicator dot. Three dots with staggered
+   animation-delay (set inline) give the classic "… writing" ellipsis. */
+@keyframes typingDot {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
+  40%           { transform: translateY(-3px); opacity: 1; }
+}
+
+.animate-typing-dot {
+  animation: typingDot 1.2s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
 /* Scroll indicator pulse */
 @keyframes scrollPulse {
   0%, 100% {

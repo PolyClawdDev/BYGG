@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import ReviewsCarousel from './components/ReviewsCarousel'
 import SiteFooter from './components/SiteFooter'
+import HeroEstimateButton from './components/estimator/HeroEstimateButton'
 
 /* ─── Data ─── */
 
@@ -591,6 +592,13 @@ export default function Home() {
                 DIN TOTALENTREPRENØR
               </h2>
             </div>
+
+            {/* Premium hero CTA — sits DIRECTLY under the subtitle so the
+                visual rhythm is: wordmark → subtitle → CTA → scroll arrow
+                → nav. Typography, borders and animation cadence match the
+                rest of the page's CTAs exactly so this feels integrated,
+                not bolted on. */}
+            <HeroEstimateButton />
           </div>
 
           {/* ── Bottom: nav + scroll arrow ──
