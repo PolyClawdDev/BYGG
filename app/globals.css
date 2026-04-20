@@ -375,15 +375,18 @@ body {
   will-change: transform, opacity;
 }
 
-/* Hero "Få estimat" button — a single diagonal warm-gold highlight that
-   sweeps across the dark pill every ~4.8s, with a long pause at the
-   end of the cycle so it reads as a premium accent rather than a
-   constant animation. The span is absolutely positioned inside the
-   button with a gradient background; we just translate it left→right. */
+/* Hero "Få estimat" button — a sharp gold-white streak that sweeps
+   quickly (~1s) then pauses off-screen for the remaining ~2.2s of
+   the 3.2s cycle. The quick transit reads as the pill "catching the
+   light", while the pause prevents the button from ever looking like
+   it's perpetually animated. The span is absolutely positioned inside
+   the button with a gradient background; we translate it left→right.
+   Any adjustment here must keep the end state (`100%`) identical to
+   the sweep-finish state (`30%`) so there's no visible reset jump. */
 @keyframes heroBtnShimmer {
-  0%   { transform: translateX(-120%); }
-  55%  { transform: translateX(120%); }
-  100% { transform: translateX(120%); }
+  0%   { transform: translateX(-140%); }
+  30%  { transform: translateX(140%); }
+  100% { transform: translateX(140%); }
 }
 
 /* Scroll indicator pulse */
