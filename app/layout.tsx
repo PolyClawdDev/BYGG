@@ -122,11 +122,13 @@ export const metadata: Metadata = {
     },
   },
 
-  icons: {
-    icon: [{ url: '/FAVICON.png', type: 'image/png' }],
-    apple: [{ url: '/FAVICON.png' }],
-    shortcut: ['/FAVICON.png'],
-  },
+  // Note: favicons are wired via Next.js 14's file-based icon convention —
+  // `app/icon.png` becomes <link rel="icon"> and `app/apple-icon.png`
+  // becomes <link rel="apple-touch-icon"> automatically. Next.js injects
+  // a content-hashed URL on every build, which defeats the ferocious
+  // browser-level favicon cache that made previous updates invisible.
+  // Do NOT re-add `metadata.icons` here — the file convention wins and
+  // having both is a confusing source of truth.
 
   manifest: '/site.webmanifest',
 
