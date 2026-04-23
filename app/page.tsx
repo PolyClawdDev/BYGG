@@ -6,6 +6,8 @@ import ReviewsCarousel from './components/ReviewsCarousel'
 import SiteFooter from './components/SiteFooter'
 import MenuSocialIcons from './components/MenuSocialIcons'
 import HeroEstimateButton from './components/estimator/HeroEstimateButton'
+import CountUp from './lib/motion/CountUp'
+import { useReducedMotion } from './lib/motion/useReducedMotion'
 
 /* ─── Data ─── */
 
@@ -150,6 +152,15 @@ const BYGGSERVICE_ITEMS: ByggServiceItem[] = [
 
 /* ─── Page ─── */
 
+/** Splits "150+" / "500+" into {num:150, suffix:"+"} for the CountUp
+ *  primitive. Kept defensive so unusual formats (e.g. pure numbers,
+ *  decimal values) still render something sensible. */
+function parseBadge(raw: string): { num: number; suffix: string } {
+  const match = /^(\d+)(.*)$/.exec(raw.trim())
+  if (!match) return { num: 0, suffix: raw }
+  return { num: parseInt(match[1], 10), suffix: match[2] || '' }
+}
+
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isShaking, setIsShaking] = useState(false)
@@ -158,6 +169,7 @@ export default function Home() {
   const [heroMaskReady, setHeroMaskReady] = useState(false)
   const [heroVideoReady, setHeroVideoReady] = useState(false)
   const sectionImageRefs = useRef<Array<HTMLDivElement | null>>([])
+  const reducedMotion = useReducedMotion()
 
   /* ── Fonts + SVG-mask readiness ──────────────────────────────────────────
      Causes of the "glitching video box on hard refresh":
@@ -204,8 +216,18 @@ export default function Home() {
     }
   }, [])
 
+  /* Route nav clicks through Lenis when it's active so in-page jumps
+     inherit the same premium inertia as mouse-wheel scrolling. Falls
+     back to the browser's native `scrollIntoView` on reduced-motion
+     or unsupported environments — no regressions. */
   const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    const el = document.getElementById(id)
+    if (!el) return
+    if (typeof window !== 'undefined' && window.__lenis) {
+      window.__lenis.scrollTo(el)
+    } else {
+      el.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   useEffect(() => {
@@ -245,35 +267,78 @@ export default function Home() {
     }
   }, [])
 
-  /* ── Subtle scroll parallax on section images (y-axis only, throttled via rAF) ── */
+  /* ── Cinematic scroll parallax (GSAP + ScrollTrigger) ─────────────────────
+     The previous rAF/getBoundingClientRect implementation worked, but it
+     sampled scroll in paint-time rather than being genuinely coupled to
+     the scroll position, which under Lenis smooth-scrolling produced a
+     one-frame lag between image and rest-of-page movement. Porting to
+     GSAP ScrollTrigger with `scrub` ties the transform directly to the
+     scroll driver SmoothScrollProvider already has on the ticker, so the
+     parallax and the scroll feel physically connected — the defining
+     quality of award-winning scroll-driven sites.
+
+     Motion:
+       • Each image panel tweens y from `-6%` to `+6%` of its own height
+         across its full viewport traversal (entering from bottom →
+         exiting past top).
+       • `ease: 'none'` is essential for scrub — any easing would cause
+         the image to "drift" ahead of/behind the scroll.
+       • `scrub: 0.6` adds just enough lag that the image feels like a
+         massive, heavy object responding to the viewport rather than
+         snapping — reads as architectural confidence.
+
+     Skipped entirely under reduced-motion, and all ScrollTriggers are
+     killed in the cleanup function to prevent memory leaks across
+     client navigations. */
   useEffect(() => {
-    let raf: number | null = null
-    const update = () => {
-      const vh = window.innerHeight
+    if (reducedMotion) return
+
+    let cleanup: (() => void) | undefined
+
+    ;(async () => {
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ])
+      gsap.registerPlugin(ScrollTrigger)
+
+      // Each tween returned by gsap.fromTo carries its attached
+      // ScrollTrigger. Keep a loose `ReturnType` so we don't have to
+      // import gsap types explicitly (they're large and chunked).
+      type ParallaxTween = ReturnType<typeof gsap.fromTo>
+      const tweens: ParallaxTween[] = []
       sectionImageRefs.current.forEach((el) => {
         if (!el) return
-        const rect = el.getBoundingClientRect()
-        const center = rect.top + rect.height / 2
-        // Progress is -1 (section below viewport) to +1 (section above)
-        const progress = Math.max(-1, Math.min(1, (vh / 2 - center) / (vh / 2 + rect.height / 2)))
-        const translateY = progress * 55
-        el.style.setProperty('--parallax-y', `${translateY}px`)
+        tweens.push(
+          gsap.fromTo(
+            el,
+            { yPercent: -6 },
+            {
+              yPercent: 6,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 0.6,
+              },
+            }
+          )
+        )
       })
-      raf = null
-    }
-    const onScroll = () => {
-      if (raf != null) return
-      raf = requestAnimationFrame(update)
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    update()
+
+      cleanup = () => {
+        tweens.forEach((t) => {
+          t.scrollTrigger?.kill()
+          t.kill()
+        })
+      }
+    })()
+
     return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      if (raf != null) cancelAnimationFrame(raf)
+      cleanup?.()
     }
-  }, [])
+  }, [reducedMotion])
 
   const ease = 'cubic-bezier(0.16, 1, 0.3, 1)'
 
@@ -823,19 +888,25 @@ export default function Home() {
             style={imagePanelClip(visible, section.imageSide)}
           >
             <div className="absolute inset-0 overflow-hidden">
-              {/* Parallax wrapper — translates on scroll via CSS var set by rAF handler */}
+              {/*
+                Parallax wrapper. GSAP ScrollTrigger writes a `yPercent`
+                transform here on every scroll tick (see the effect in
+                the Home() component). The extra top/bottom bleed
+                (-10 %) guarantees the wrapper's edges stay outside the
+                visible frame across the entire parallax range, so no
+                blank strip is ever exposed at the top or bottom of the
+                image panel even at maximum displacement.
+              */}
               <div
                 ref={(el) => {
                   sectionImageRefs.current[idx] = el
                 }}
                 className="absolute"
                 style={{
-                  // Extend the image vertically so parallax translation never reveals blank edges
-                  top: '-8%',
+                  top: '-10%',
                   left: 0,
                   right: 0,
-                  bottom: '-8%',
-                  transform: 'translate3d(0, var(--parallax-y, 0), 0)',
+                  bottom: '-10%',
                   willChange: 'transform',
                 }}
               >
@@ -896,9 +967,22 @@ export default function Home() {
                 }}
               >
                 <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-lg px-5 py-4 md:px-6 md:py-5 shadow-xl">
-                  <div className="font-montserrat font-black text-white text-3xl md:text-4xl leading-none tracking-tight">
-                    {section.badge.value}
-                  </div>
+                  {/* Editorial counter — "150+", "20+", "500+" count up
+                      smoothly once the glass badge enters the viewport,
+                      using the site's canonical cubic ease. Counter is
+                      single-shot per mount (won't re-fire on re-entries)
+                      and snaps to the final number under reduced-motion. */}
+                  {(() => {
+                    const { num, suffix } = parseBadge(section.badge.value)
+                    return (
+                      <CountUp
+                        value={num}
+                        suffix={suffix}
+                        duration={2000}
+                        className="font-montserrat font-black text-white text-3xl md:text-4xl leading-none tracking-tight block"
+                      />
+                    )
+                  })()}
                   <div className="font-montserrat font-bold text-white/70 text-[10px] tracking-[0.3em] mt-2">
                     {section.badge.label}
                   </div>

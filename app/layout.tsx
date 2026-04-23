@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import FloatingCallCta from './components/FloatingCallCta'
+import SmoothScrollProvider from './components/SmoothScrollProvider'
+import ScrollProgressRail from './components/ScrollProgressRail'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SEO — Fint Hjem
@@ -351,7 +353,21 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased">
-        {children}
+        {/*
+          SmoothScrollProvider wraps the entire app tree so every page
+          inherits the premium Lenis-driven scroll. It auto-skips
+          dashboard routes (/estimat) and short-circuits entirely when
+          the user has prefers-reduced-motion set, so we never ship
+          motion where it isn't wanted.
+        */}
+        <SmoothScrollProvider>
+          {/* Editorial scroll-progress rail — an ultra-thin warm line
+              pinned to the top of the viewport that fills as the user
+              descends the page. Hidden on dashboard routes and under
+              reduced-motion. */}
+          <ScrollProgressRail />
+          {children}
+        </SmoothScrollProvider>
         {/* Persistent mobile call-to-action — always one tap away while scrolling. */}
         <FloatingCallCta />
       </body>
