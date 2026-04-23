@@ -3,18 +3,20 @@
 /**
  * HeroEstimateButton — the premium CTA under "DIN TOTALENTREPRENØR".
  *
- * v3: radically cleaner.
- *   • Dropped the upload glyph (the page handles uploads — the button
- *     doesn't need to advertise that).
- *   • Dropped the rule-line-plus-arrow construction; replaced with a
- *     single subtle arrow so the typography can breathe.
- *   • Deeper near-black brown (#1a1614) gives the shimmer a much
- *     stronger contrast — now the shine is genuinely visible.
- *   • Shimmer rebuilt: a sharper, brighter gold-white streak that
- *     sweeps quickly (≈1s) then pauses for ~2.2s. That rhythm reads
- *     as "catches the light" rather than "is animated".
- *   • Subtle constant metallic top-highlight gives the pill a bit of
- *     physical depth without a gradient-button look.
+ * v4: colour-matched to the site palette.
+ *   • The original near-black pill (#1a1614) felt imported from a
+ *     different design system — jarring against the warm beige/brown
+ *     world the rest of the page lives in. Swapped it for a deeper
+ *     shade of the brand brown (#9c7a6d) so the button now reads as
+ *     part of the Fint Hjem palette instead of a hard cutout.
+ *   • Background      #6e5448   (rich tobacco brown — the brand
+ *                                 accent, deepened for text contrast)
+ *   • Glyph           #f6f2ec   (soft cream, unchanged)
+ *   • Shadows         rgba(110,84,72, …)   warm brown, not generic
+ *                                          black, so it sits on the
+ *                                          beige backdrop cleanly.
+ *   • Shimmer + top-highlight preserved — still reads as "catches the
+ *     light" with the same cadence.
  *   • Links to /estimat.
  */
 
@@ -37,11 +39,13 @@ export default function HeroEstimateButton() {
                    text-[#f6f2ec]
                    transition-all duration-500 ease-out
                    hover:-translate-y-0.5
-                   shadow-[0_2px_4px_-2px_rgba(26,22,20,0.25)]
-                   hover:shadow-[0_12px_28px_-10px_rgba(26,22,20,0.4)]"
+                   shadow-[0_2px_4px_-2px_rgba(110,84,72,0.30)]
+                   hover:shadow-[0_12px_28px_-10px_rgba(110,84,72,0.45)]"
         style={{
-          // Near-black warm brown — deep enough that the shimmer pops.
-          backgroundColor: '#1a1614',
+          // Deep tobacco brown — the brand accent (#9c7a6d) darkened
+          // so cream text still has WCAG-level contrast. Keeps the
+          // shimmer visible without going near-black.
+          backgroundColor: '#6e5448',
         }}
       >
         {/* Constant top-half highlight — a faint sheen that gives the

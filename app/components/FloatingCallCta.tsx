@@ -9,7 +9,8 @@
  *
  * Styling matches the "Få estimat" hero CTA so the visual language across
  * the site stays consistent:
- *   • deep warm brown     #1a1614   (same as HeroEstimateButton)
+ *   • tobacco brown       #6e5448   (brand accent #9c7a6d, darkened —
+ *                                    same as HeroEstimateButton)
  *   • cream glyph         #f6f2ec
  *   • subtle top highlight (faint sheen, no gradient-button look)
  *
@@ -38,13 +39,14 @@ export default function FloatingCallCta() {
         rounded-full
         overflow-hidden
         text-[#f6f2ec]
-        shadow-[0_8px_20px_-6px_rgba(26,22,20,0.45),_0_2px_6px_rgba(26,22,20,0.2)]
+        shadow-[0_8px_20px_-6px_rgba(110,84,72,0.50),_0_2px_6px_rgba(110,84,72,0.25)]
         active:scale-90 transition-transform duration-150
         animate-fadeIn
       "
       style={{
-        // Deep warm brown — identical to the Få estimat hero CTA.
-        backgroundColor: '#1a1614',
+        // Tobacco brown — identical to the Få estimat hero CTA
+        // (brand accent #9c7a6d, darkened for contrast with cream).
+        backgroundColor: '#6e5448',
         bottom: 'max(1rem, env(safe-area-inset-bottom, 0px))',
       }}
     >
@@ -68,7 +70,7 @@ export default function FloatingCallCta() {
           animate-[fhPulse_2.4s_ease-out_infinite]
           pointer-events-none
         "
-        style={{ backgroundColor: '#1a1614' }}
+        style={{ backgroundColor: '#6e5448' }}
       />
 
       <svg
