@@ -129,27 +129,42 @@ export default function EstimatorDashboard() {
   )
 
   // ─── Sidebar right — live estimate + lead form ─────────────────────
+  //
+  // Designed to fit in one viewport without scrolling at typical laptop
+  // heights (≥ 820 px). Compact header, tightened body padding, and the
+  // EstimateSummaryCard's own "Bestill gratis befaring" button doubles
+  // as the right-rail CTA — so the duplicate "Be om befaring" row below
+  // is only rendered before an estimate exists (i.e. with the dashed
+  // empty-state card), never alongside a real estimate.
   const rightPanel = (
     <div className="h-full flex flex-col">
-      <div className="px-6 md:px-7 pt-7 pb-4 border-b border-brown/10">
-        <p className="font-montserrat font-bold text-[10px] tracking-[0.42em] text-brown/60 uppercase mb-2">
+      <div className="px-5 md:px-6 pt-5 pb-3 border-b border-brown/10 flex-shrink-0">
+        <p className="font-montserrat font-bold text-[10px] tracking-[0.42em] text-brown/60 uppercase mb-1.5">
           Ditt estimat
         </p>
-        <p className="font-playfair font-light text-gray-900 text-lg leading-snug">
-          {latestEstimate ? 'Grovt estimat basert på det du har delt.' : 'Her dukker estimatet opp når vi har nok informasjon.'}
+        <p className="font-playfair font-light text-gray-900 text-sm md:text-[15px] leading-snug">
+          {latestEstimate
+            ? 'Grovt estimat basert på det du har delt.'
+            : 'Her dukker estimatet opp når vi har nok informasjon.'}
         </p>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto px-6 md:px-7 py-6">
+      <div className="flex-1 min-h-0 overflow-y-auto px-5 md:px-6 py-4">
         {latestEstimate ? (
           <EstimateSummaryCard estimate={latestEstimate} onBookBefaring={goBefaring} />
         ) : (
-          <div className="rounded-2xl border border-dashed border-brown/20 p-6 md:p-7">
-            <svg className="w-7 h-7 text-brown/40 mb-4" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M4 7h16M4 12h10M4 17h7" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+          <div className="rounded-2xl border border-dashed border-brown/20 p-5">
+            <svg className="w-6 h-6 text-brown/40 mb-3" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path
+                d="M4 7h16M4 12h10M4 17h7"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+              />
             </svg>
             <p className="font-playfair font-light text-brown/70 text-sm leading-relaxed">
-              Beskriv prosjektet i samtalen — fyll gjerne ut kategori, jobbtype og størrelse i planneren for raskere resultat.
+              Beskriv prosjektet i samtalen — fyll gjerne ut kategori, jobbtype og størrelse i
+              planneren for raskere resultat.
             </p>
           </div>
         )}
@@ -163,9 +178,9 @@ export default function EstimatorDashboard() {
               animate={{ opacity: 1, height: 'auto', y: 0 }}
               exit={{ opacity: 0, height: 0, y: 8 }}
               transition={{ duration: 0.45, ease }}
-              className="overflow-hidden mt-8"
+              className="overflow-hidden mt-5"
             >
-              <div className="rounded-2xl border border-brown/20 p-6 md:p-7 bg-[#f8f6f2]">
+              <div className="rounded-2xl border border-brown/20 p-5 bg-[#f8f6f2]">
                 <LeadForm
                   intake={intake}
                   defaultSummary={defaultLeadSummary}
@@ -179,9 +194,10 @@ export default function EstimatorDashboard() {
           )}
         </AnimatePresence>
 
-        {/* Persistent befaring CTA — always visible at the bottom of the right rail. */}
-        {!leadOpen && (
-          <div className="mt-8 pt-6 border-t border-brown/10">
+        {/* Fallback befaring CTA — only shown when there's no estimate yet
+            (the EstimateSummaryCard already carries its own CTA). */}
+        {!leadOpen && !latestEstimate && (
+          <div className="mt-6 pt-5 border-t border-brown/10">
             <button
               type="button"
               onClick={goBefaring}
@@ -191,8 +207,21 @@ export default function EstimatorDashboard() {
                 Be om befaring
               </span>
               <span className="relative flex items-center w-12 h-[1px] bg-brown/50 group-hover:bg-gray-900 group-hover:w-20 transition-all duration-500">
-                <svg width="12" height="10" viewBox="0 0 12 10" className="absolute right-0 -translate-x-2 group-hover:translate-x-0 transition-transform duration-500 text-gray-900" aria-hidden>
-                  <path d="M1 5h10M7 1l4 4-4 4" stroke="currentColor" strokeWidth="1.25" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                <svg
+                  width="12"
+                  height="10"
+                  viewBox="0 0 12 10"
+                  className="absolute right-0 -translate-x-2 group-hover:translate-x-0 transition-transform duration-500 text-gray-900"
+                  aria-hidden
+                >
+                  <path
+                    d="M1 5h10M7 1l4 4-4 4"
+                    stroke="currentColor"
+                    strokeWidth="1.25"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </span>
             </button>
