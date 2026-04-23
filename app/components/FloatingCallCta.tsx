@@ -7,6 +7,12 @@
  * Tap opens the dialer with the business number pre-filled. Hidden on lg+
  * where the header's envelope CTA is already visible.
  *
+ * Styling matches the "Få estimat" hero CTA so the visual language across
+ * the site stays consistent:
+ *   • deep warm brown     #1a1614   (same as HeroEstimateButton)
+ *   • cream glyph         #f6f2ec
+ *   • subtle top highlight (faint sheen, no gradient-button look)
+ *
  *  • 48 × 48 px touch target (≥ Apple HIG 44pt, ≥ Material 48dp)
  *  • Respects env(safe-area-inset-bottom) so it clears the iOS home-bar
  *  • Faint pulse ring invites attention without being loud
@@ -30,26 +36,41 @@ export default function FloatingCallCta() {
         flex items-center justify-center
         w-12 h-12
         rounded-full
-        bg-[#1a1714] text-white
-        shadow-[0_8px_20px_-6px_rgba(0,0,0,0.45),_0_2px_6px_rgba(0,0,0,0.2)]
+        overflow-hidden
+        text-[#f6f2ec]
+        shadow-[0_8px_20px_-6px_rgba(26,22,20,0.45),_0_2px_6px_rgba(26,22,20,0.2)]
         active:scale-90 transition-transform duration-150
-        hover:bg-[#2a2320]
         animate-fadeIn
       "
       style={{
+        // Deep warm brown — identical to the Få estimat hero CTA.
+        backgroundColor: '#1a1614',
         bottom: 'max(1rem, env(safe-area-inset-bottom, 0px))',
       }}
     >
-      {/* Soft outer pulse ring. Behind the filled button so it halos out. */}
+      {/* Faint top-half sheen — gives the pill subtle physical depth,
+          same trick as HeroEstimateButton. */}
+      <span
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-1/2 pointer-events-none"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 100%)',
+        }}
+      />
+
+      {/* Soft outer pulse ring — halos the button without being loud. */}
       <span
         aria-hidden
         className="
-          absolute inset-0 rounded-full bg-[#1a1714]
+          absolute inset-0 rounded-full
           opacity-0
           animate-[fhPulse_2.4s_ease-out_infinite]
           pointer-events-none
         "
+        style={{ backgroundColor: '#1a1614' }}
       />
+
       <svg
         aria-hidden
         className="relative w-5 h-5"
