@@ -340,10 +340,24 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
 
+        {/* Google Analytics 4 — Fint Hjem (G-LBR1CP6Q69)
+            async so it never blocks the first paint. Placed in <head>
+            (not <body>) so GA fires on every page including 404s. */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-LBR1CP6Q69" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-LBR1CP6Q69');
+            `,
+          }}
+        />
+
         {/* Strukturerte data — Google Rich Results */}
         <script
           type="application/ld+json"
-          // Next render'er dette på server; ingen hydration-mismatch.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
