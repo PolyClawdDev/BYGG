@@ -322,11 +322,6 @@ const jsonLd = {
       description: DEFAULT_DESCRIPTION,
       inLanguage: 'nb-NO',
       publisher: { '@id': `${SITE_URL}/#organization` },
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: `${SITE_URL}/?s={search_term_string}`,
-        'query-input': 'required name=search_term_string',
-      },
     },
   ],
 }
