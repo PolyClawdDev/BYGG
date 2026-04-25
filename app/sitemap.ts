@@ -6,17 +6,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
 
   return [
+    /* ── Core pages ─────────────────────────────────────────────── */
     {
       url: SITE_URL,
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 1.0,
-      alternates: {
-        languages: {
-          'nb-NO': SITE_URL,
-          'x-default': SITE_URL,
-        },
-      },
+      alternates: { languages: { 'nb-NO': SITE_URL, 'x-default': SITE_URL } },
     },
     {
       url: `${SITE_URL}/kontakt`,
@@ -37,31 +33,60 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
 
-    /* ── Anker-URL'er for seksjonene på forsiden ─ Gjør at Google kan
-       vise "Gå til seksjon"-resultater i søk (Sitelinks / Jump-to). ── */
+    /* ── Dedicated service pages (SEO) ──────────────────────────── */
     {
-      url: `${SITE_URL}/#ditt-nye-hjem`,
+      url: `${SITE_URL}/nybygg-oslo`,
       lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.95,
     },
     {
-      url: `${SITE_URL}/#renovering-forandring`,
+      url: `${SITE_URL}/renovering-oslo`,
       lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.95,
     },
     {
-      url: `${SITE_URL}/#byggservice`,
+      url: `${SITE_URL}/bad-renovering-oslo`,
       lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.9,
     },
     {
-      url: `${SITE_URL}/#interior-styling`,
+      url: `${SITE_URL}/kjokken-renovering-oslo`,
       lastModified: now,
       changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/snekker-oslo`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${SITE_URL}/maling-oslo`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${SITE_URL}/vvs-rorlegger-oslo`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${SITE_URL}/tilbygg-oslo`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/vinduer-dorer-oslo`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.85,
     },
   ]
 }
