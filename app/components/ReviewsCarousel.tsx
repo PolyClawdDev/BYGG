@@ -284,10 +284,14 @@ export default function ReviewsCarousel() {
           className="animate-marquee flex"
           style={{
             width: 'max-content',
-            /* Reduced-motion users get a static strip they can scroll
-               horizontally with a trackpad if they want. Removing the
-               marquee animation is the right call here — an infinite
-               loop counts as decorative motion. */
+            /* touch-action: pan-y — tells the browser that horizontal
+               swipes on this element are NOT page-scroll gestures, so it
+               doesn't cancel/interrupt the CSS marquee animation when the
+               user swipes horizontally on mobile. */
+            touchAction: 'pan-y',
+            /* Reduced-motion users get a static strip. Removing the
+               marquee animation is the right call — an infinite loop
+               counts as decorative motion. */
             animation: reduced ? 'none' : undefined,
           }}
         >
