@@ -11,20 +11,6 @@ const HOME_SECTION_LINKS = [
   { label: 'Interiør & Styling', hash: 'interior-styling' },
 ] as const
 
-/** Kun typografi — ingen LOGO2.png som overlapper overskrift */
-function PageWordmark({ className = '' }: { className?: string }) {
-  return (
-    <div className={`text-center ${className}`}>
-      <p className="font-playfair font-light text-brown text-lg sm:text-xl md:text-2xl tracking-[0.12em] uppercase leading-snug">
-        Interiørdesign
-      </p>
-      <p className="font-playfair font-light text-brown/90 text-base sm:text-lg md:text-xl tracking-[0.22em] uppercase mt-1">
-        Homestyling
-      </p>
-    </div>
-  )
-}
-
 export default function InteriorDesign() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -44,10 +30,6 @@ export default function InteriorDesign() {
         </button>
 
         <div className="flex-1 flex flex-col px-4 sm:px-6 md:px-8 pt-16 pb-10 overflow-y-auto">
-          <header className="relative z-[1] flex justify-center shrink-0 mb-8 md:mb-10 px-2">
-            <PageWordmark />
-          </header>
-
           <div className="flex flex-col items-center">
             <div className="w-full max-w-4xl mx-auto relative z-[1]">
               <div className="text-center mb-8 md:mb-10 animate-fadeInUp">
@@ -66,21 +48,9 @@ export default function InteriorDesign() {
                     Vi tilbyr helhetlige løsninger innen interiørdesign hvor vi alltid tar utgangspunkt i deg, dine behov og din livsstil. Sammen former vi omgivelser som ikke bare er vakre, men også praktiske og varige over tid. Alt fra materialvalg og fargesetting til møblering og detaljer planlegges med omhu – slik at hjemmet ditt blir akkurat slik du ønsker det, både i dag og i morgen.
                   </p>
 
-                  <div
-                    className="rounded-2xl border border-brown/15 bg-white/70 px-6 py-7 md:px-10 md:py-9 shadow-[0_12px_40px_rgba(42,32,28,0.06)] max-w-3xl mx-auto mb-10"
-                    role="region"
-                    aria-labelledby="homestyling-salg-heading"
-                  >
-                    <h2
-                      id="homestyling-salg-heading"
-                      className="font-playfair font-normal text-brown text-xl md:text-2xl tracking-wide mb-4 text-center"
-                    >
-                      For deg som skal selge bolig
-                    </h2>
-                    <p className="font-playfair font-light text-brown text-lg md:text-xl leading-relaxed mb-0 text-center md:text-left">
-                      Vi har også mulighet til å hjelpe med møblering og homestyling. Vi vet hvor avgjørende det første inntrykket er, og hvor mye riktig følelse kan påvirke salgsprisen. Med nøye utvalgte møbler, riktig lys og balanserte fargevalg kan vi fremheve boligens beste sider og skape en atmosfære som appellerer til interessenter – samtidig som det føles naturlig og innbydende.
-                    </p>
-                  </div>
+                  <p className="font-playfair font-light text-brown text-lg md:text-xl leading-relaxed mb-8">
+                    For deg som skal selge bolig har vi også mulighet til å hjelpe med møblering og homestyling. Vi vet hvor avgjørende det første inntrykket er, og hvor mye riktig følelse kan påvirke salgsprisen. Med nøye utvalgte møbler, riktig lys og balanserte fargevalg kan vi fremheve boligens beste sider og skape en atmosfære som appellerer til interessenter – samtidig som det føles naturlig og innbydende.
+                  </p>
 
                   <p className="font-playfair font-light text-brown text-lg md:text-xl leading-relaxed mb-8">
                     Vår filosofi er enkel: hvert hjem har potensial. Vårt oppdrag er å hjelpe deg med å frigjøre det. Enten du ønsker å skape ditt drømmehjem å leve i, eller du vil maksimere verdien ved et salg, kan du stole på vår erfaring, vårt blikk for detaljer og vår forståelse for hva som gjør et hjem til noe mer enn bare en bolig.
@@ -107,8 +77,10 @@ export default function InteriorDesign() {
 
       {isMenuOpen && (
         <div className="fixed inset-4 bg-amber-50 z-50 flex flex-col items-center justify-center animate-slideDown rounded-2xl overflow-y-auto">
-          <div className="absolute top-8 left-1/2 -translate-x-1/2 w-[90vw] max-w-md px-2 text-center pointer-events-none">
-            <PageWordmark />
+          <div className="absolute top-8 left-1/2 -translate-x-1/2 text-center pointer-events-none">
+            <span className="font-montserrat font-black text-brown text-3xl md:text-5xl lg:text-6xl tracking-tight leading-none">
+              FINT HJEM
+            </span>
           </div>
 
           <nav className="text-center px-6 pt-28 pb-8">
