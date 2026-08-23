@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Baderom renovering Oslo – Bad & Flislegging | Fint Hjem',
+  title: 'Baderom renovering Oslo – Bad & Flislegging',
   description: 'Profesjonell baderomsrenovering i Oslo. Fint Hjem leverer komplette baderom fra membran til ferdig flate. Godkjente fagfolk, fast pris og garanti. Book gratis befaring.',
   keywords: ['baderom renovering Oslo', 'bad renovering Oslo', 'flislegger Oslo', 'baderomsrenovering Oslo', 'nytt bad Oslo', 'Fint Hjem bad'],
   alternates: { canonical: `${SITE_URL}/bad-renovering-oslo` },

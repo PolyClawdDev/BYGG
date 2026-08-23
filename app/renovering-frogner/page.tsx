@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Renovering Frogner Oslo – Totalentreprenør | Fint Hjem',
+  title: 'Renovering Frogner Oslo – Totalentreprenør',
   description: 'Renovering på Frogner i Oslo. Fint Hjem leverer totalrenovering, bad, kjøkken og fasade i Frogner-området. Erfarne håndverkere med respekt for klassisk arkitektur. Book befaring.',
   keywords: ['renovering Frogner', 'totalrenovering Frogner Oslo', 'håndverker Frogner', 'oppussing Frogner', 'snekker Frogner Oslo'],
   alternates: { canonical: `${SITE_URL}/renovering-frogner` },

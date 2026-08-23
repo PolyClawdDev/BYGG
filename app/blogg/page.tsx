@@ -5,7 +5,7 @@ import { SITE_URL } from '../lib/site'
 import SiteFooter from '../components/SiteFooter'
 
 export const metadata: Metadata = {
-  title: 'Blogg – Tips og prisguider for renovering og nybygg | Fint Hjem',
+  title: 'Blogg – Tips og prisguider for renovering og nybygg',
   description: 'Les våre artikler om renovering, nybygg og interiørdesign i Oslo. Prisguider, tips og råd fra erfarne fagfolk hos Fint Hjem.',
   alternates: { canonical: `${SITE_URL}/blogg` },
 }

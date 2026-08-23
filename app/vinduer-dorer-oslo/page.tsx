@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Vinduer og dører Oslo – Montering og utskifting | Fint Hjem',
+  title: 'Vinduer og dører Oslo – Montering og utskifting',
   description: 'Montering og utskifting av vinduer og dører i Oslo. Fint Hjem leverer bedre isolasjon, lys og estetikk. Godkjente fagfolk og fast pris. Book gratis befaring.',
   keywords: ['vinduer Oslo', 'dører Oslo', 'skifte vinduer Oslo', 'nye vinduer Oslo', 'vindusmontering Oslo', 'Fint Hjem vinduer'],
   alternates: { canonical: `${SITE_URL}/vinduer-dorer-oslo` },

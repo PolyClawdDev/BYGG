@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Nybygg Oslo – Totalentreprenør | Fint Hjem',
+  title: 'Nybygg Oslo – Totalentreprenør',
   description: 'Fint Hjem bygger nøkkelferdige boliger i Oslo fra tomt til innflytting. Totalentreprenør med over 20 års erfaring – søknad, tegninger, bygging og overlevering. Book gratis befaring.',
   keywords: ['nybygg Oslo', 'totalentreprenør Oslo', 'bygge hus Oslo', 'nøkkelferdig bolig Oslo', 'byggmester Oslo', 'Fint Hjem nybygg'],
   alternates: { canonical: `${SITE_URL}/nybygg-oslo` },

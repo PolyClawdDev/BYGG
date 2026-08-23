@@ -4,7 +4,9 @@ import { SITE_URL } from '../lib/site'
 const PAGE_URL = `${SITE_URL}/estimat`
 const OG_IMAGE = `${SITE_URL}/FAVICON.png`
 
-const TITLE = 'Be om gratis befaring – Fint Hjem'
+/* No brand suffix here — the root layout's title template already
+   appends "| Fint Hjem". */
+const TITLE = 'Be om gratis befaring i Oslo'
 const DESCRIPTION =
   'Book gratis og uforpliktende befaring hos Fint Hjem. Vi ser på prosjektet ditt i Oslo og omegn og gir deg en eksakt pris med tidsplan — for nybygg, renovering, bad, kjøkken og byggservice.'
 

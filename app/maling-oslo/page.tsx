@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Maling Oslo – Maler og overflatebehandling | Fint Hjem',
+  title: 'Maling Oslo – Maler og overflatebehandling',
   description: 'Profesjonell maler i Oslo. Fint Hjem leverer innvendig og utvendig maling, tapetsering og sparkling. Ryddig, presis og til avtalt pris. Book gratis befaring.',
   keywords: ['maler Oslo', 'malerfirma Oslo', 'maling innvendig Oslo', 'maling utvendig Oslo', 'tapetsering Oslo', 'sparkling Oslo', 'Fint Hjem maling'],
   alternates: { canonical: `${SITE_URL}/maling-oslo` },

@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Fasade renovering Oslo – Kledning og tak | Fint Hjem',
+  title: 'Fasade renovering Oslo – Kledning og tak',
   description: 'Profesjonell fasadrenovering i Oslo. Fint Hjem leverer kledning, takrenove­ring, isolasjon og energioppgradering av fasade. Godkjente fagfolk. Book gratis befaring.',
   keywords: ['fasade renovering Oslo', 'fasaderehabilitering Oslo', 'ny kledning Oslo', 'tak renovering Oslo', 'isolere hus Oslo', 'Fint Hjem fasade'],
   alternates: { canonical: `${SITE_URL}/fasade-renovering-oslo` },

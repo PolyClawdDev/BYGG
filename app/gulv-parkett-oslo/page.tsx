@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Gulv Oslo – Parkett, fliser og gulvlegging | Fint Hjem',
+  title: 'Gulv Oslo – Parkett, fliser og gulvlegging',
   description: 'Profesjonell gulvlegging i Oslo. Fint Hjem leverer parkett, laminat, fliser og gulvslipeing. Faglig håndverk og fast pris. Book gratis befaring.',
   keywords: ['gulv Oslo', 'parkett Oslo', 'gulvlegging Oslo', 'parkettlegging Oslo', 'gulvslipeing Oslo', 'fliser gulv Oslo', 'Fint Hjem gulv'],
   alternates: { canonical: `${SITE_URL}/gulv-parkett-oslo` },

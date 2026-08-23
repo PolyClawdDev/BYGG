@@ -4,7 +4,7 @@ import { SITE_URL } from '../lib/site'
 const PAGE_URL = `${SITE_URL}/interior-design-homestyling`
 const OG_IMAGE = `${SITE_URL}/FAVICON.png`
 
-const TITLE = 'Interiørdesign & Homestyling i Oslo – Fint Hjem'
+const TITLE = 'Interiørdesign & Homestyling i Oslo'
 const DESCRIPTION =
   'Profesjonell interiørdesign og homestyling av Fint Hjem. Fra konsept og 3D-visualisering til ferdig innredet bolig – vi skaper rom som reflekterer deg. Gratis befaring i Oslo og omegn.'
 

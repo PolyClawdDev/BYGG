@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Renovering Nordstrand Oslo – Enebolig og leilighet | Fint Hjem',
+  title: 'Renovering Nordstrand Oslo – Enebolig og leilighet',
   description: 'Renovering på Nordstrand og Søndre Nordstrand i Oslo. Fint Hjem leverer totalrenovering, bad, kjøkken og tilbygg i hele Nordstrand-området. Book gratis befaring.',
   keywords: ['renovering Nordstrand', 'håndverker Nordstrand Oslo', 'totalrenovering Nordstrand', 'bad Nordstrand', 'snekker Nordstrand Oslo'],
   alternates: { canonical: `${SITE_URL}/renovering-nordstrand` },

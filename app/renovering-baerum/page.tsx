@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Renovering Bærum – Totalentreprenør | Fint Hjem',
+  title: 'Renovering Bærum – Totalentreprenør',
   description: 'Renovering i Bærum. Fint Hjem leverer totalrenovering, nybygg, bad, kjøkken og tilbygg i Bærum kommune. Erfarne fagfolk med 20+ års erfaring. Book gratis befaring.',
   keywords: ['renovering Bærum', 'totalrenovering Bærum', 'håndverker Bærum', 'nybygg Bærum', 'totalentreprenør Bærum', 'snekker Bærum'],
   alternates: { canonical: `${SITE_URL}/renovering-baerum` },

@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Kjøkken renovering Oslo – Nytt kjøkken | Fint Hjem',
+  title: 'Kjøkken renovering Oslo – Nytt kjøkken',
   description: 'Kjøkkenrenovering i Oslo av fagfolk. Fint Hjem leverer nye kjøkken, åpne planløsninger og totalrenovering av kjøkkenrom. Fast pris og garanti. Book gratis befaring.',
   keywords: ['kjøkken renovering Oslo', 'nytt kjøkken Oslo', 'kjøkkeninnredning Oslo', 'kjøkkenrenovering pris', 'Fint Hjem kjøkken'],
   alternates: { canonical: `${SITE_URL}/kjokken-renovering-oslo` },

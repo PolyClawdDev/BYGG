@@ -4,7 +4,7 @@ import { SITE_URL } from '../lib/site'
 const PAGE_URL = `${SITE_URL}/kontakt`
 const OG_IMAGE = `${SITE_URL}/FAVICON.png`
 
-const TITLE = 'Kontakt Fint Hjem – Book gratis befaring i Oslo'
+const TITLE = 'Kontakt – Book gratis befaring i Oslo'
 const DESCRIPTION =
   'Ta kontakt med Fint Hjem for nybygg, renovering, byggservice eller interiørdesign. Vi kommer gjerne på gratis befaring i Oslo og omegn. Ring +47 465 83 867 eller send e-post til info@finthjem.no.'
 

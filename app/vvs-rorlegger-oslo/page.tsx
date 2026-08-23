@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'VVS Oslo – Rørlegger og vanninstallasjoner | Fint Hjem',
+  title: 'VVS Oslo – Rørlegger og vanninstallasjoner',
   description: 'Godkjent rørlegger i Oslo. Fint Hjem leverer VVS-arbeid for bad, kjøkken og tekniske installasjoner. Rask respons, fast pris og garanti. Book gratis befaring.',
   keywords: ['rørlegger Oslo', 'VVS Oslo', 'rørlegger pris Oslo', 'vannlekkasje Oslo', 'VVS firma Oslo', 'Fint Hjem VVS'],
   alternates: { canonical: `${SITE_URL}/vvs-rorlegger-oslo` },

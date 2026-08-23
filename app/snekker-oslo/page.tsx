@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Snekker Oslo – Snekkerarbeid og trevare | Fint Hjem',
+  title: 'Snekker Oslo – Snekkerarbeid og trevare',
   description: 'Dyktig snekker i Oslo. Fint Hjem leverer skreddersydde trevareløsninger, innredning, trapper, dører og finish av høyeste håndverkskvalitet. Book gratis befaring.',
   keywords: ['snekker Oslo', 'snekkerfirma Oslo', 'tømrer Oslo', 'snekkerarbeid Oslo', 'innredningssnekker Oslo', 'Fint Hjem snekker'],
   alternates: { canonical: `${SITE_URL}/snekker-oslo` },

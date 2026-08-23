@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Energioppgradering bolig Oslo – Enova støtte | Fint Hjem',
+  title: 'Energioppgradering bolig Oslo – Enova støtte',
   description: 'Energioppgradering av bolig i Oslo. Fint Hjem leverer etterisolering, varmepumpe, nye vinduer og Enova-støtte. Lavere strømregning og høyere boligverdi. Book befaring.',
   keywords: ['energioppgradering Oslo', 'etterisolering Oslo', 'varmepumpe Oslo', 'Enova støtte', 'energieffektivisering bolig', 'Fint Hjem energi'],
   alternates: { canonical: `${SITE_URL}/energioppgradering-oslo` },
