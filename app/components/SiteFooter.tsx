@@ -14,9 +14,21 @@ export default function SiteFooter() {
             <span className="block font-montserrat font-black text-white text-2xl md:text-3xl lg:text-4xl tracking-tight leading-none mb-6">
               FINT HJEM
             </span>
-            <p className="font-playfair font-light text-white/50 text-sm leading-relaxed mb-8">
+            <p className="font-playfair font-light text-white/50 text-sm leading-relaxed mb-6">
               Din totalentreprenør for nybygg, renovering, byggservice og interiørdesign. Vi bygger drømmehjem med presisjon og omtanke — i Oslo og resten av Norge.
             </p>
+
+            {/* Registered company identity. Google cross-checks this against
+                the Brønnøysund register and directory listings, so the legal
+                name and org.nr must match them exactly. */}
+            <p className="font-playfair font-light text-white/40 text-sm leading-relaxed mb-8">
+              FINT HJEM AS
+              <br />
+              Org.nr.{' '}
+              <span className="whitespace-nowrap">933 583 023</span>
+              <span className="text-white/25"> MVA</span>
+            </p>
+
             <div className="flex gap-4">
               {SOCIAL_LINKS.map((s) => {
                 const isExternal = s.href.startsWith('http')

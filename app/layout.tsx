@@ -174,7 +174,21 @@ const jsonLd = {
       '@type': ['Organization', 'GeneralContractor'],
       '@id': `${SITE_URL}/#organization`,
       name: SITE_NAME,
-      legalName: 'Fint Hjem AS',
+      // Exactly as registered in Brønnøysund — Google matches this against
+      // the register and directory listings, so it must not be reworded.
+      legalName: 'FINT HJEM AS',
+      taxID: '933583023',
+      vatID: 'NO933583023MVA',
+      identifier: {
+        '@type': 'PropertyValue',
+        name: 'Organisasjonsnummer',
+        propertyID: 'https://data.brreg.no/enhetsregisteret',
+        value: '933583023',
+      },
+      // ISIC rev.4 4100 = Construction of buildings, matching the company's
+      // registered næringskode 41.000.
+      isicV4: '4100',
+      foundingDate: '2024-05-21',
       url: SITE_URL,
       logo: {
         '@type': 'ImageObject',
@@ -230,6 +244,8 @@ const jsonLd = {
       image: `${SITE_URL}/LOGO.png`,
       telephone: '+4746583867',
       email: 'info@finthjem.no',
+      vatID: 'NO933583023MVA',
+      taxID: '933583023',
       priceRange: '$$$',
       address: {
         '@type': 'PostalAddress',
