@@ -28,7 +28,7 @@ export default function BlogIndex() {
         <div className="max-w-4xl">
           <div className="flex items-center gap-4 mb-8">
             <span className="h-px w-10 bg-brown/50 block" />
-            <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown/60">FAGLIG INNHOLD</span>
+            <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown-ink">FAGLIG INNHOLD</span>
           </div>
           <h1
             className="font-montserrat font-black text-gray-900 tracking-tight mb-6"
@@ -53,11 +53,11 @@ export default function BlogIndex() {
             >
               <div className="p-7 flex flex-col flex-1" style={{ backgroundColor: '#faf9f7' }}>
                 <div className="flex items-center gap-3 mb-5">
-                  <span className="font-montserrat font-bold text-[10px] tracking-[0.3em] text-brown/50 uppercase">
+                  <span className="font-montserrat font-bold text-[10px] tracking-[0.3em] text-brown-ink uppercase">
                     {new Date(post.publishedAt).toLocaleDateString('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })}
                   </span>
                   <span className="text-brown/30">·</span>
-                  <span className="font-montserrat font-bold text-[10px] tracking-[0.2em] text-brown/50">
+                  <span className="font-montserrat font-bold text-[10px] tracking-[0.2em] text-brown-ink">
                     {post.readingMinutes} min
                   </span>
                 </div>

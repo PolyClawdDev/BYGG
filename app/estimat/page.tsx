@@ -42,7 +42,7 @@ export default function EstimatPage() {
         <div className="max-w-6xl mx-auto px-6 md:px-10 pt-10 md:pt-12">
           <Link
             href="/"
-            className="inline-flex items-center gap-3 font-montserrat font-bold text-[10px] tracking-[0.32em] uppercase text-brown/70 hover:text-gray-900 transition-colors duration-500"
+            className="inline-flex items-center gap-3 font-montserrat font-bold text-[10px] tracking-[0.32em] uppercase text-brown-ink hover:text-gray-900 transition-colors duration-500"
           >
             <svg width="14" height="10" viewBox="0 0 14 10" aria-hidden>
               <path
@@ -61,7 +61,7 @@ export default function EstimatPage() {
         {/* ── Hero ───────────────────────────────────────────────────── */}
         <section className="max-w-6xl mx-auto px-6 md:px-10 pt-12 md:pt-16 pb-4">
           <div className="flex items-center gap-4 mb-7 animate-fadeInUp">
-            <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown/60 uppercase">
+            <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown-ink uppercase">
               Gratis befaring
             </span>
             <span className="h-px w-10 bg-brown/30 block" aria-hidden />
@@ -110,7 +110,7 @@ export default function EstimatPage() {
 
         {/* ── How it works ───────────────────────────────────────────── */}
         <section className="max-w-6xl mx-auto px-6 md:px-10 pt-16 md:pt-20 pb-4">
-          <h2 className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown/60 uppercase mb-10">
+          <h2 className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown-ink uppercase mb-10">
             Slik fungerer det
           </h2>
 

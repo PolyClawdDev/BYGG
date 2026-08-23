@@ -22,7 +22,7 @@ const field =
   'transition-colors duration-300 placeholder:text-brown/35'
 
 const label =
-  'block font-montserrat font-bold text-[10px] tracking-[0.32em] text-brown/70 mb-2 uppercase'
+  'block font-montserrat font-bold text-[10px] tracking-[0.32em] text-brown-ink mb-2 uppercase'
 
 export default function BefaringForm() {
   const [name, setName] = useState('')

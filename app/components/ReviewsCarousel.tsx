@@ -121,7 +121,7 @@ function ReviewCard({ name, location, text }: Review) {
         <p className="font-montserrat font-bold text-xs tracking-[0.15em] text-gray-900 uppercase not-italic">
           {name}
         </p>
-        <p className="font-montserrat text-xs tracking-wider text-brown/60 mt-0.5 not-italic">
+        <p className="font-montserrat text-xs tracking-wider text-brown-ink mt-0.5 not-italic">
           {location}
         </p>
       </figcaption>
@@ -188,7 +188,7 @@ export default function ReviewsCarousel() {
             }}
           />
           <p
-            className="font-montserrat font-bold text-xs tracking-[0.4em] text-brown/55"
+            className="font-montserrat font-bold text-xs tracking-[0.4em] text-brown-ink"
             style={{
               transform: visible ? 'translateY(0)' : 'translateY(110%)',
               opacity: visible ? 1 : 0,

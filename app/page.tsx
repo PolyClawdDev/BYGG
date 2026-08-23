@@ -766,7 +766,7 @@ export default function Home() {
                   style={tagStyle(visible)}
                 >
                   <span className="h-px w-10 bg-brown/50 block" />
-                  <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown/60">
+                  <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown-ink">
                     {section.tag}
                   </span>
                   <span className="font-montserrat font-bold text-[11px] tracking-[0.3em] text-brown/30 ml-auto hidden md:inline">
@@ -1075,7 +1075,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="mb-16">
             <div className="overflow-hidden mb-8">
-              <div className="font-montserrat font-bold text-xs tracking-[0.42em] text-brown/50" style={tagStyle(byggVisible)}>
+              <div className="font-montserrat font-bold text-xs tracking-[0.42em] text-brown-ink" style={tagStyle(byggVisible)}>
                 — FAGLIG HÅNDVERK
               </div>
             </div>

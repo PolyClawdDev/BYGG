@@ -58,7 +58,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         <Link href="/" className="font-montserrat font-black text-brown text-xl md:text-2xl tracking-tight leading-none hover:opacity-70 transition-opacity duration-300">
           FINT HJEM
         </Link>
-        <Link href="/blogg" className="font-montserrat font-bold text-[11px] tracking-[0.35em] text-brown/60 hover:text-gray-900 transition-colors duration-300 pb-1 border-b border-transparent hover:border-gray-900">
+        <Link href="/blogg" className="font-montserrat font-bold text-[11px] tracking-[0.35em] text-brown-ink hover:text-gray-900 transition-colors duration-300 pb-1 border-b border-transparent hover:border-gray-900">
           ← ALLE ARTIKLER
         </Link>
       </div>
@@ -67,11 +67,11 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
       <header className="px-8 md:px-14 lg:px-20 py-16 md:py-24" style={{ backgroundColor: '#f8f6f2' }}>
         <div className="max-w-3xl">
           <div className="flex items-center gap-3 mb-8">
-            <span className="font-montserrat font-bold text-[10px] tracking-[0.3em] text-brown/50">
+            <span className="font-montserrat font-bold text-[10px] tracking-[0.3em] text-brown-ink">
               {new Date(post.publishedAt).toLocaleDateString('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })}
             </span>
             <span className="text-brown/30">·</span>
-            <span className="font-montserrat font-bold text-[10px] tracking-[0.2em] text-brown/50">
+            <span className="font-montserrat font-bold text-[10px] tracking-[0.2em] text-brown-ink">
               {post.readingMinutes} min lesetid
             </span>
           </div>
@@ -109,7 +109,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
       {/* CTA block */}
       <section className="mx-8 md:mx-14 lg:mx-20 mb-20 rounded-2xl px-8 md:px-14 py-14" style={{ backgroundColor: '#f0ebe5' }}>
         <div className="max-w-2xl">
-          <p className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown/50 mb-6">— FINT HJEM</p>
+          <p className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown-ink mb-6">— FINT HJEM</p>
           <p className="font-playfair font-light text-brown/85 text-lg md:text-xl leading-relaxed mb-10">
             {post.ctaText}
           </p>
@@ -132,7 +132,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-4 mb-10">
             <span className="h-px w-10 bg-brown/40 block" />
-            <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown/50">FLERE ARTIKLER</span>
+            <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown-ink">FLERE ARTIKLER</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 2).map((related) => (
@@ -142,7 +142,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
                 className="group border border-brown/10 hover:border-brown/35 rounded-2xl p-7 transition-all duration-500 hover:shadow-md"
                 style={{ backgroundColor: '#faf9f7' }}
               >
-                <p className="font-montserrat font-bold text-[10px] tracking-[0.3em] text-brown/45 mb-4">
+                <p className="font-montserrat font-bold text-[10px] tracking-[0.3em] text-brown-ink mb-4">
                   {new Date(related.publishedAt).toLocaleDateString('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </p>
                 <h3 className="font-montserrat font-black text-gray-900 text-sm leading-tight tracking-tight group-hover:text-brown transition-colors duration-300" style={{ letterSpacing: '-0.01em' }}>

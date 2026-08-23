@@ -92,7 +92,7 @@ export default function ServicePageShell({
             {/* Eyebrow */}
             <div className="flex items-center gap-4 mb-10">
               <span className="h-px w-10 bg-brown/50 block" />
-              <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown/60">
+              <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown-ink">
                 {tag}
               </span>
               <span className="font-montserrat font-bold text-[11px] tracking-[0.3em] text-brown/30 ml-auto hidden md:inline">
@@ -108,7 +108,7 @@ export default function ServicePageShell({
               {headline}
             </h1>
             <p
-              className="font-montserrat font-bold text-brown/50 mb-10"
+              className="font-montserrat font-bold text-brown-ink mb-10"
               style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', letterSpacing: '-0.01em' }}
             >
               {subheadline}
@@ -182,7 +182,7 @@ export default function ServicePageShell({
           <div className="mb-14">
             <div className="flex items-center gap-4 mb-6">
               <span className="h-px w-10 bg-brown/40 block" />
-              <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown/50">
+              <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown-ink">
                 HVA VI LEVERER
               </span>
             </div>
@@ -223,7 +223,7 @@ export default function ServicePageShell({
             <div className="mb-14">
               <div className="flex items-center gap-4 mb-6">
                 <span className="h-px w-10 bg-brown/40 block" />
-                <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown/50">
+                <span className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown-ink">
                   VANLIGE SPØRSMÅL
                 </span>
               </div>
