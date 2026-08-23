@@ -168,11 +168,41 @@ export const viewport: Viewport = {
 }
 
 /* ── JSON-LD: Organization, LocalBusiness (Oslo), WebSite ─────────────────── */
+
+/**
+ * The registered address from Brønnøysund, shared by both graph nodes so they
+ * can never drift apart. Google cross-checks this against the company register
+ * and the Google Business Profile; a mismatch weakens the local signal instead
+ * of broadening it, so it must stay the real registered address rather than a
+ * city-centre one. Stabekk is in Bærum, Akershus — Oslo is expressed through
+ * areaServed on the LocalBusiness node, not by faking the address.
+ *
+ * Note the human-readable copies in SiteFooter.tsx and kontakt/page.tsx are
+ * still separate; update those too if this ever changes.
+ */
+const POSTAL_ADDRESS = {
+  '@type': 'PostalAddress',
+  streetAddress: 'Ringsveien 14A',
+  addressLocality: 'Stabekk',
+  postalCode: '1368',
+  addressRegion: 'Akershus',
+  addressCountry: 'NO',
+} as const
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
+    /* The legal entity. Deliberately a plain Organization: this used to be
+       typed ['Organization', 'GeneralContractor'], but GeneralContractor is a
+       subtype of LocalBusiness, so that quietly made `address` a required
+       property on a node that had none — the address lived only on the #oslo
+       node below. Semrush flagged it as an invalid LOCAL_BUSINESS address on
+       every page. The industry type now sits on #oslo, where the address, geo
+       and opening hours already are, which is also the arrangement Google
+       documents: one Organization for the company, one LocalBusiness for the
+       physical location it operates from. */
     {
-      '@type': ['Organization', 'GeneralContractor'],
+      '@type': 'Organization',
       '@id': `${SITE_URL}/#organization`,
       name: SITE_NAME,
       // Exactly as registered in Brønnøysund — Google matches this against
@@ -190,6 +220,10 @@ const jsonLd = {
       // registered næringskode 41.000.
       isicV4: '4100',
       foundingDate: '2024-05-21',
+      // Recommended on Organization in Google's own docs, and it keeps the
+      // legal entity's registered address discoverable independently of the
+      // location node.
+      address: POSTAL_ADDRESS,
       url: SITE_URL,
       logo: {
         '@type': 'ImageObject',
@@ -235,9 +269,14 @@ const jsonLd = {
       ],
     },
 
-    /* Lokalavdeling — Oslo */
+    /* Lokalavdeling — den fysiske virksomheten.
+       GeneralContractor is the most specific applicable type and sits here
+       rather than on the Organization above, because this is the node that
+       carries address, geo and opening hours — everything a LocalBusiness is
+       required to have. LocalBusiness is kept alongside it so the type is
+       unambiguous to parsers that do not resolve the subtype chain. */
     {
-      '@type': 'LocalBusiness',
+      '@type': ['LocalBusiness', 'GeneralContractor'],
       '@id': `${SITE_URL}/#oslo`,
       name: 'Fint Hjem – Oslo',
       parentOrganization: { '@id': `${SITE_URL}/#organization` },
@@ -248,19 +287,7 @@ const jsonLd = {
       vatID: 'NO933583023MVA',
       taxID: '933583023',
       priceRange: '$$$',
-      /* The registered address from Brønnøysund. Google cross-checks this
-         against the company register and the Google Business Profile, so it
-         has to be the real registered address rather than a city-centre one —
-         a mismatch weakens the local ranking signal instead of helping it.
-         Stabekk is in Bærum, Akershus; Oslo stays in areaServed below. */
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: 'Ringsveien 14A',
-        addressLocality: 'Stabekk',
-        postalCode: '1368',
-        addressRegion: 'Akershus',
-        addressCountry: 'NO',
-      },
+      address: POSTAL_ADDRESS,
       geo: {
         '@type': 'GeoCoordinates',
         latitude: 59.913888,
