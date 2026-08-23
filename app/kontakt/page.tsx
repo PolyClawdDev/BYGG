@@ -76,7 +76,7 @@ export default function Kontakt() {
                   </div>
                   <div>
                     <h3 className="font-playfair font-light text-brown font-medium">Adresse</h3>
-                    <p className="font-playfair font-light text-brown">Prinsensgate 5, 0152 Oslo</p>
+                    <p className="font-playfair font-light text-brown">Ringsveien 14A, 1368 Stabekk</p>
                   </div>
                   <div>
                     <h3 className="font-playfair font-light text-brown font-medium">Åpningstider</h3>

@@ -248,18 +248,23 @@ const jsonLd = {
       vatID: 'NO933583023MVA',
       taxID: '933583023',
       priceRange: '$$$',
+      /* The registered address from Brønnøysund. Google cross-checks this
+         against the company register and the Google Business Profile, so it
+         has to be the real registered address rather than a city-centre one —
+         a mismatch weakens the local ranking signal instead of helping it.
+         Stabekk is in Bærum, Akershus; Oslo stays in areaServed below. */
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Prinsensgate 5',
-        addressLocality: 'Oslo',
-        postalCode: '0152',
-        addressRegion: 'Oslo',
+        streetAddress: 'Ringsveien 14A',
+        addressLocality: 'Stabekk',
+        postalCode: '1368',
+        addressRegion: 'Akershus',
         addressCountry: 'NO',
       },
       geo: {
         '@type': 'GeoCoordinates',
-        latitude: 59.9106,
-        longitude: 10.7466,
+        latitude: 59.913888,
+        longitude: 10.601049,
       },
       areaServed: [
         { '@type': 'AdministrativeArea', name: 'Oslo' },

@@ -124,7 +124,7 @@ export default function SiteFooter() {
               <li>
                 <p className="font-montserrat font-bold text-xs tracking-wider text-white/30 uppercase mb-1">Adresse</p>
                 <p className="font-playfair font-light text-white/60 text-sm leading-relaxed">
-                  Prinsensgate 5<br />0152 Oslo, Norge
+                  Ringsveien 14A<br />1368 Stabekk, Norge
                 </p>
               </li>
               <li>
