@@ -5,7 +5,7 @@ import Link from 'next/link'
 import ReviewsCarousel from './components/ReviewsCarousel'
 import SiteFooter from './components/SiteFooter'
 import MenuSocialIcons from './components/MenuSocialIcons'
-import HeroEstimateButton from './components/estimator/HeroEstimateButton'
+import HeroEstimateButton from './components/befaring/HeroEstimateButton'
 import CountUp from './lib/motion/CountUp'
 import { useReducedMotion } from './lib/motion/useReducedMotion'
 

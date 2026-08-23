@@ -17,9 +17,6 @@
  *   • Transform-only animation (`scaleX` on a `transform-origin: left`
  *     bar) — stays on the compositor, zero layout thrash, zero paint
  *     cost per scroll tick.
- *   • Skipped on the /estimat dashboard (its right rail already gives
- *     the user progressive feedback and a second bar up top would be
- *     visual noise).
  *   • Hidden under `prefers-reduced-motion` — the bar only appears
  *     when its animation would communicate anything new.
  */
@@ -28,7 +25,7 @@ import { useEffect, useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { useReducedMotion } from '../lib/motion/useReducedMotion'
 
-const HIDDEN_ROUTES = ['/estimat']
+const HIDDEN_ROUTES: string[] = []
 
 export default function ScrollProgressRail() {
   const pathname = usePathname()

@@ -4,22 +4,23 @@ import { SITE_URL } from '../lib/site'
 const PAGE_URL = `${SITE_URL}/estimat`
 const OG_IMAGE = `${SITE_URL}/FAVICON.png`
 
-const TITLE = 'Prosjektplanner & Estimat – Fint Hjem'
+const TITLE = 'Be om gratis befaring – Fint Hjem'
 const DESCRIPTION =
-  'Planlegg bygg- eller renoveringsprosjektet ditt steg for steg. Få et grovt prisestimat og tidsestimat fra Fint Hjems AI-assistent — last opp bilder, beskriv prosjektet og bestill gratis befaring i Oslo.'
+  'Book gratis og uforpliktende befaring hos Fint Hjem. Vi ser på prosjektet ditt i Oslo og omegn og gir deg en eksakt pris med tidsplan — for nybygg, renovering, bad, kjøkken og byggservice.'
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
-    'prosjektplanner bygg',
-    'renovering estimat Oslo',
-    'byggkalkulator',
+    'gratis befaring Oslo',
+    'be om befaring',
+    'pristilbud renovering Oslo',
+    'tilbud totalentreprenør Oslo',
+    'befaring renovering',
     'pris oppussing leilighet',
     'pris renovering bad',
     'pris renovering kjøkken',
-    'gratis befaring Oslo',
-    'Fint Hjem estimat',
+    'Fint Hjem befaring',
   ],
   alternates: {
     canonical: PAGE_URL,
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
         url: OG_IMAGE,
         width: 512,
         height: 512,
-        alt: 'Fint Hjem prosjektplanner',
+        alt: 'Fint Hjem – be om gratis befaring',
       },
     ],
   },
@@ -47,9 +48,8 @@ export const metadata: Metadata = {
     images: [OG_IMAGE],
   },
   robots: {
-    // Allow indexing — it's a useful landing page for keywords like
-    // "prisestimat renovering Oslo". The chat itself runs client-side so
-    // there's nothing user-specific in the SSR payload.
+    // Worth indexing — "gratis befaring Oslo" and "pristilbud renovering"
+    // are high-intent queries and this is the page that converts them.
     index: true,
     follow: true,
     googleBot: {

@@ -1,10 +1,9 @@
 /**
  * POST /api/lead
  *
- * Receives the final "Be om befaring" submission from the estimator's
- * lead form. For now we just validate + log — Fint Hjem staff can wire
- * this up to SendGrid / Resend / HubSpot / a webhook by editing ONLY
- * this file, without touching the UI.
+ * Receives the "Be om befaring" submission from /estimat. For now we just
+ * validate + log — Fint Hjem staff can wire this up to SendGrid / Resend /
+ * HubSpot / a webhook by editing ONLY this file, without touching the UI.
  *
  * Response shape stays stable: `{ ok: true }` on success, `{ error }`
  * on failure. The UI reads the HTTP status and doesn't care how the
@@ -72,7 +71,6 @@ export async function POST(req: Request) {
     location,
     summary,
     intake: body.intake,
-    imageNames: Array.isArray(body.imageNames) ? body.imageNames.slice(0, 20) : [],
   })
 
   return NextResponse.json({ ok: true }, { status: 200 })

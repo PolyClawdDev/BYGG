@@ -16,11 +16,6 @@
  *      browser's native scroll. No Lenis instance is created, no
  *      RAF, no GSAP ticker cost.
  *
- * Intentionally NOT applied inside the /estimat route: the dashboard
- * is a fixed-height flex column (`100svh`), not a scrolling document,
- * and Lenis hijacking its internal overflow containers would break
- * the chat + intake + estimate rails. We detect that route via
- * usePathname and skip initialisation there.
  *
  * We also expose a small `scrollTo(target)` helper via a ref-style
  * global so nav links (`scrollToSection` on the home page) can
@@ -46,10 +41,10 @@ declare global {
   }
 }
 
-// Routes where Lenis should NOT run. These pages use their own scroll
-// containers (dashboards, app-shell layouts) and wiring Lenis into
-// them breaks nested overflow panels.
-const SKIP_ROUTES = ['/estimat']
+// Routes where Lenis should NOT run — for pages that own their own
+// scroll containers, where wiring Lenis in breaks nested overflow
+// panels. Empty for now; every route is a normal scrolling document.
+const SKIP_ROUTES: string[] = []
 
 export default function SmoothScrollProvider({
   children,
