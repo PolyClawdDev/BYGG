@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Fasade renovering Oslo – Kledning og tak | Fint Hjem',
   description: 'Profesjonell fasadrenovering i Oslo. Fint Hjem leverer kledning, takrenove­ring, isolasjon og energioppgradering av fasade. Godkjente fagfolk. Book gratis befaring.',
   keywords: ['fasade renovering Oslo', 'fasaderehabilitering Oslo', 'ny kledning Oslo', 'tak renovering Oslo', 'isolere hus Oslo', 'Fint Hjem fasade'],
-  alternates: { canonical: 'https://finthjem.no/fasade-renovering-oslo' },
+  alternates: { canonical: `${SITE_URL}/fasade-renovering-oslo` },
   openGraph: {
     title: 'Fasade renovering Oslo – Kledning og tak | Fint Hjem',
     description: 'Fasadrenovering og kledning i Oslo. Bedre isolasjon og nytt utseende. Book gratis befaring.',
-    url: 'https://finthjem.no/fasade-renovering-oslo',
+    url: `${SITE_URL}/fasade-renovering-oslo`,
   },
 }
 

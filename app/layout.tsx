@@ -3,18 +3,18 @@ import './globals.css'
 import FloatingCallCta from './components/FloatingCallCta'
 import SmoothScrollProvider from './components/SmoothScrollProvider'
 import ScrollProgressRail from './components/ScrollProgressRail'
+import { SITE_URL } from './lib/site'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SEO — Fint Hjem
    ---------------------------------------------------------------------------
    Språk:     Norsk bokmål (nb-NO)
    Merke:     Fint Hjem  (ALDRI "Fint Hem")
-   Domene:    https://finthjem.no
+   Domene:    https://www.finthjem.no  (se app/lib/site.ts)
    Mål:       Toppresultat på Google for totalentreprenør, nybygg, renovering,
               byggservice og interiørdesign i Oslo og Norge.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-const SITE_URL = 'https://finthjem.no'
 const SITE_NAME = 'Fint Hjem'
 const DEFAULT_TITLE =
   'Fint Hjem – Totalentreprenør i Oslo | Nybygg, Renovering & Interiør'

@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Nybygg Oslo – Totalentreprenør | Fint Hjem',
   description: 'Fint Hjem bygger nøkkelferdige boliger i Oslo fra tomt til innflytting. Totalentreprenør med over 20 års erfaring – søknad, tegninger, bygging og overlevering. Book gratis befaring.',
   keywords: ['nybygg Oslo', 'totalentreprenør Oslo', 'bygge hus Oslo', 'nøkkelferdig bolig Oslo', 'byggmester Oslo', 'Fint Hjem nybygg'],
-  alternates: { canonical: 'https://finthjem.no/nybygg-oslo' },
+  alternates: { canonical: `${SITE_URL}/nybygg-oslo` },
   openGraph: {
     title: 'Nybygg Oslo – Totalentreprenør | Fint Hjem',
     description: 'Nøkkelferdige boliger i Oslo – fra tomt til innflytting. Book gratis befaring i dag.',
-    url: 'https://finthjem.no/nybygg-oslo',
+    url: `${SITE_URL}/nybygg-oslo`,
   },
 }
 

@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Snekker Oslo – Snekkerarbeid og trevare | Fint Hjem',
   description: 'Dyktig snekker i Oslo. Fint Hjem leverer skreddersydde trevareløsninger, innredning, trapper, dører og finish av høyeste håndverkskvalitet. Book gratis befaring.',
   keywords: ['snekker Oslo', 'snekkerfirma Oslo', 'tømrer Oslo', 'snekkerarbeid Oslo', 'innredningssnekker Oslo', 'Fint Hjem snekker'],
-  alternates: { canonical: 'https://finthjem.no/snekker-oslo' },
+  alternates: { canonical: `${SITE_URL}/snekker-oslo` },
   openGraph: {
     title: 'Snekker Oslo – Snekkerarbeid og trevare | Fint Hjem',
     description: 'Skreddersydde trevareløsninger og snekkerarbeid i Oslo. Book gratis befaring.',
-    url: 'https://finthjem.no/snekker-oslo',
+    url: `${SITE_URL}/snekker-oslo`,
   },
 }
 

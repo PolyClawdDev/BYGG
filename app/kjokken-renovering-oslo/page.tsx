@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Kjøkken renovering Oslo – Nytt kjøkken | Fint Hjem',
   description: 'Kjøkkenrenovering i Oslo av fagfolk. Fint Hjem leverer nye kjøkken, åpne planløsninger og totalrenovering av kjøkkenrom. Fast pris og garanti. Book gratis befaring.',
   keywords: ['kjøkken renovering Oslo', 'nytt kjøkken Oslo', 'kjøkkeninnredning Oslo', 'kjøkkenrenovering pris', 'Fint Hjem kjøkken'],
-  alternates: { canonical: 'https://finthjem.no/kjokken-renovering-oslo' },
+  alternates: { canonical: `${SITE_URL}/kjokken-renovering-oslo` },
   openGraph: {
     title: 'Kjøkken renovering Oslo – Nytt kjøkken | Fint Hjem',
     description: 'Profesjonell kjøkkenrenovering i Oslo. Fra gammel kjøkken til drømmekjøkken. Book gratis befaring.',
-    url: 'https://finthjem.no/kjokken-renovering-oslo',
+    url: `${SITE_URL}/kjokken-renovering-oslo`,
   },
 }
 

@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Renovering Bærum – Totalentreprenør | Fint Hjem',
   description: 'Renovering i Bærum. Fint Hjem leverer totalrenovering, nybygg, bad, kjøkken og tilbygg i Bærum kommune. Erfarne fagfolk med 20+ års erfaring. Book gratis befaring.',
   keywords: ['renovering Bærum', 'totalrenovering Bærum', 'håndverker Bærum', 'nybygg Bærum', 'totalentreprenør Bærum', 'snekker Bærum'],
-  alternates: { canonical: 'https://finthjem.no/renovering-baerum' },
+  alternates: { canonical: `${SITE_URL}/renovering-baerum` },
   openGraph: {
     title: 'Renovering Bærum – Totalentreprenør | Fint Hjem',
     description: 'Totalrenovering og nybygg i Bærum. 20+ års erfaring. Book gratis befaring.',
-    url: 'https://finthjem.no/renovering-baerum',
+    url: `${SITE_URL}/renovering-baerum`,
   },
 }
 

@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Renovering Majorstuen Oslo – Bad, kjøkken og leilighet | Fint Hjem',
   description: 'Renovering på Majorstuen i Oslo. Fint Hjem leverer bad, kjøkken og totalrenovering av leiligheter på Majorstuen og omegn. Fast pris og garanti. Book gratis befaring.',
   keywords: ['renovering Majorstuen', 'oppussing Majorstuen Oslo', 'bad renovering Majorstuen', 'kjøkken Majorstuen', 'håndverker Majorstuen Oslo'],
-  alternates: { canonical: 'https://finthjem.no/renovering-majorstuen' },
+  alternates: { canonical: `${SITE_URL}/renovering-majorstuen` },
   openGraph: {
     title: 'Renovering Majorstuen Oslo – Bad, kjøkken og leilighet | Fint Hjem',
     description: 'Renovering på Majorstuen. Bad, kjøkken og totalrenovering. Book gratis befaring.',
-    url: 'https://finthjem.no/renovering-majorstuen',
+    url: `${SITE_URL}/renovering-majorstuen`,
   },
 }
 

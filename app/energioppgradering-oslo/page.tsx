@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Energioppgradering bolig Oslo – Enova støtte | Fint Hjem',
   description: 'Energioppgradering av bolig i Oslo. Fint Hjem leverer etterisolering, varmepumpe, nye vinduer og Enova-støtte. Lavere strømregning og høyere boligverdi. Book befaring.',
   keywords: ['energioppgradering Oslo', 'etterisolering Oslo', 'varmepumpe Oslo', 'Enova støtte', 'energieffektivisering bolig', 'Fint Hjem energi'],
-  alternates: { canonical: 'https://finthjem.no/energioppgradering-oslo' },
+  alternates: { canonical: `${SITE_URL}/energioppgradering-oslo` },
   openGraph: {
     title: 'Energioppgradering bolig Oslo – Enova støtte | Fint Hjem',
     description: 'Energioppgradering av bolig i Oslo. Lavere strømregning, Enova-støtte. Book befaring.',
-    url: 'https://finthjem.no/energioppgradering-oslo',
+    url: `${SITE_URL}/energioppgradering-oslo`,
   },
 }
 

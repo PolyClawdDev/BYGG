@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BLOG_POSTS } from '../lib/blog'
+import { SITE_URL } from '../lib/site'
 import SiteFooter from '../components/SiteFooter'
 
 export const metadata: Metadata = {
   title: 'Blogg – Tips og prisguider for renovering og nybygg | Fint Hjem',
   description: 'Les våre artikler om renovering, nybygg og interiørdesign i Oslo. Prisguider, tips og råd fra erfarne fagfolk hos Fint Hjem.',
-  alternates: { canonical: 'https://finthjem.no/blogg' },
+  alternates: { canonical: `${SITE_URL}/blogg` },
 }
 
 export default function BlogIndex() {

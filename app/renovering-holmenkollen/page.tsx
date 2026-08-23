@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Renovering Holmenkollen Oslo – Prestisjeoppdrag | Fint Hjem',
   description: 'Renovering på Holmenkollen og Vestre Aker. Fint Hjem leverer høystandard renovering og nybygg i Oslo vest. Diskret, presist og til avtalt pris. Book gratis befaring.',
   keywords: ['renovering Holmenkollen', 'håndverker Holmenkollen', 'totalrenovering Oslo vest', 'renovering Vinderen', 'renovering Ullern', 'Fint Hjem Holmenkollen'],
-  alternates: { canonical: 'https://finthjem.no/renovering-holmenkollen' },
+  alternates: { canonical: `${SITE_URL}/renovering-holmenkollen` },
   openGraph: {
     title: 'Renovering Holmenkollen Oslo – Prestisjeoppdrag | Fint Hjem',
     description: 'Høystandard renovering på Holmenkollen og Oslo vest. Book gratis befaring.',
-    url: 'https://finthjem.no/renovering-holmenkollen',
+    url: `${SITE_URL}/renovering-holmenkollen`,
   },
 }
 

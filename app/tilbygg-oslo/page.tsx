@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Tilbygg Oslo – Anneks, garasje og utvidelse | Fint Hjem',
   description: 'Tilbygg og anneks i Oslo. Fint Hjem leverer tilbygg, garasjer, anneks og utvidelser av bolig – fra søknad til nøkkel. Totalentreprenør med fast pris. Book gratis befaring.',
   keywords: ['tilbygg Oslo', 'anneks Oslo', 'garasje Oslo', 'bygge tilbygg Oslo', 'utvidelse bolig Oslo', 'Fint Hjem tilbygg'],
-  alternates: { canonical: 'https://finthjem.no/tilbygg-oslo' },
+  alternates: { canonical: `${SITE_URL}/tilbygg-oslo` },
   openGraph: {
     title: 'Tilbygg Oslo – Anneks, garasje og utvidelse | Fint Hjem',
     description: 'Tilbygg, anneks og garasjer i Oslo. Fra søknad til nøkkel. Book gratis befaring.',
-    url: 'https://finthjem.no/tilbygg-oslo',
+    url: `${SITE_URL}/tilbygg-oslo`,
   },
 }
 

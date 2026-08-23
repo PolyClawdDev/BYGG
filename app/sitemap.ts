@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { BLOG_POSTS } from './lib/blog'
-
-const SITE_URL = 'https://finthjem.no'
+import { SITE_URL } from './lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()

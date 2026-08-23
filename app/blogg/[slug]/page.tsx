@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { BLOG_POSTS } from '../../lib/blog'
+import { SITE_URL } from '../../lib/site'
 import SiteFooter from '../../components/SiteFooter'
 
 export function generateStaticParams() {
@@ -19,11 +20,11 @@ export async function generateMetadata({
     title: post.metaTitle,
     description: post.metaDescription,
     keywords: post.keywords,
-    alternates: { canonical: `https://finthjem.no/blogg/${post.slug}` },
+    alternates: { canonical: `${SITE_URL}/blogg/${post.slug}` },
     openGraph: {
       title: post.metaTitle,
       description: post.metaDescription,
-      url: `https://finthjem.no/blogg/${post.slug}`,
+      url: `${SITE_URL}/blogg/${post.slug}`,
       type: 'article',
       publishedTime: post.publishedAt,
     },
@@ -40,9 +41,9 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
     headline: post.title,
     description: post.metaDescription,
     datePublished: post.publishedAt,
-    author: { '@type': 'Organization', name: 'Fint Hjem', url: 'https://finthjem.no' },
-    publisher: { '@type': 'Organization', name: 'Fint Hjem', url: 'https://finthjem.no' },
-    mainEntityOfPage: `https://finthjem.no/blogg/${post.slug}`,
+    author: { '@type': 'Organization', name: 'Fint Hjem', url: SITE_URL },
+    publisher: { '@type': 'Organization', name: 'Fint Hjem', url: SITE_URL },
+    mainEntityOfPage: `${SITE_URL}/blogg/${post.slug}`,
   }
 
   return (

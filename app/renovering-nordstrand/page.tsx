@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Renovering Nordstrand Oslo – Enebolig og leilighet | Fint Hjem',
   description: 'Renovering på Nordstrand og Søndre Nordstrand i Oslo. Fint Hjem leverer totalrenovering, bad, kjøkken og tilbygg i hele Nordstrand-området. Book gratis befaring.',
   keywords: ['renovering Nordstrand', 'håndverker Nordstrand Oslo', 'totalrenovering Nordstrand', 'bad Nordstrand', 'snekker Nordstrand Oslo'],
-  alternates: { canonical: 'https://finthjem.no/renovering-nordstrand' },
+  alternates: { canonical: `${SITE_URL}/renovering-nordstrand` },
   openGraph: {
     title: 'Renovering Nordstrand Oslo – Enebolig og leilighet | Fint Hjem',
     description: 'Totalrenovering på Nordstrand i Oslo. Book gratis befaring.',
-    url: 'https://finthjem.no/renovering-nordstrand',
+    url: `${SITE_URL}/renovering-nordstrand`,
   },
 }
 

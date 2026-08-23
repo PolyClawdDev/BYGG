@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
+import { SITE_URL } from '../lib/site'
 
-const SITE_URL = 'https://finthjem.no'
 const PAGE_URL = `${SITE_URL}/interior-design-homestyling`
 const OG_IMAGE = `${SITE_URL}/FAVICON.png`
 

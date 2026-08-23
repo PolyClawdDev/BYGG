@@ -12,7 +12,7 @@
  * Optional env (sensible defaults in parentheses):
  *   OPENROUTER_SITE_URL     — forwarded as HTTP-Referer so we show up
  *                             on OpenRouter's rankings dashboard
- *                             (https://finthjem.no)
+ *                             (https://www.finthjem.no)
  *   OPENROUTER_APP_NAME     — forwarded as X-Title (Fint Hjem Estimator)
  */
 
@@ -59,7 +59,7 @@ interface OpenRouterResponse {
 
 export function getOpenRouterConfig() {
   const apiKey = process.env.OPENROUTER_API_KEY
-  const siteUrl = process.env.OPENROUTER_SITE_URL || 'https://finthjem.no'
+  const siteUrl = process.env.OPENROUTER_SITE_URL || 'https://www.finthjem.no'
   const appName = process.env.OPENROUTER_APP_NAME || 'Fint Hjem Estimator'
   return { apiKey, siteUrl, appName }
 }

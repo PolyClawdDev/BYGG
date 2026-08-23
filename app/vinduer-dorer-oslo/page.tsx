@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
 import ServicePageShell from '../components/ServicePageShell'
+import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
   title: 'Vinduer og dører Oslo – Montering og utskifting | Fint Hjem',
   description: 'Montering og utskifting av vinduer og dører i Oslo. Fint Hjem leverer bedre isolasjon, lys og estetikk. Godkjente fagfolk og fast pris. Book gratis befaring.',
   keywords: ['vinduer Oslo', 'dører Oslo', 'skifte vinduer Oslo', 'nye vinduer Oslo', 'vindusmontering Oslo', 'Fint Hjem vinduer'],
-  alternates: { canonical: 'https://finthjem.no/vinduer-dorer-oslo' },
+  alternates: { canonical: `${SITE_URL}/vinduer-dorer-oslo` },
   openGraph: {
     title: 'Vinduer og dører Oslo – Montering og utskifting | Fint Hjem',
     description: 'Skifte vinduer og dører i Oslo. Bedre isolasjon, lys og estetikk. Book gratis befaring.',
-    url: 'https://finthjem.no/vinduer-dorer-oslo',
+    url: `${SITE_URL}/vinduer-dorer-oslo`,
   },
 }
 
