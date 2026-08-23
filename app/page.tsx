@@ -8,6 +8,7 @@ import MenuSocialIcons from './components/MenuSocialIcons'
 import HeroEstimateButton from './components/befaring/HeroEstimateButton'
 import CountUp from './lib/motion/CountUp'
 import { useReducedMotion } from './lib/motion/useReducedMotion'
+import { unsplashSrcSet, IMAGE_SIZES } from './lib/images'
 
 /* ─── Data ─── */
 
@@ -169,6 +170,7 @@ export default function Home() {
   const [heroMaskReady, setHeroMaskReady] = useState(false)
   const [heroVideoReady, setHeroVideoReady] = useState(false)
   const sectionImageRefs = useRef<Array<HTMLDivElement | null>>([])
+  const heroVideoRef = useRef<HTMLVideoElement | null>(null)
   const reducedMotion = useReducedMotion()
 
   /* ── Fonts + SVG-mask readiness ──────────────────────────────────────────
@@ -214,6 +216,30 @@ export default function Home() {
       cancelled = true
       window.clearTimeout(videoSafety)
     }
+  }, [])
+
+  /* ── Hero video source, chosen per viewport ───────────────────────────────
+     The desktop clip is 960×540 and, because it runs 77 s, weighs ~4.9 MB —
+     on its own it was 5 of the 6.3 MB the homepage pulled, and on throttled
+     4G it starved everything else of bandwidth (mobile LCP 5.5 s). Phones
+     show the wordmark a few hundred px wide, so they get a 640×360 re-encode
+     of the same footage at 1.7 MB instead. Same clip, same length, same look.
+
+     Assigning src here rather than in the markup is deliberate: it keeps the
+     download out of the initial HTML parse, so the browser spends its first
+     round trip on the CSS and font the hero actually blocks on. Nothing is
+     lost without JS — the video is already gated behind `heroVideoReady`, so
+     a no-JS visitor never saw it play regardless. */
+  useEffect(() => {
+    const video = heroVideoRef.current
+    if (!video) return
+
+    const isNarrow = window.matchMedia('(max-width: 768px)').matches
+    video.src = isNarrow ? '/BYGG-mobile.mp4' : '/BYGG.mp4'
+    video.load()
+    // autoPlay covers the normal path; this catches browsers that decline to
+    // start a source attached after the element was created.
+    void video.play().catch(() => {})
   }, [])
 
   /* Route nav clicks through Lenis when it's active so in-page jumps
@@ -538,6 +564,7 @@ export default function Home() {
                         the viewer only ever sees the letters — never the
                         surrounding video rectangle. */}
                     <video
+                      ref={heroVideoRef}
                       autoPlay
                       muted
                       loop
@@ -553,9 +580,10 @@ export default function Home() {
                         display: 'block',
                         visibility: heroMaskReady && heroVideoReady ? 'visible' : 'hidden',
                       }}
-                    >
-                      <source src="/BYGG.mp4" type="video/mp4" />
-                    </video>
+                    />
+                    {/* No <source> child — the effect above sets `src` to the
+                        desktop or mobile encode once it can read the viewport
+                        width. */}
 
                     {/* Layer 2 — beige plate with letter-shaped holes. Always at
                         opacity 1 — no fade-in, no transition. Its fill is
@@ -913,6 +941,8 @@ export default function Home() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={section.image}
+                  srcSet={unsplashSrcSet(section.image)}
+                  sizes={IMAGE_SIZES.splitSection}
                   alt={section.imageAlt}
                   className="absolute inset-0 w-full h-full object-cover animate-kenburns"
                   loading="eager"
@@ -1089,6 +1119,8 @@ export default function Home() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={item.image}
+                  srcSet={unsplashSrcSet(item.image)}
+                  sizes={IMAGE_SIZES.serviceCard}
                   alt=""
                   aria-hidden
                   loading="lazy"

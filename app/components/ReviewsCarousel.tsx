@@ -97,7 +97,10 @@ function StarIcon() {
 function ReviewCard({ name, location, text }: Review) {
   return (
     <figure className="flex-shrink-0 w-[280px] sm:w-80 bg-white rounded-2xl p-6 sm:p-8 mx-2 sm:mx-3 shadow-sm border border-stone-100 flex flex-col">
-      <div className="flex gap-1 mb-5" aria-label="5 av 5 stjerner">
+      {/* role="img" is required for aria-label to be allowed here — a bare
+          <div> has no role, so screen readers (and Lighthouse) reject the
+          label outright and announce five meaningless icons instead. */}
+      <div className="flex gap-1 mb-5" role="img" aria-label="5 av 5 stjerner">
         {[0, 1, 2, 3, 4].map((i) => (
           <StarIcon key={i} />
         ))}

@@ -50,11 +50,15 @@ export default function SiteFooter() {
             </div>
           </div>
 
-          {/* Navigation */}
+          {/* Navigation.
+              These column titles are h3, not h4: the last heading above the
+              footer is an h2, so h4 would skip a level and break the document
+              outline for screen readers. Size comes from the classes, so the
+              level carries no visual weight. */}
           <div>
-            <h4 className="font-montserrat font-bold text-xs tracking-[0.35em] text-white/30 mb-7 uppercase">
+            <h3 className="font-montserrat font-bold text-xs tracking-[0.35em] text-white/30 mb-7 uppercase">
               Navigasjon
-            </h4>
+            </h3>
             <ul className="space-y-4">
               {[
                 { label: 'Hjem', href: '/' },
@@ -75,9 +79,9 @@ export default function SiteFooter() {
 
           {/* Services */}
           <div>
-            <h4 className="font-montserrat font-bold text-xs tracking-[0.35em] text-white/30 mb-7 uppercase">
+            <h3 className="font-montserrat font-bold text-xs tracking-[0.35em] text-white/30 mb-7 uppercase">
               Tjenester
-            </h4>
+            </h3>
             <ul className="space-y-4">
               {[
                 'Ditt Nye Hjem',
@@ -95,9 +99,9 @@ export default function SiteFooter() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-montserrat font-bold text-xs tracking-[0.35em] text-white/30 mb-7 uppercase">
+            <h3 className="font-montserrat font-bold text-xs tracking-[0.35em] text-white/30 mb-7 uppercase">
               Kontakt
-            </h4>
+            </h3>
             <ul className="space-y-5">
               <li>
                 <p className="font-montserrat font-bold text-xs tracking-wider text-white/30 uppercase mb-1">Telefon</p>

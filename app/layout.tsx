@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import './globals.css'
 import FloatingCallCta from './components/FloatingCallCta'
 import SmoothScrollProvider from './components/SmoothScrollProvider'
@@ -353,22 +354,29 @@ export default function RootLayout({
         {/* Resource hints — raskere første paint for bilder/fonter */}
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        {/* Fonts are self-hosted from /public/fonts (declared in globals.css),
+            so there is no fonts.googleapis.com / fonts.gstatic.com traffic
+            left to preconnect to.
 
-        {/* Google Analytics 4 — Fint Hjem (G-LBR1CP6Q69)
-            async so it never blocks the first paint. Placed in <head>
-            (not <body>) so GA fires on every page including 404s. */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-LBR1CP6Q69" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-LBR1CP6Q69');
-            `,
-          }}
+            Preloading matters here more than usual: the hero wordmark is the
+            LCP element and Montserrat is font-display: block, so nothing in
+            the hero paints until this file lands. Without the preload the
+            browser only discovers it after parsing the stylesheet, which cost
+            seconds on mobile. `latin` alone is preloaded — latin-ext is
+            gated behind unicode-range and rarely needed. */}
+        <link
+          rel="preload"
+          href="/fonts/montserrat-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/playfair-latin.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
         />
 
         {/* Strukturerte data — Google Rich Results */}
@@ -395,6 +403,24 @@ export default function RootLayout({
         </SmoothScrollProvider>
         {/* Persistent mobile call-to-action — always one tap away while scrolling. */}
         <FloatingCallCta />
+
+        {/* Google Analytics 4 — Fint Hjem (G-LBR1CP6Q69).
+            strategy="afterInteractive" hands the 181 KB gtag bundle to Next,
+            which loads it once the page is interactive rather than during the
+            head parse. That keeps it off the critical path without delaying it
+            so long that short visits go unrecorded. */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-LBR1CP6Q69"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-LBR1CP6Q69');
+          `}
+        </Script>
       </body>
     </html>
   )

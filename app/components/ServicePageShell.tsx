@@ -14,6 +14,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import SiteFooter from './SiteFooter'
 import MenuSocialIcons from './MenuSocialIcons'
+import { unsplashSrcSet, IMAGE_SIZES } from '../lib/images'
 
 export interface ServiceFeature {
   title: string
@@ -140,6 +141,8 @@ export default function ServicePageShell({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={image}
+            srcSet={unsplashSrcSet(image)}
+            sizes={IMAGE_SIZES.fullBleed}
             alt={imageAlt}
             className="absolute inset-0 w-full h-full object-cover animate-kenburns"
             loading="eager"

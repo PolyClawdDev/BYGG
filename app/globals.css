@@ -1,8 +1,101 @@
-/* display=block for Montserrat so the hero mask never paints with a fallback
-   font (which would change the letter widths and leak a video rectangle for
-   one frame on hard refresh). Playfair can keep swap — it's body copy only. */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=block');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400&display=swap');
+/* ── Self-hosted fonts ─────────────────────────────────────────────────────
+   These were loaded from fonts.googleapis.com via @import until the hero
+   wordmark turned out to be the LCP element, with 4.0 s of render delay on
+   mobile. The chain was the problem: download this stylesheet → parse it →
+   discover the Google Fonts CSS → fetch it (805 ms) → only then discover the
+   woff2 → fetch that. And because Montserrat must use font-display: block
+   (see below), nothing in the hero could paint until the last hop finished.
+
+   Serving the files from /public collapses that to a single same-origin
+   request, which app/layout.tsx additionally preloads. Both families are
+   OFL-licensed, so self-hosting is permitted.
+
+   The declarations below mirror Google's own CSS exactly — same weights, same
+   unicode-ranges, one file per subset. Each woff2 is a variable font, so 700
+   and 900 (and 300/400 for Playfair) legitimately share a source; the
+   font-weight in each @font-face pins the weight axis. Keep the family names
+   spelled "Montserrat" and "Playfair Display": the hero calls
+   document.fonts.load('900 200px Montserrat') to know when the SVG mask is
+   safe to paint, and that lookup is by family name.
+
+   Only latin and latin-ext are shipped — enough for Norwegian (æ ø å all sit
+   in latin) plus any European names. unicode-range means latin-ext is only
+   fetched if a page actually uses a character from it. */
+
+/* Montserrat — headings, wordmark, all-caps labels.
+   font-display: block is deliberate and must not become swap. The hero
+   wordmark is an SVG <mask> built from live <text>, so a fallback font would
+   produce different glyph widths, and the mismatched cutouts would leak a
+   rectangle of video around the letters for one frame on hard refresh. */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url('/fonts/montserrat-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  font-display: block;
+  src: url('/fonts/montserrat-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url('/fonts/montserrat-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url('/fonts/montserrat-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Playfair Display — body copy. swap is fine here: a brief paint in the
+   fallback serif is far better than holding the text back, and nothing
+   depends on its metrics. */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/playfair-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/playfair-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/playfair-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/playfair-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
