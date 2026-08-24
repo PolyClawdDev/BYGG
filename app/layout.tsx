@@ -5,6 +5,7 @@ import FloatingCallCta from './components/FloatingCallCta'
 import SmoothScrollProvider from './components/SmoothScrollProvider'
 import ScrollProgressRail from './components/ScrollProgressRail'
 import { SITE_URL } from './lib/site'
+import { SOCIAL_PROFILE_URLS } from './lib/socialLinks'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SEO — Fint Hjem
@@ -256,7 +257,10 @@ const jsonLd = {
         'Interiørdesign',
         'Homestyling',
       ],
-      sameAs: ['https://www.facebook.com/profile.php?id=100076333510353'],
+      /* Derived from the shared social registry rather than hardcoded, so a
+         profile added to the footer can never be missing here. `sameAs` is
+         how Google ties these accounts to the Fint Hjem entity. */
+      sameAs: SOCIAL_PROFILE_URLS,
       contactPoint: [
         {
           '@type': 'ContactPoint',
