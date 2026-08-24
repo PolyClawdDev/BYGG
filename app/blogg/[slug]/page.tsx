@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { BLOG_POSTS } from '../../lib/blog'
 import { SITE_URL } from '../../lib/site'
+import { routes } from '../../lib/routes'
 import SiteFooter from '../../components/SiteFooter'
 
 export function generateStaticParams() {
@@ -106,6 +107,34 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         </div>
       </article>
 
+      {/* Service hand-off.
+          `section.body` is plain text rendered with `whitespace-pre-line`, so
+          links cannot sit inside the prose — the article's outbound links live
+          here instead, driven by `relatedServices` on the post. */}
+      <section className="px-8 md:px-14 lg:px-20 pb-16">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center gap-4 mb-8">
+            <span className="h-px w-10 bg-brown/40 block" />
+            <h2 className="font-montserrat font-bold text-[11px] tracking-[0.42em] text-brown-ink">
+              RELEVANTE TJENESTER
+            </h2>
+          </div>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+            {routes(...post.relatedServices).map((service) => (
+              <li key={service.path} className="flex items-baseline gap-3">
+                <span className="h-px w-4 bg-brown/40 shrink-0 translate-y-[-4px]" />
+                <Link
+                  href={service.path}
+                  className="font-playfair font-light text-brown/80 hover:text-gray-900 text-base md:text-[17px] border-b border-brown/20 hover:border-gray-900 pb-0.5 transition-colors duration-300"
+                >
+                  {service.anchor}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* CTA block */}
       <section className="mx-8 md:mx-14 lg:mx-20 mb-20 rounded-2xl px-8 md:px-14 py-14" style={{ backgroundColor: '#f0ebe5' }}>
         <div className="max-w-2xl">
@@ -113,17 +142,25 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
           <p className="font-playfair font-light text-brown/85 text-lg md:text-xl leading-relaxed mb-10">
             {post.ctaText}
           </p>
-          <Link
-            href="/kontakt"
-            className="group inline-flex items-center gap-5 pb-3 border-b border-brown/30 hover:border-gray-900 transition-colors duration-500"
-          >
-            <span className="font-montserrat font-bold text-[11px] tracking-[0.35em] text-gray-900">
-              BOOK GRATIS BEFARING
-            </span>
-            <svg width="12" height="10" viewBox="0 0 12 10" className="text-brown/60 group-hover:text-gray-900 group-hover:translate-x-1 transition-all duration-400" aria-hidden>
-              <path d="M1 5h10M7 1l4 4-4 4" stroke="currentColor" strokeWidth="1.25" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </Link>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10">
+            <Link
+              href="/estimat"
+              className="group inline-flex items-center gap-5 pb-3 border-b border-brown/30 hover:border-gray-900 transition-colors duration-500 self-start"
+            >
+              <span className="font-montserrat font-bold text-[11px] tracking-[0.35em] text-gray-900">
+                BOOK GRATIS BEFARING
+              </span>
+              <svg width="12" height="10" viewBox="0 0 12 10" className="text-brown/60 group-hover:text-gray-900 group-hover:translate-x-1 transition-all duration-400" aria-hidden>
+                <path d="M1 5h10M7 1l4 4-4 4" stroke="currentColor" strokeWidth="1.25" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Link>
+            <Link
+              href="/kontakt"
+              className="font-playfair font-light text-brown/70 hover:text-gray-900 text-base border-b border-brown/20 hover:border-gray-900 pb-0.5 transition-colors duration-300 self-start"
+            >
+              eller kontakt oss direkte
+            </Link>
+          </div>
         </div>
       </section>
 

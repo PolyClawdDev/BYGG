@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import MenuSocialIcons from '../components/MenuSocialIcons'
+import SiteFooter from '../components/SiteFooter'
 
 const HOME_SECTION_LINKS = [
   { label: 'Ditt Nye Hjem', hash: 'ditt-nye-hjem' },
@@ -74,6 +75,8 @@ export default function InteriorDesign() {
           </div>
         </div>
       </div>
+
+      <SiteFooter />
 
       {isMenuOpen && (
         <div className="fixed inset-4 bg-amber-50 z-50 flex flex-col items-center justify-center animate-slideDown rounded-2xl overflow-y-auto">

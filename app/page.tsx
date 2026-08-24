@@ -9,6 +9,7 @@ import HeroEstimateButton from './components/befaring/HeroEstimateButton'
 import CountUp from './lib/motion/CountUp'
 import { useReducedMotion } from './lib/motion/useReducedMotion'
 import { unsplashSrcSet, IMAGE_SIZES } from './lib/images'
+import { route, routes } from './lib/routes'
 
 /* ─── Data ─── */
 
@@ -41,8 +42,8 @@ const SECTIONS: Section[] = [
     tag: 'NY KONSTRUKSJON',
     lines: ['VI BYGGER', 'DRØMMEHJEM'],
     body: 'Fra tomt til nøkkelferdig bolig. Vi håndterer hvert eneste steg med presisjon og omtanke — fra søknad til innflytting.',
-    link: '/kontakt',
-    ctaLabel: 'START DITT PROSJEKT',
+    link: route('/nybygg-oslo').path,
+    ctaLabel: 'SE NYBYGG I OSLO',
     imageSide: 'right',
     image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=90',
     imageAlt: 'Moderne nybygget bolighus med hvit fasade',
@@ -61,8 +62,8 @@ const SECTIONS: Section[] = [
     tag: 'RENOVASJON',
     lines: ['TRANSFORMER', 'DET EKSISTERENDE'],
     body: 'Gi hjemmet ditt nytt liv. Vi respekterer det eksisterende mens vi skaper noe ekstraordinært — kjøkken, bad, fasade og alt imellom.',
-    link: '/kontakt',
-    ctaLabel: 'BOOK BEFARING',
+    link: route('/renovering-oslo').path,
+    ctaLabel: 'SE RENOVERING I OSLO',
     imageSide: 'left',
     image: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=1800&q=90',
     imageAlt: 'Nyrenovert moderne kjøkken',
@@ -81,8 +82,8 @@ const SECTIONS: Section[] = [
     tag: 'INTERIØRDESIGN',
     lines: ['ROMMET SOM', 'REFLEKTERER DEG'],
     body: 'Mer enn estetikk — vi skaper rom som virkelig føles riktige. Fra konsept til ferdig interiør med hvert eneste detalj på plass.',
-    link: '/interior-design-homestyling',
-    ctaLabel: 'UTFORSK MER',
+    link: route('/interior-design-homestyling').path,
+    ctaLabel: 'UTFORSK INTERIØRDESIGN',
     imageSide: 'right',
     image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1800&q=90',
     imageAlt: 'Luksuriøst skandinavisk interiør med minimalistisk design',
@@ -104,6 +105,8 @@ interface ByggServiceItem {
   desc: string
   image: string
   icon: string
+  /** Service page this card opens; the card's CTA uses its keyword anchor. */
+  href: string
 }
 
 const BYGGSERVICE_ITEMS: ByggServiceItem[] = [
@@ -111,6 +114,7 @@ const BYGGSERVICE_ITEMS: ByggServiceItem[] = [
     num: '01',
     title: 'Snekkerarbeid',
     desc: 'Skreddersydde trevareløsninger, innredning og finish av høyeste håndverkskvalitet.',
+    href: route('/snekker-oslo').path,
     image: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?auto=format&fit=crop&w=1400&q=85',
     icon: 'M4 6h16M4 12h16M4 18h7M15 15l4 4-4 4M19 19h-4',
   },
@@ -118,6 +122,7 @@ const BYGGSERVICE_ITEMS: ByggServiceItem[] = [
     num: '02',
     title: 'Bad & Flislegging',
     desc: 'Komplette baderomsrenovasjoner med presist håndverk fra membran til ferdig flate.',
+    href: route('/bad-renovering-oslo').path,
     image: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1400&q=85',
     icon: 'M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01',
   },
@@ -125,6 +130,7 @@ const BYGGSERVICE_ITEMS: ByggServiceItem[] = [
     num: '03',
     title: 'Maling & Overflater',
     desc: 'Profesjonell maling innvendig og utvendig — inkludert tapetsering og sparkling.',
+    href: route('/maling-oslo').path,
     image: 'https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?auto=format&fit=crop&w=1400&q=85',
     icon: 'M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z',
   },
@@ -132,6 +138,7 @@ const BYGGSERVICE_ITEMS: ByggServiceItem[] = [
     num: '04',
     title: 'VVS / Rørlegger',
     desc: 'Rørleggerarbeid for bad, kjøkken og tekniske installasjoner. Godkjente fagfolk.',
+    href: route('/vvs-rorlegger-oslo').path,
     image: 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?auto=format&fit=crop&w=1400&q=85',
     icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065zM15 12a3 3 0 11-6 0 3 3 0 016 0z',
   },
@@ -139,6 +146,7 @@ const BYGGSERVICE_ITEMS: ByggServiceItem[] = [
     num: '05',
     title: 'Tilbygg & Nybygg',
     desc: 'Tilbygg, garasjer, anneks og nøkkelferdige boliger. Vi håndterer alt fra søknad til nøkkel.',
+    href: route('/tilbygg-oslo').path,
     image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1400&q=85',
     icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
   },
@@ -146,6 +154,7 @@ const BYGGSERVICE_ITEMS: ByggServiceItem[] = [
     num: '06',
     title: 'Vinduer & Dører',
     desc: 'Montering og utskifting av vinduer og dører for bedre isolasjon, lys og estetikk.',
+    href: route('/vinduer-dorer-oslo').path,
     image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85',
     icon: 'M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18',
   },
@@ -1100,7 +1109,7 @@ export default function Home() {
             {BYGGSERVICE_ITEMS.map((item, i) => (
               <Link
                 key={item.title}
-                href="/kontakt"
+                href={item.href}
                 className="group relative overflow-hidden rounded-2xl border border-brown/10 hover:border-brown/40 transition-all duration-700 aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] block"
                 style={{
                   opacity: byggVisible ? 1 : 0,
@@ -1170,8 +1179,8 @@ export default function Home() {
                     </p>
 
                     <div className="mt-7 flex items-center gap-3 text-brown/65 group-hover:text-white transition-colors duration-500">
-                      <span className="font-montserrat font-bold text-[10px] tracking-[0.35em]">
-                        LES MER
+                      <span className="font-montserrat font-bold text-[10px] tracking-[0.35em] uppercase">
+                        {route(item.href).anchor}
                       </span>
                       <span className="relative block h-px w-8 bg-current group-hover:w-14 transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
                         <svg
@@ -1237,6 +1246,41 @@ export default function Home() {
                 </svg>
               </span>
             </Link>
+          </div>
+
+          {/* Six cards cannot cover twelve service pages. Without this row the
+              remaining four get no link from the site's strongest page, and
+              Bærum — the most winnable term we have — gets none either. */}
+          <div
+            className="mt-12 pt-8 border-t border-brown/10 flex flex-col sm:flex-row sm:items-baseline gap-x-8 gap-y-4"
+            style={{
+              opacity: byggVisible ? 1 : 0,
+              transform: byggVisible ? 'translateY(0)' : 'translateY(10px)',
+              transition: 'opacity 0.8s ease, transform 0.8s ease',
+              transitionDelay: '1.45s',
+            }}
+          >
+            <span className="font-montserrat font-bold text-[10px] tracking-[0.3em] text-brown-ink shrink-0">
+              SE OGSÅ
+            </span>
+            <ul className="flex flex-wrap items-baseline gap-x-7 gap-y-3">
+              {routes(
+                '/kjokken-renovering-oslo',
+                '/fasade-renovering-oslo',
+                '/gulv-parkett-oslo',
+                '/energioppgradering-oslo',
+                '/renovering-baerum'
+              ).map((r) => (
+                <li key={r.path}>
+                  <Link
+                    href={r.path}
+                    className="font-playfair font-light text-brown/75 hover:text-gray-900 text-[15px] border-b border-brown/20 hover:border-gray-900 pb-0.5 transition-colors duration-300"
+                  >
+                    {r.anchor}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>

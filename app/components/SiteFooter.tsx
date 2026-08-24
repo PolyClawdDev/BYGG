@@ -1,5 +1,23 @@
 import Link from 'next/link'
 import { SOCIAL_LINKS } from '../lib/socialLinks'
+import { AREA_ROUTES, BLOG_ROUTES, CORE_ROUTES, SERVICE_ROUTES, type SiteRoute } from '../lib/routes'
+
+const HEADING = 'font-montserrat font-bold text-xs tracking-[0.35em] text-white/30 mb-7 uppercase'
+const LINK = 'font-playfair font-light text-white/60 hover:text-white transition-colors duration-300'
+
+function LinkList({ items, className }: { items: SiteRoute[]; className?: string }) {
+  return (
+    <ul className={className ?? 'space-y-4'}>
+      {items.map((item) => (
+        <li key={item.path}>
+          <Link href={item.path} className={`${LINK} text-base`}>
+            {item.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 export default function SiteFooter() {
   return (
@@ -30,23 +48,20 @@ export default function SiteFooter() {
             </p>
 
             <div className="flex gap-4">
-              {SOCIAL_LINKS.map((s) => {
-                const isExternal = s.href.startsWith('http')
-                return (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    aria-label={s.label}
-                    target={isExternal ? '_blank' : undefined}
-                    rel={isExternal ? 'noopener noreferrer' : undefined}
-                    className="text-white/40 hover:text-white transition-colors duration-300"
-                  >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d={s.d} />
-                    </svg>
-                  </a>
-                )
-              })}
+              {SOCIAL_LINKS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  aria-label={s.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white/40 hover:text-white transition-colors duration-300"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d={s.d} />
+                  </svg>
+                </a>
+              ))}
             </div>
           </div>
 
@@ -56,52 +71,22 @@ export default function SiteFooter() {
               outline for screen readers. Size comes from the classes, so the
               level carries no visual weight. */}
           <div>
-            <h3 className="font-montserrat font-bold text-xs tracking-[0.35em] text-white/30 mb-7 uppercase">
-              Navigasjon
-            </h3>
-            <ul className="space-y-4">
-              {[
-                { label: 'Hjem', href: '/' },
-                { label: 'Kontakt', href: '/kontakt' },
-                { label: 'Interiørdesign', href: '/interior-design-homestyling' },
-              ].map((item) => (
-                <li key={item.label}>
-                  <Link
-                    href={item.href}
-                    className="font-playfair font-light text-white/60 hover:text-white transition-colors duration-300 text-base"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <h3 className={HEADING}>Navigasjon</h3>
+            <LinkList items={CORE_ROUTES} />
           </div>
 
-          {/* Services */}
+          {/* Service areas. Each of these pages targets "<service> <place>"
+              queries, and this is the only anchor text they receive from every
+              other page on the site, so the labels carry the service word
+              rather than the bare place name. */}
           <div>
-            <h3 className="font-montserrat font-bold text-xs tracking-[0.35em] text-white/30 mb-7 uppercase">
-              Tjenester
-            </h3>
-            <ul className="space-y-4">
-              {[
-                'Ditt Nye Hjem',
-                'Renovering & Forandring',
-                'Byggservice',
-                'Interiør & Styling',
-                'Gratis befaring',
-              ].map((s) => (
-                <li key={s}>
-                  <span className="font-playfair font-light text-white/60 text-base">{s}</span>
-                </li>
-              ))}
-            </ul>
+            <h3 className={HEADING}>Områder</h3>
+            <LinkList items={AREA_ROUTES} />
           </div>
 
           {/* Contact */}
           <div>
-            <h3 className="font-montserrat font-bold text-xs tracking-[0.35em] text-white/30 mb-7 uppercase">
-              Kontakt
-            </h3>
+            <h3 className={HEADING}>Kontakt</h3>
             <ul className="space-y-5">
               <li>
                 <p className="font-montserrat font-bold text-xs tracking-wider text-white/30 uppercase mb-1">Telefon</p>
@@ -136,6 +121,26 @@ export default function SiteFooter() {
                 </p>
               </li>
             </ul>
+          </div>
+        </div>
+
+        {/* Full page inventory.
+            Kept in its own band rather than crammed into the grid above so the
+            twelve service links can run in two short sub-columns instead of one
+            long stack — the four-column grid has no room for a list that deep
+            without leaving the neighbouring columns visibly stranded. */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-12 py-14 border-b border-white/10">
+          <div className="lg:col-span-2">
+            <h3 className={HEADING}>Tjenester</h3>
+            <LinkList
+              items={SERVICE_ROUTES}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4"
+            />
+          </div>
+
+          <div>
+            <h3 className={HEADING}>Ressurser</h3>
+            <LinkList items={BLOG_ROUTES} />
           </div>
         </div>
 

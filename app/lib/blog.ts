@@ -8,6 +8,8 @@
 export interface BlogPost {
   slug: string
   title: string
+  /** Short title for link lists, where the full headline would wrap badly. */
+  linkLabel: string
   metaTitle: string
   metaDescription: string
   keywords: string[]
@@ -16,12 +18,20 @@ export interface BlogPost {
   intro: string
   sections: { heading: string; body: string }[]
   ctaText: string
+  /**
+   * Service pages this article should hand the reader off to, most relevant
+   * first. Paths are resolved through `lib/routes.ts`, which supplies the
+   * anchor text — `section.body` is plain text rendered with `whitespace-pre-line`,
+   * so links cannot live inside the prose itself.
+   */
+  relatedServices: string[]
 }
 
 export const BLOG_POSTS: BlogPost[] = [
   {
     slug: 'hva-koster-baderomsrenovering-oslo-2026',
     title: 'Hva koster baderomsrenovering i Oslo 2026?',
+    linkLabel: 'Prisguide: baderomsrenovering',
     metaTitle: 'Hva koster baderomsrenovering i Oslo 2026? Komplett prisguide',
     metaDescription: 'Komplett prisguide for baderomsrenovering i Oslo 2026. Hva koster et nytt bad, hva påvirker prisen og hvordan unngår du dyre overraskelser? Les alt her.',
     keywords: ['hva koster baderomsrenovering', 'pris bad renovering Oslo', 'baderomsrenovering kostnad', 'nytt bad pris 2026'],
@@ -47,10 +57,12 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     ctaText: 'Vil du ha et nøyaktig pristilbud for ditt bad? Book gratis befaring — vi kommer til deg, vurderer rommet og gir deg et fast tilbud uten overraskelser.',
+    relatedServices: ['/bad-renovering-oslo', '/renovering-oslo', '/vvs-rorlegger-oslo'],
   },
   {
     slug: 'hva-koster-nybygg-oslo-2026',
     title: 'Hva koster det å bygge ny bolig i Oslo 2026?',
+    linkLabel: 'Prisguide: nybygg i Oslo',
     metaTitle: 'Hva koster nybygg i Oslo 2026? Alt du trenger å vite',
     metaDescription: 'Komplett prisguide for nybygg i Oslo 2026. Byggekostnader per m², hva påvirker prisen og hva du bør vite før du starter. Basert på virkelige prosjekter.',
     keywords: ['hva koster nybygg Oslo', 'pris nybygg Oslo 2026', 'bygge hus kostnad', 'nybygg per kvadratmeter'],
@@ -76,10 +88,12 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     ctaText: 'Vil du vite hva ditt drømmehus koster? Vi gir deg en gratis og uforpliktende gjennomgang av tomten, planene dine og et realistisk budsjettestimat.',
+    relatedServices: ['/nybygg-oslo', '/tilbygg-oslo', '/renovering-baerum'],
   },
   {
     slug: 'hva-koster-renovering-leilighet-oslo',
     title: 'Hva koster renovering av leilighet i Oslo 2026?',
+    linkLabel: 'Prisguide: renovering av leilighet',
     metaTitle: 'Hva koster renovering av leilighet i Oslo 2026? Komplett prisguide',
     metaDescription: 'Hva koster oppussing av leilighet i Oslo? Komplett prisguide for 2026 — bad, kjøkken, totalrenovering og overflater. Basert på ekte prosjekter i Oslo.',
     keywords: ['hva koster renovering leilighet Oslo', 'pris oppussing leilighet', 'renovering leilighet kostnad 2026', 'totalrenovering leilighet pris'],
@@ -105,10 +119,12 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     ctaText: 'Vil du vite hva akkurat din leilighet koster å renovere? Book gratis befaring — vi kommer hjem til deg og gir deg et nøyaktig tilbud.',
+    relatedServices: ['/renovering-oslo', '/kjokken-renovering-oslo', '/bad-renovering-oslo', '/gulv-parkett-oslo'],
   },
   {
     slug: 'tilbygg-eller-flytte',
     title: 'Tilbygg eller flytte? Slik tar du riktig beslutning',
+    linkLabel: 'Tilbygg eller flytte?',
     metaTitle: 'Tilbygg eller flytte? Slik tar du riktig beslutning for familien din',
     metaDescription: 'Trenger familien mer plass? Les vår guide til å velge mellom tilbygg og å flytte — kostnader, fordeler, ulemper og hva som lønner seg i Oslo i 2026.',
     keywords: ['tilbygg eller flytte', 'bygge til eller flytte', 'plass i hjemmet', 'tilbygg kostnad vs flytte', 'tilbygg lønnsomhet'],
@@ -134,10 +150,12 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     ctaText: 'Usikker på hva som er riktig for deg? Vi kommer på gratis befaring, vurderer muligheten for tilbygg og gir deg et nøyaktig kostnadsestimat — ingen forpliktelser.',
+    relatedServices: ['/tilbygg-oslo', '/nybygg-oslo', '/renovering-baerum'],
   },
   {
     slug: 'velge-totalentreprenor-oslo',
     title: 'Slik velger du riktig totalentreprenør i Oslo – 7 ting du MÅ sjekke',
+    linkLabel: 'Velge totalentreprenør',
     metaTitle: 'Slik velger du totalentreprenør i Oslo – 7 ting du MÅ sjekke',
     metaDescription: 'Skal du ansette totalentreprenør i Oslo? Les vår guide til hva du bør sjekke, hvilke spørsmål du bør stille og røde flagg du bør unngå. Spar tid og penger.',
     keywords: ['velge totalentreprenør Oslo', 'totalentreprenør tips', 'finne byggefirma Oslo', 'hvem skal bygge huset mitt', 'sjekkliste totalentreprenør'],
@@ -175,5 +193,6 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
     ctaText: 'Fint Hjem oppfyller alle punktene over — og vi beviser det gjerne. Book en gratis befaring og møt teamet som faktisk skal jobbe på prosjektet ditt.',
+    relatedServices: ['/renovering-baerum', '/renovering-oslo', '/nybygg-oslo'],
   },
 ]
