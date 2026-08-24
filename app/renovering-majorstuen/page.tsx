@@ -3,7 +3,7 @@ import ServicePageShell from '../components/ServicePageShell'
 import { SITE_URL } from '../lib/site'
 
 export const metadata: Metadata = {
-  title: 'Renovering Majorstuen Oslo – Bad, kjøkken og leilighet',
+  title: 'Renovering Majorstuen Oslo – Bad og kjøkken',
   description: 'Renovering på Majorstuen i Oslo. Fint Hjem leverer bad, kjøkken og totalrenovering av leiligheter på Majorstuen og omegn. Fast pris og garanti. Book gratis befaring.',
   keywords: ['renovering Majorstuen', 'oppussing Majorstuen Oslo', 'bad renovering Majorstuen', 'kjøkken Majorstuen', 'håndverker Majorstuen Oslo'],
   alternates: { canonical: `${SITE_URL}/renovering-majorstuen` },
